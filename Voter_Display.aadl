@@ -3,6 +3,8 @@ public
 with ARINC653;
 with SHM_DataType;
 with SEI;
+with Memory_Properties;
+
 virtual processor voter_partition
 properties
       Scheduling_Protocol => (FixedTimeline);
@@ -71,9 +73,9 @@ features
 properties
    Initialize_Entrypoint => classifier (VD_Module::voter_spg);
    Priority => 1;
-   Source_Stack_Size => 20 KByte;
-   Source_Code_Size => 100 KByte;
-   Source_Data_Size => 1 KByte;
+   Stack_Size => 20 KByte;
+   Code_Size => 100 KByte;
+   Data_Size => 1 KByte;
    Dispatch_Protocol => Periodic;
    Period => 50 ms;
    Compute_Execution_Time => 25 ms .. 50 ms;
@@ -113,9 +115,9 @@ features
 properties
    Initialize_Entrypoint => classifier (VD_Module::voter_HM_spg);
    Priority => 2;
-   Source_Stack_Size => 20 KByte;
-   Source_Code_Size => 100 KByte;
-   Source_Data_Size => 1 KByte;
+   Stack_Size => 20 KByte;
+   Code_Size => 100 KByte;
+   Data_Size => 1 KByte;
    Dispatch_Protocol => Periodic;
    Period => 50 ms;
    Compute_Execution_Time => 20 ms .. 50 ms;
@@ -152,9 +154,9 @@ features
 properties
    Initialize_Entrypoint => classifier (VD_Module::Display_spg);
    Priority => 3;
-   Source_Stack_Size => 20 KByte;
-   Source_Code_Size => 100 KByte;
-   Source_Data_Size => 1 KByte;
+   Stack_Size => 20 KByte;
+   Code_Size => 100 KByte;
+   Data_Size => 1 KByte;
    Dispatch_Protocol => Periodic;
    Period => 50 ms;
    Compute_Execution_Time => 20 ms .. 50 ms;
@@ -179,9 +181,9 @@ features
 properties
    Initialize_Entrypoint => classifier (VD_Module::display_HM_spg);
    Priority => 4;
-   Source_Stack_Size => 20 KByte;
-   Source_Code_Size => 100 KByte;
-   Source_Data_Size => 1 KByte;
+   Stack_Size => 20 KByte;
+   Code_Size => 100 KByte;
+   Data_Size => 1 KByte;
    Dispatch_Protocol => Periodic;
    Period => 50 ms;
    Compute_Execution_Time => 20 ms .. 50 ms;
@@ -376,7 +378,7 @@ end powerpc_voter_display.impl;
 memory voter1_partition_memory
 properties
    Base_Address => 0;
-   Byte_Count=>500000 ;
+   Memory_Size=>500 KByte;
    ARINC653::Memory_Type => (Code_Memory);
    ARINC653::Access_Type => (read, write, execute);
 end voter1_partition_memory;
@@ -384,7 +386,7 @@ end voter1_partition_memory;
 memory voter2_partition_memory
 properties
    Base_Address => 1000010;
-   Byte_Count=>500000 ;
+   Memory_Size=>500 KByte;
    ARINC653::Memory_Type => (Code_Memory);
    ARINC653::Access_Type => (read, write, execute);
 end voter2_partition_memory;
@@ -392,7 +394,7 @@ end voter2_partition_memory;
 memory voter3_partition_memory
 properties
    Base_Address => 1500020;
-   Byte_Count=>500000 ;
+   Memory_Size=>500 KByte;
    ARINC653::Memory_Type => (Code_Memory);
    ARINC653::Access_Type => (read, write, execute);
 end voter3_partition_memory;
