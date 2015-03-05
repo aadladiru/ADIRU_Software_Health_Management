@@ -61,7 +61,7 @@ sub1: {
 };
 
 connections
- parameter accDataOutput.accDataOut->accout;
+ cAccout : parameter accDataOutput.accDataOut->accout;
 end  acc_dataOutput.impl;
 
 thread  acc_HM
@@ -91,9 +91,9 @@ sub1: {
 };
 
 connections
- parameter acc_data_monitor->accHM.in_para;
- parameter acc_error_action->accHM.in_action_command;
- parameter accHM.out_error_data->acc_error_out;
+ cAcc_Data_Monitor : parameter acc_data_monitor->accHM.in_para;
+ cAcc_error_action : parameter acc_error_action->accHM.in_action_command;
+ cAcc_error_out : parameter accHM.out_error_data->acc_error_out;
  
 end  acc_HM.impl;
 
@@ -109,10 +109,10 @@ subcomponents
    acc: thread acc_dataOutput.impl;
    acc_HM: thread acc_HM.impl;
 connections
-   port acc.accout->acc_output;
-   port acc.accout->acc_HM.acc_data_monitor {Timing=>Delayed;};
-   port acc_HM.acc_error_out->acc_error_out;
-   port acc_error_action->acc_HM.acc_error_action;
+   cAcc_output : port acc.accout->acc_output;
+   cAcc_AccHM : port acc.accout->acc_HM.acc_data_monitor {Timing=>Delayed;};
+   cAcc_error_out : port acc_HM.acc_error_out->acc_error_out;
+   cAcc_error_action : port acc_error_action->acc_HM.acc_error_action;
 end acc_process.impl;
 
 processor powerpc_acc
