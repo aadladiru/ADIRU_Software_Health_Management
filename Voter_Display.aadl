@@ -91,11 +91,11 @@ sub1: {
 };
 
 connections
- parameter accData_in1->voter.inData_para1;
- parameter accData_in2->voter.inData_para2;
- parameter accData_in3->voter.inData_para3;
- parameter accData_in4->voter.inData_para4;
- parameter voter.outData_para->voter_out;
+ cAccData_in1 : parameter accData_in1->voter.inData_para1;
+ cAccData_in2 : parameter accData_in2->voter.inData_para2;
+ cAccData_in3 : parameter accData_in3->voter.inData_para3;
+ cAccData_in4 : parameter accData_in4->voter.inData_para4;
+ cVoter_out : parameter voter.outData_para->voter_out;
 
 end    voter_dataOutput.impl;
 
@@ -133,16 +133,16 @@ sub1: {
 };
 
 connections
- parameter  accData_in1->voter_HM.inData_para1;
- parameter  accData_in2->voter_HM.inData_para2;
- parameter  accData_in3->voter_HM.inData_para3;
- parameter  accData_in4->voter_HM.inData_para4;
- parameter  voter_HM.outData_para1->accData_out1;
- parameter  voter_HM.outData_para2->accData_out2;
- parameter  voter_HM.outData_para3->accData_out3;
- parameter  voter_HM.outData_para4->accData_out4;
- parameter  voter_error_action->voter_HM.error_action_in;
- parameter  voter_HM.error_data_out->voter_error_out;
+ cAccData_in1 : parameter  accData_in1->voter_HM.inData_para1;
+ cAccData_in2 : parameter  accData_in2->voter_HM.inData_para2;
+ cAccData_in3 : parameter  accData_in3->voter_HM.inData_para3;
+ cAccData_in4 : parameter  accData_in4->voter_HM.inData_para4;
+ cAccData_out1 : parameter  voter_HM.outData_para1->accData_out1;
+ cAccData_out2 : parameter  voter_HM.outData_para2->accData_out2;
+ cAccData_out3 : parameter  voter_HM.outData_para3->accData_out3;
+ cAccData_out4 : parameter  voter_HM.outData_para4->accData_out4;
+ cVoter_error_action : parameter  voter_error_action->voter_HM.error_action_in;
+ cVoter_error_out : parameter  voter_HM.error_data_out->voter_error_out;
  
 end    voter_HM.impl;
 
@@ -199,16 +199,16 @@ sub1: {
 };
 
 connections
- parameter  displayData_in1->display_HM.inData_para1;
- parameter  displayData_in2->display_HM.inData_para2;
- parameter  displayData_in3->display_HM.inData_para3;
+ cDisplayData_in1 : parameter  displayData_in1->display_HM.inData_para1;
+ cDisplayData_in2 : parameter  displayData_in2->display_HM.inData_para2;
+ cDisplayData_in3 : parameter  displayData_in3->display_HM.inData_para3;
  
- parameter  display_HM.outData_para1-> displayData_out1;
- parameter  display_HM.outData_para2-> displayData_out2;
- parameter  display_HM.outData_para3-> displayData_out3;
+ cDisplayData_out1 : parameter  display_HM.outData_para1-> displayData_out1;
+ cDisplayData_out2 : parameter  display_HM.outData_para2-> displayData_out2;
+ cDisplayData_out3 : parameter  display_HM.outData_para3-> displayData_out3;
  
- parameter  display_error_action->display_HM.error_action_in;
- parameter  display_HM.error_data_out->display_error_out;
+ cDisplay_error_action : parameter  display_error_action->display_HM.error_action_in;
+ cDisplay_error_out : parameter  display_HM.error_data_out->display_error_out;
  
 end    display_HM.impl;
 
@@ -234,30 +234,30 @@ subcomponents
    display: thread display.impl;
    display_HM_th:thread display_HM.impl;
 connections
-   port ADIRU1_input->voter_HM_th.accData_in1 {Timing=>Delayed;};
-   port ADIRU2_input->voter_HM_th.accData_in2 {Timing=>Delayed;};
-   port ADIRU3_input->voter_HM_th.accData_in3 {Timing=>Delayed;};
-   port ADIRU4_input->voter_HM_th.accData_in4 {Timing=>Delayed;};
-   port voter_HM_th.accData_out1->voter.accData_in1 {Timing=>Delayed;};
-   port voter_HM_th.accData_out2->voter.accData_in2 {Timing=>Delayed;};
-   port voter_HM_th.accData_out3->voter.accData_in3 {Timing=>Delayed;};
-   port voter_HM_th.accData_out4->voter.accData_in4 {Timing=>Delayed;};
+   cADIRU1_input : port ADIRU1_input->voter_HM_th.accData_in1 {Timing=>Delayed;};
+   cADIRU2_input : port ADIRU2_input->voter_HM_th.accData_in2 {Timing=>Delayed;};
+   cADIRU3_input : port ADIRU3_input->voter_HM_th.accData_in3 {Timing=>Delayed;};
+   cADIRU4_input : port ADIRU4_input->voter_HM_th.accData_in4 {Timing=>Delayed;};
+   cVoterHMTh_voterAccData1 : port voter_HM_th.accData_out1->voter.accData_in1 {Timing=>Delayed;};
+   cVoterHMTh_voterAccData2 : port voter_HM_th.accData_out2->voter.accData_in2 {Timing=>Delayed;};
+   cVoterHMTh_voterAccData3 : port voter_HM_th.accData_out3->voter.accData_in3 {Timing=>Delayed;};
+   cVoterHMTh_voterAccData4 : port voter_HM_th.accData_out4->voter.accData_in4 {Timing=>Delayed;};
    
-   port voter.voter_out-> display_HM_th.displayData_in1 {Timing=>Delayed;};
-   port displayC_Data_input->display_HM_th.displayData_in2 {Timing=>Delayed;};
-   port displayR_Data_input->display_HM_th.displayData_in3 {Timing=>Delayed;};
+   cVoter_DisplayHMThDisplayData1 : port voter.voter_out-> display_HM_th.displayData_in1 {Timing=>Delayed;};
+   cDisplayC_data_input : port displayC_Data_input->display_HM_th.displayData_in2 {Timing=>Delayed;};
+   cDisplayR_data_input : port displayR_Data_input->display_HM_th.displayData_in3 {Timing=>Delayed;};
    
-   port display_HM_th.displayData_out1->display.display_in1 {Timing=>Delayed;};
-   port display_HM_th.displayData_out2->display.display_in2 {Timing=>Delayed;};
-   port display_HM_th.displayData_out3->display.display_in3 {Timing=>Delayed;};
+   cDisplayHMTh_displayDisplay1 : port display_HM_th.displayData_out1->display.display_in1 {Timing=>Delayed;};
+   cDisplayHMTh_displayDisplay2 : port display_HM_th.displayData_out2->display.display_in2 {Timing=>Delayed;};
+   cDisplayHMTh_displayDisplay3 : port display_HM_th.displayData_out3->display.display_in3 {Timing=>Delayed;};
    
-   port voter.voter_out->voter_output {Timing=>Delayed;};
+   cVoter_output : port voter.voter_out->voter_output {Timing=>Delayed;};
    
-   port voter_HM_th.voter_error_out->voter_error_out;
-   port voter_error_action->voter_HM_th.voter_error_action;
+   cVoter_error_action : port voter_error_action->voter_HM_th.voter_error_action;   
+   cVoter_error_out : port voter_HM_th.voter_error_out->voter_error_out;
    
-   port display_HM_th.display_error_out->display_error_out;
-   port display_error_action->display_HM_th.display_error_action;
+   cDisplay_error_action : port display_error_action->display_HM_th.display_error_action;
+   cDisplay_error_out : port display_HM_th.display_error_out->display_error_out;
    
 end voter_displayL_process.impl;
 
@@ -283,28 +283,30 @@ subcomponents
    display: thread display.impl;
    display_HM_th:thread display_HM.impl;
 connections
-   port ADIRU1_input->voter_HM_th.accData_in1 {Timing=>Delayed;};
-   port ADIRU2_input->voter_HM_th.accData_in2 {Timing=>Delayed;};
-   port ADIRU3_input->voter_HM_th.accData_in3 {Timing=>Delayed;};
-   port ADIRU4_input->voter_HM_th.accData_in4 {Timing=>Delayed;};
-   port voter_HM_th.accData_out1->voter.accData_in1 {Timing=>Delayed;};
-   port voter_HM_th.accData_out2->voter.accData_in2 {Timing=>Delayed;};
-   port voter_HM_th.accData_out3->voter.accData_in3 {Timing=>Delayed;};
-   port voter_HM_th.accData_out4->voter.accData_in4 {Timing=>Delayed;};
+   cADIRU1_input : port ADIRU1_input->voter_HM_th.accData_in1 {Timing=>Delayed;};
+   cADIRU2_input : port ADIRU2_input->voter_HM_th.accData_in2 {Timing=>Delayed;};
+   cADIRU3_input : port ADIRU3_input->voter_HM_th.accData_in3 {Timing=>Delayed;};
+   cADIRU4_input : port ADIRU4_input->voter_HM_th.accData_in4 {Timing=>Delayed;};
+   cVoterHMTh_voterAccData1 : port voter_HM_th.accData_out1->voter.accData_in1 {Timing=>Delayed;};
+   cVoterHMTh_voterAccData2 : port voter_HM_th.accData_out2->voter.accData_in2 {Timing=>Delayed;};
+   cVoterHMTh_voterAccData3 : port voter_HM_th.accData_out3->voter.accData_in3 {Timing=>Delayed;};
+   cVoterHMTh_voterAccData4 : port voter_HM_th.accData_out4->voter.accData_in4 {Timing=>Delayed;};
    
-   port voter.voter_out->display_HM_th.displayData_in2 {Timing=>Delayed;};
-   port displayL_Data_input->display_HM_th.displayData_in1 {Timing=>Delayed;};
-   port displayR_Data_input->display_HM_th.displayData_in3 {Timing=>Delayed;};
-   port voter.voter_out->voter_output {Timing=>Delayed;};
+   cVoter_DisplayHMThDisplayData1 : port voter.voter_out->display_HM_th.displayData_in2 {Timing=>Delayed;};
+   cDisplayL_data_input : port displayL_Data_input->display_HM_th.displayData_in1 {Timing=>Delayed;};
+   cDisplayR_data_input: port displayR_Data_input->display_HM_th.displayData_in3 {Timing=>Delayed;};
    
-   port display_HM_th.displayData_out1->display.display_in1 {Timing=>Delayed;};
-   port display_HM_th.displayData_out2->display.display_in2 {Timing=>Delayed;};
-   port display_HM_th.displayData_out3->display.display_in3 {Timing=>Delayed;};
+   cDisplayHMTh_displayDisplay1 : port display_HM_th.displayData_out1->display.display_in1 {Timing=>Delayed;};
+   cDisplayHMTh_displayDisplay2 : port display_HM_th.displayData_out2->display.display_in2 {Timing=>Delayed;};
+   cDisplayHMTh_displayDisplay3 : port display_HM_th.displayData_out3->display.display_in3 {Timing=>Delayed;};
    
-   port voter_HM_th.voter_error_out->voter_error_out;
-   port voter_error_action->voter_HM_th.voter_error_action;
-   port display_HM_th.display_error_out->display_error_out;
-   port display_error_action->display_HM_th.display_error_action;
+   cVoter_output : port voter.voter_out->voter_output {Timing=>Delayed;};
+   
+   cVoter_error_action : port voter_error_action->voter_HM_th.voter_error_action;   
+   cVoter_error_out : port voter_HM_th.voter_error_out->voter_error_out;
+   
+   cDisplay_error_action : port display_error_action->display_HM_th.display_error_action;
+   cDisplay_error_out : port display_HM_th.display_error_out->display_error_out;
    
 end voter_displayC_process.impl;
 
@@ -330,28 +332,30 @@ subcomponents
    display: thread display.impl;
    display_HM_th:thread display_HM.impl;
 connections
-   port ADIRU1_input->voter_HM_th.accData_in1 {Timing=>Delayed;};
-   port ADIRU2_input->voter_HM_th.accData_in2 {Timing=>Delayed;};
-   port ADIRU3_input->voter_HM_th.accData_in3 {Timing=>Delayed;};
-   port ADIRU4_input->voter_HM_th.accData_in4 {Timing=>Delayed;};
-   port voter_HM_th.accData_out1->voter.accData_in1 {Timing=>Delayed;};
-   port voter_HM_th.accData_out2->voter.accData_in2 {Timing=>Delayed;};
-   port voter_HM_th.accData_out3->voter.accData_in3 {Timing=>Delayed;};
-   port voter_HM_th.accData_out4->voter.accData_in4 {Timing=>Delayed;};
+	cADIRU1_input : port ADIRU1_input->voter_HM_th.accData_in1 {Timing=>Delayed;};
+   cADIRU2_input : port ADIRU2_input->voter_HM_th.accData_in2 {Timing=>Delayed;};
+   cADIRU3_input : port ADIRU3_input->voter_HM_th.accData_in3 {Timing=>Delayed;};
+   cADIRU4_input : port ADIRU4_input->voter_HM_th.accData_in4 {Timing=>Delayed;};
+   cVoterHMTh_voterAccData1 : port voter_HM_th.accData_out1->voter.accData_in1 {Timing=>Delayed;};
+   cVoterHMTh_voterAccData2 : port voter_HM_th.accData_out2->voter.accData_in2 {Timing=>Delayed;};
+   cVoterHMTh_voterAccData3 : port voter_HM_th.accData_out3->voter.accData_in3 {Timing=>Delayed;};
+   cVoterHMTh_voterAccData4 : port voter_HM_th.accData_out4->voter.accData_in4 {Timing=>Delayed;};
    
-   port voter.voter_out->display_HM_th.displayData_in3 {Timing=>Delayed;};
-   port displayC_Data_input->display_HM_th.displayData_in2 {Timing=>Delayed;};
-   port displayL_Data_input->display_HM_th.displayData_in1 {Timing=>Delayed;};
-   port voter.voter_out->voter_output {Timing=>Delayed;};
+   cVoter_DisplayHMThDisplayData1 : port voter.voter_out->display_HM_th.displayData_in2 {Timing=>Delayed;};
+   cDisplayC_data_input: port displayC_Data_input->display_HM_th.displayData_in3 {Timing=>Delayed;};   
+   cDisplayL_data_input : port displayL_Data_input->display_HM_th.displayData_in1 {Timing=>Delayed;};
    
-   port display_HM_th.displayData_out1->display.display_in1 {Timing=>Delayed;};
-   port display_HM_th.displayData_out2->display.display_in2 {Timing=>Delayed;};
-   port display_HM_th.displayData_out3->display.display_in3 {Timing=>Delayed;};
+   cDisplayHMTh_displayDisplay1 : port display_HM_th.displayData_out1->display.display_in1 {Timing=>Delayed;};
+   cDisplayHMTh_displayDisplay2 : port display_HM_th.displayData_out2->display.display_in2 {Timing=>Delayed;};
+   cDisplayHMTh_displayDisplay3 : port display_HM_th.displayData_out3->display.display_in3 {Timing=>Delayed;};
    
-   port voter_HM_th.voter_error_out->voter_error_out;
-   port voter_error_action->voter_HM_th.voter_error_action;
-   port display_HM_th.display_error_out->display_error_out;
-   port display_error_action->display_HM_th.display_error_action;
+   cVoter_output : port voter.voter_out->voter_output {Timing=>Delayed;};
+   
+   cVoter_error_action : port voter_error_action->voter_HM_th.voter_error_action;   
+   cVoter_error_out : port voter_HM_th.voter_error_out->voter_error_out;
+   
+   cDisplay_error_action : port display_error_action->display_HM_th.display_error_action;
+   cDisplay_error_out : port display_HM_th.display_error_out->display_error_out;
    
 end voter_displayR_process.impl;
 
@@ -450,40 +454,40 @@ subcomponents
    voter_displayC_pr  : process  voter_displayC_process.impl;
    voter_displayR_pr  : process  voter_displayR_process.impl;
 connections
-  port  voterL_input1-> voter_displayL_pr. ADIRU1_input;
-  port  voterL_input2-> voter_displayL_pr. ADIRU2_input; 
-  port  voterL_input3-> voter_displayL_pr. ADIRU3_input;
-  port  voterL_input4-> voter_displayL_pr. ADIRU4_input;
-  port  voterR_input1-> voter_displayR_pr. ADIRU1_input;
-  port  voterR_input2-> voter_displayR_pr. ADIRU2_input; 
-  port  voterR_input3-> voter_displayR_pr. ADIRU3_input; 
-  port  voterR_input4-> voter_displayR_pr. ADIRU4_input;
-  port  voterC_input1-> voter_displayC_pr. ADIRU1_input;
-  port  voterC_input2-> voter_displayC_pr. ADIRU2_input; 
-  port  voterC_input3-> voter_displayC_pr. ADIRU3_input; 
-  port  voterC_input4-> voter_displayC_pr. ADIRU4_input;
+  cVoterL_input1 : port  voterL_input1->voter_displayL_pr.ADIRU1_input;
+  cVoterL_input2 : port  voterL_input2->voter_displayL_pr.ADIRU2_input; 
+  cVoterL_input3 : port  voterL_input3->voter_displayL_pr.ADIRU3_input;
+  cVoterL_input4 : port  voterL_input4->voter_displayL_pr.ADIRU4_input;
+  cVoterR_input1 : port  voterR_input1->voter_displayR_pr.ADIRU1_input;
+  cVoterR_input2 : port  voterR_input2->voter_displayR_pr.ADIRU2_input; 
+  cVoterR_input3 : port  voterR_input3->voter_displayR_pr.ADIRU3_input; 
+  cVoterR_input4 : port  voterR_input4->voter_displayR_pr.ADIRU4_input;
+  cVoterC_input1 : port  voterC_input1->voter_displayC_pr.ADIRU1_input;
+  cVoterC_input2 : port  voterC_input2->voter_displayC_pr.ADIRU2_input; 
+  cVoterC_input3 : port  voterC_input3->voter_displayC_pr.ADIRU3_input; 
+  cVoterC_input4 : port  voterC_input4->voter_displayC_pr.ADIRU4_input;
   
-  port  voter_displayL_pr.voter_output-> voter_displayC_pr.displayL_Data_input;
-  port  voter_displayL_pr.voter_output-> voter_displayR_pr.displayL_Data_input;
-  port  voter_displayC_pr.voter_output-> voter_displayL_pr.displayC_Data_input;
-  port  voter_displayC_pr.voter_output-> voter_displayR_pr.displayC_Data_input;
-  port  voter_displayR_pr.voter_output-> voter_displayL_pr.displayR_Data_input;
-  port  voter_displayR_pr.voter_output-> voter_displayC_pr.displayR_Data_input;
+  cVoterDisplayL_displayCPr : port  voter_displayL_pr.voter_output-> voter_displayC_pr.displayL_Data_input;
+  cVoterDisplayL_displayRPr : port  voter_displayL_pr.voter_output-> voter_displayR_pr.displayL_Data_input;
+  cVoterDisplayC_displayLPr : port  voter_displayC_pr.voter_output-> voter_displayL_pr.displayC_Data_input;
+  cVoterDisplayC_displayRPr : port  voter_displayC_pr.voter_output-> voter_displayR_pr.displayC_Data_input;
+  cVoterDisplayR_displayLPr : port  voter_displayR_pr.voter_output-> voter_displayL_pr.displayR_Data_input;
+  cVoterDisplayR_displayCPr : port  voter_displayR_pr.voter_output-> voter_displayC_pr.displayR_Data_input;
   
-  port voter_displayL_pr.voter_error_out->voterL_error_out;
-  port voter_displayL_pr.display_error_out->displayL_error_out;
-  port voterL_error_action-> voter_displayL_pr.voter_error_action;
-  port displayL_error_action-> voter_displayL_pr.display_error_action;
+  cVoterL_error_out : port voter_displayL_pr.voter_error_out->voterL_error_out;
+  cDisplayL_error_out : port voter_displayL_pr.display_error_out->displayL_error_out;
+  cVoterL_error_action : port voterL_error_action-> voter_displayL_pr.voter_error_action;
+  cDisplayL_error_action : port displayL_error_action-> voter_displayL_pr.display_error_action;
   
-  port voter_displayC_pr.voter_error_out->voterC_error_out;
-  port voter_displayC_pr.display_error_out->displayC_error_out;
-  port voterC_error_action-> voter_displayC_pr.voter_error_action;
-  port displayC_error_action-> voter_displayC_pr.display_error_action;
+  cVoterC_error_out : port voter_displayC_pr.voter_error_out->voterC_error_out;
+  cDisplayC_error_out : port voter_displayC_pr.display_error_out->displayC_error_out;
+  cVoterC_error_action : port voterC_error_action-> voter_displayC_pr.voter_error_action;
+  cDisplayC_error_action : port displayC_error_action-> voter_displayC_pr.display_error_action;
   
-  port voter_displayR_pr.voter_error_out->voterR_error_out;
-  port voter_displayR_pr.display_error_out->displayR_error_out;
-  port voterR_error_action-> voter_displayR_pr.voter_error_action;
-  port displayR_error_action-> voter_displayR_pr.display_error_action;
+  cVoterR_error_out : port voter_displayR_pr.voter_error_out->voterR_error_out;
+  cDisplayR_error_out : port voter_displayR_pr.display_error_out->displayR_error_out;
+  cVoterR_error_action : port voterR_error_action-> voter_displayR_pr.voter_error_action;
+  cDisplayR_error_action : port displayR_error_action-> voter_displayR_pr.display_error_action;
   
 properties
    --  bind partition process to their associated       
