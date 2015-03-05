@@ -1,0 +1,506 @@
+package VD_Module
+public
+with ARINC653;
+with SHM_DataType;
+with SEI;
+virtual processor voter_partition
+properties
+      Scheduling_Protocol => (FixedTimeline);
+end voter_partition;
+
+virtual processor implementation voter_partition.impl
+end voter_partition.impl;
+
+subprogram  voter_spg
+features
+ inData_para1: in parameter SHM_DataType::accData {Source_Name=>"accData1";};
+ inData_para2: in parameter SHM_DataType::accData {Source_Name=>"accData2";};
+ inData_para3: in parameter SHM_DataType::accData {Source_Name=>"accData3";};
+ inData_para4: in parameter SHM_DataType::accData {Source_Name=>"accData4";};
+ outdata_para: out parameter SHM_DataType::accData;
+properties
+ Source_Language =>(C);
+ Source_Text => ("voter.c");
+end         voter_spg;
+
+subprogram  voter_HM_spg
+features
+ inData_para1: in parameter SHM_DataType::accData {Source_Name=>"accData1";};
+ inData_para2: in parameter SHM_DataType::accData {Source_Name=>"accData2";};
+ inData_para3: in parameter SHM_DataType::accData {Source_Name=>"accData3";};
+ inData_para4: in parameter SHM_DataType::accData {Source_Name=>"accData4";};
+ outdata_para1: out parameter SHM_DataType::accData;
+ outdata_para2: out parameter SHM_DataType::accData;
+ outdata_para3: out parameter SHM_DataType::accData;
+ outdata_para4: out parameter SHM_DataType::accData;
+ error_data_out: out parameter SHM_DataType::errorData;
+ error_action_in: in parameter SHM_DataType::actionData;
+properties
+ Source_Language =>(C);
+ Source_Text => ("voter_HM.c");
+end         voter_HM_spg;
+
+subprogram  display_spg
+end    display_spg;
+
+subprogram  display_HM_spg
+features
+ inData_para1: in parameter SHM_DataType::accData {Source_Name=>"accData1";};
+ inData_para2: in parameter SHM_DataType::accData {Source_Name=>"accData2";};
+ inData_para3: in parameter SHM_DataType::accData {Source_Name=>"accData3";};
+ inData_para4: in parameter SHM_DataType::accData {Source_Name=>"accData4";};
+ outdata_para1: out parameter SHM_DataType::accData;
+ outdata_para2: out parameter SHM_DataType::accData;
+ outdata_para3: out parameter SHM_DataType::accData;
+ outdata_para4: out parameter SHM_DataType::accData;
+ error_data_out: out parameter SHM_DataType::errorData;
+ error_action_in: in parameter SHM_DataType::actionData;
+properties
+ Source_Language =>(C);
+ Source_Text => ("diaplay_HM.c");
+end     display_HM_spg;
+
+thread  voter_dataOutput
+features
+   accData_in1:  in data port SHM_DataType::accData;
+   accData_in2:  in data port SHM_DataType::accData;
+   accData_in3:  in data port SHM_DataType::accData;
+   accData_in4:  in data port SHM_DataType::accData;
+   voter_out: out data port SHM_DataType::accData;
+  
+properties
+   Initialize_Entrypoint => classifier (VD_Module::voter_spg);
+   Priority => 1;
+   Source_Stack_Size => 20 KByte;
+   Source_Code_Size => 100 KByte;
+   Source_Data_Size => 1 KByte;
+   Dispatch_Protocol => Periodic;
+   Period => 50 ms;
+   Compute_Execution_Time => 25 ms .. 50 ms;
+   Deadline => 50 ms;
+   ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
+   ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+end  voter_dataOutput;
+
+thread implementation    voter_dataOutput.impl
+calls
+sub1: {
+	   voter: subprogram voter_spg;
+};
+
+connections
+ parameter accData_in1->voter.inData_para1;
+ parameter accData_in2->voter.inData_para2;
+ parameter accData_in3->voter.inData_para3;
+ parameter accData_in4->voter.inData_para4;
+ parameter voter.outData_para->voter_out;
+
+end    voter_dataOutput.impl;
+
+thread  voter_HM
+features
+   accData_in1:  in data port SHM_DataType::accData;
+   accData_in2:  in data port SHM_DataType::accData;
+   accData_in3:  in data port SHM_DataType::accData;
+   accData_in4:  in data port SHM_DataType::accData;
+   accData_out1:  out data port SHM_DataType::accData;
+   accData_out2:  out data port SHM_DataType::accData;
+   accData_out3:  out data port SHM_DataType::accData;
+   accData_out4:  out data port SHM_DataType::accData;
+   voter_error_out: out event data port SHM_DataType::errorData;
+   voter_error_action: in event data port SHM_DataType::actionData;
+  
+properties
+   Initialize_Entrypoint => classifier (VD_Module::voter_HM_spg);
+   Priority => 2;
+   Source_Stack_Size => 20 KByte;
+   Source_Code_Size => 100 KByte;
+   Source_Data_Size => 1 KByte;
+   Dispatch_Protocol => Periodic;
+   Period => 50 ms;
+   Compute_Execution_Time => 20 ms .. 50 ms;
+   Deadline => 50 ms;
+   ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
+   ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+end  voter_HM;
+
+thread implementation    voter_HM.impl
+calls
+sub1: {
+	   voter_HM: subprogram voter_HM_spg;
+};
+
+connections
+ parameter  accData_in1->voter_HM.inData_para1;
+ parameter  accData_in2->voter_HM.inData_para2;
+ parameter  accData_in3->voter_HM.inData_para3;
+ parameter  accData_in4->voter_HM.inData_para4;
+ parameter  voter_HM.outData_para1->accData_out1;
+ parameter  voter_HM.outData_para2->accData_out2;
+ parameter  voter_HM.outData_para3->accData_out3;
+ parameter  voter_HM.outData_para4->accData_out4;
+ parameter  voter_error_action->voter_HM.error_action_in;
+ parameter  voter_HM.error_data_out->voter_error_out;
+ 
+end    voter_HM.impl;
+
+thread  display
+features
+   display_in1:  in data port SHM_DataType::accData;
+   display_in2:  in data port SHM_DataType::accData;
+   display_in3:  in data port SHM_DataType::accData;
+properties
+   Initialize_Entrypoint => classifier (VD_Module::Display_spg);
+   Priority => 3;
+   Source_Stack_Size => 20 KByte;
+   Source_Code_Size => 100 KByte;
+   Source_Data_Size => 1 KByte;
+   Dispatch_Protocol => Periodic;
+   Period => 50 ms;
+   Compute_Execution_Time => 20 ms .. 50 ms;
+   Deadline => 50 ms;
+   ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
+   ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+end  display;
+
+thread implementation   display.impl
+end    display.impl;
+
+thread  display_HM
+features
+   displayData_in1:  in data port SHM_DataType::accData;
+   displayData_in2:  in data port SHM_DataType::accData;
+   displayData_in3:  in data port SHM_DataType::accData;
+   displayData_out1:  out data port SHM_DataType::accData;
+   displayData_out2:  out data port SHM_DataType::accData;
+   displayData_out3:  out data port SHM_DataType::accData;
+   display_error_out: out event data port SHM_DataType::errorData;
+   display_error_action: in event data port SHM_DataType::actionData;
+properties
+   Initialize_Entrypoint => classifier (VD_Module::display_HM_spg);
+   Priority => 4;
+   Source_Stack_Size => 20 KByte;
+   Source_Code_Size => 100 KByte;
+   Source_Data_Size => 1 KByte;
+   Dispatch_Protocol => Periodic;
+   Period => 50 ms;
+   Compute_Execution_Time => 20 ms .. 50 ms;
+   Deadline => 50 ms;
+   ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
+   ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+end  display_HM;
+
+thread implementation   display_HM.impl
+calls
+sub1: {
+	   display_HM: subprogram display_HM_spg;
+};
+
+connections
+ parameter  displayData_in1->display_HM.inData_para1;
+ parameter  displayData_in2->display_HM.inData_para2;
+ parameter  displayData_in3->display_HM.inData_para3;
+ 
+ parameter  display_HM.outData_para1-> displayData_out1;
+ parameter  display_HM.outData_para2-> displayData_out2;
+ parameter  display_HM.outData_para3-> displayData_out3;
+ 
+ parameter  display_error_action->display_HM.error_action_in;
+ parameter  display_HM.error_data_out->display_error_out;
+ 
+end    display_HM.impl;
+
+process voter_displayL_process
+features
+   ADIRU1_input: in data port SHM_DataType::accData;
+   ADIRU2_input: in data port SHM_DataType::accData;
+   ADIRU3_input: in data port SHM_DataType::accData;
+   ADIRU4_input: in data port SHM_DataType::accData;
+   displayC_Data_input:in data port SHM_DataType::accData;
+   displayR_Data_input:in data port SHM_DataType::accData;
+   voter_output:out data port SHM_DataType::accData;
+   voter_error_out: out event data port SHM_DataType::errorData;
+   voter_error_action: in event data port SHM_DataType::actionData;
+   display_error_out: out event data port SHM_DataType::errorData;
+   display_error_action: in event data port SHM_DataType::actionData;
+end voter_displayL_process;
+
+process implementation voter_displayL_process.impl
+subcomponents
+   voter: thread voter_dataOutput.impl;
+   voter_HM_th: thread voter_HM.impl;
+   display: thread display.impl;
+   display_HM_th:thread display_HM.impl;
+connections
+   port ADIRU1_input->voter_HM_th.accData_in1 {Timing=>Delayed;};
+   port ADIRU2_input->voter_HM_th.accData_in2 {Timing=>Delayed;};
+   port ADIRU3_input->voter_HM_th.accData_in3 {Timing=>Delayed;};
+   port ADIRU4_input->voter_HM_th.accData_in4 {Timing=>Delayed;};
+   port voter_HM_th.accData_out1->voter.accData_in1 {Timing=>Delayed;};
+   port voter_HM_th.accData_out2->voter.accData_in2 {Timing=>Delayed;};
+   port voter_HM_th.accData_out3->voter.accData_in3 {Timing=>Delayed;};
+   port voter_HM_th.accData_out4->voter.accData_in4 {Timing=>Delayed;};
+   
+   port voter.voter_out-> display_HM_th.displayData_in1 {Timing=>Delayed;};
+   port displayC_Data_input->display_HM_th.displayData_in2 {Timing=>Delayed;};
+   port displayR_Data_input->display_HM_th.displayData_in3 {Timing=>Delayed;};
+   
+   port display_HM_th.displayData_out1->display.display_in1 {Timing=>Delayed;};
+   port display_HM_th.displayData_out2->display.display_in2 {Timing=>Delayed;};
+   port display_HM_th.displayData_out3->display.display_in3 {Timing=>Delayed;};
+   
+   port voter.voter_out->voter_output {Timing=>Delayed;};
+   
+   port voter_HM_th.voter_error_out->voter_error_out;
+   port voter_error_action->voter_HM_th.voter_error_action;
+   
+   port display_HM_th.display_error_out->display_error_out;
+   port display_error_action->display_HM_th.display_error_action;
+   
+end voter_displayL_process.impl;
+
+process voter_displayC_process
+features
+   ADIRU1_input: in data port SHM_DataType::accData;
+   ADIRU2_input: in data port SHM_DataType::accData;
+   ADIRU3_input: in data port SHM_DataType::accData;
+   ADIRU4_input: in data port SHM_DataType::accData;
+   displayL_Data_input:in data port SHM_DataType::accData;
+   displayR_Data_input:in data port SHM_DataType::accData;
+   voter_output:out data port SHM_DataType::accData;
+   voter_error_out: out event data port SHM_DataType::errorData;
+   voter_error_action: in event data port SHM_DataType::actionData;
+   display_error_out: out event data port SHM_DataType::errorData;
+   display_error_action: in event data port SHM_DataType::actionData;
+end voter_displayC_process;
+
+process implementation voter_displayC_process.impl
+subcomponents
+   voter: thread voter_dataOutput.impl;
+   voter_HM_th: thread voter_HM.impl;
+   display: thread display.impl;
+   display_HM_th:thread display_HM.impl;
+connections
+   port ADIRU1_input->voter_HM_th.accData_in1 {Timing=>Delayed;};
+   port ADIRU2_input->voter_HM_th.accData_in2 {Timing=>Delayed;};
+   port ADIRU3_input->voter_HM_th.accData_in3 {Timing=>Delayed;};
+   port ADIRU4_input->voter_HM_th.accData_in4 {Timing=>Delayed;};
+   port voter_HM_th.accData_out1->voter.accData_in1 {Timing=>Delayed;};
+   port voter_HM_th.accData_out2->voter.accData_in2 {Timing=>Delayed;};
+   port voter_HM_th.accData_out3->voter.accData_in3 {Timing=>Delayed;};
+   port voter_HM_th.accData_out4->voter.accData_in4 {Timing=>Delayed;};
+   
+   port voter.voter_out->display_HM_th.displayData_in2 {Timing=>Delayed;};
+   port displayL_Data_input->display_HM_th.displayData_in1 {Timing=>Delayed;};
+   port displayR_Data_input->display_HM_th.displayData_in3 {Timing=>Delayed;};
+   port voter.voter_out->voter_output {Timing=>Delayed;};
+   
+   port display_HM_th.displayData_out1->display.display_in1 {Timing=>Delayed;};
+   port display_HM_th.displayData_out2->display.display_in2 {Timing=>Delayed;};
+   port display_HM_th.displayData_out3->display.display_in3 {Timing=>Delayed;};
+   
+   port voter_HM_th.voter_error_out->voter_error_out;
+   port voter_error_action->voter_HM_th.voter_error_action;
+   port display_HM_th.display_error_out->display_error_out;
+   port display_error_action->display_HM_th.display_error_action;
+   
+end voter_displayC_process.impl;
+
+process voter_displayR_process
+features
+   ADIRU1_input: in data port SHM_DataType::accData;
+   ADIRU2_input: in data port SHM_DataType::accData;
+   ADIRU3_input: in data port SHM_DataType::accData;
+   ADIRU4_input: in data port SHM_DataType::accData;
+   displayC_Data_input:in data port SHM_DataType::accData;
+   displayL_Data_input:in data port SHM_DataType::accData;
+   voter_output:out data port SHM_DataType::accData;
+   voter_error_out: out event data port SHM_DataType::errorData;
+   voter_error_action: in event data port SHM_DataType::actionData;
+   display_error_out: out event data port SHM_DataType::errorData;
+   display_error_action: in event data port SHM_DataType::actionData;
+end voter_displayR_process;
+
+process implementation voter_displayR_process.impl
+subcomponents
+   voter: thread voter_dataOutput.impl;
+   voter_HM_th: thread voter_HM.impl;
+   display: thread display.impl;
+   display_HM_th:thread display_HM.impl;
+connections
+   port ADIRU1_input->voter_HM_th.accData_in1 {Timing=>Delayed;};
+   port ADIRU2_input->voter_HM_th.accData_in2 {Timing=>Delayed;};
+   port ADIRU3_input->voter_HM_th.accData_in3 {Timing=>Delayed;};
+   port ADIRU4_input->voter_HM_th.accData_in4 {Timing=>Delayed;};
+   port voter_HM_th.accData_out1->voter.accData_in1 {Timing=>Delayed;};
+   port voter_HM_th.accData_out2->voter.accData_in2 {Timing=>Delayed;};
+   port voter_HM_th.accData_out3->voter.accData_in3 {Timing=>Delayed;};
+   port voter_HM_th.accData_out4->voter.accData_in4 {Timing=>Delayed;};
+   
+   port voter.voter_out->display_HM_th.displayData_in3 {Timing=>Delayed;};
+   port displayC_Data_input->display_HM_th.displayData_in2 {Timing=>Delayed;};
+   port displayL_Data_input->display_HM_th.displayData_in1 {Timing=>Delayed;};
+   port voter.voter_out->voter_output {Timing=>Delayed;};
+   
+   port display_HM_th.displayData_out1->display.display_in1 {Timing=>Delayed;};
+   port display_HM_th.displayData_out2->display.display_in2 {Timing=>Delayed;};
+   port display_HM_th.displayData_out3->display.display_in3 {Timing=>Delayed;};
+   
+   port voter_HM_th.voter_error_out->voter_error_out;
+   port voter_error_action->voter_HM_th.voter_error_action;
+   port display_HM_th.display_error_out->display_error_out;
+   port display_error_action->display_HM_th.display_error_action;
+   
+end voter_displayR_process.impl;
+
+processor powerpc_voter_display
+end powerpc_voter_display;
+
+processor implementation powerpc_voter_display.impl
+subcomponents
+   part1:   virtual processor voter_partition.impl;
+   part2:   virtual processor voter_partition.impl;
+   part3:   virtual processor voter_partition.impl;
+  
+properties
+   SEI::MIPSCapacity=>0.65 MIPS;
+   ARINC653::Module_Major_Frame => 990 ms;
+   ARINC653::Partition_Slots => (330 ms, 330 ms, 330 ms);
+   ARINC653::Slots_Allocation => 
+     (reference (part1), reference (part2), reference (part3));
+   ARINC653::HM_Errors => (Power_Fail);
+   ARINC653::HM_Module_Recovery_Actions => (Reset);
+end powerpc_voter_display.impl;
+
+-- Memory
+memory voter1_partition_memory
+properties
+   Base_Address => 0;
+   Byte_Count=>500000 ;
+   ARINC653::Memory_Type => (Code_Memory);
+   ARINC653::Access_Type => (read, write, execute);
+end voter1_partition_memory;
+
+memory voter2_partition_memory
+properties
+   Base_Address => 1000010;
+   Byte_Count=>500000 ;
+   ARINC653::Memory_Type => (Code_Memory);
+   ARINC653::Access_Type => (read, write, execute);
+end voter2_partition_memory;
+
+memory voter3_partition_memory
+properties
+   Base_Address => 1500020;
+   Byte_Count=>500000 ;
+   ARINC653::Memory_Type => (Code_Memory);
+   ARINC653::Access_Type => (read, write, execute);
+end voter3_partition_memory;
+
+memory voter_memory
+end voter_memory;
+
+memory implementation voter_memory.impl
+subcomponents
+   voter1Mem: memory voter1_partition_memory;
+   voter2Mem: memory voter2_partition_memory;
+   voter3Mem: memory voter3_partition_memory;
+  
+end voter_memory.impl;
+
+system voter_display
+features
+  voterL_input1: in data port SHM_DataType::accData;
+  voterL_input2: in data port SHM_DataType::accData;
+  voterL_input3: in data port SHM_DataType::accData;
+  voterL_input4: in data port SHM_DataType::accData;
+  voterR_input1: in data port SHM_DataType::accData;
+  voterR_input2: in data port SHM_DataType::accData;
+  voterR_input3: in data port SHM_DataType::accData;
+  voterR_input4: in data port SHM_DataType::accData;
+  voterC_input1: in data port SHM_DataType::accData;
+  voterC_input2: in data port SHM_DataType::accData;
+  voterC_input3: in data port SHM_DataType::accData;
+  voterC_input4: in data port SHM_DataType::accData;
+  
+  voterL_error_out: out event data port SHM_DataType::errorData;
+  voterL_error_action: in event data port SHM_DataType::actionData;
+  displayL_error_out: out event data port SHM_DataType::errorData;
+  displayL_error_action: in event data port SHM_DataType::actionData;
+  
+  voterC_error_out: out event data port SHM_DataType::errorData;
+  voterC_error_action: in event data port SHM_DataType::actionData;
+  displayC_error_out: out event data port SHM_DataType::errorData;
+  displayC_error_action: in event data port SHM_DataType::actionData;
+  
+  voterR_error_out: out event data port SHM_DataType::errorData;
+  voterR_error_action: in event data port SHM_DataType::actionData;
+  displayR_error_out: out event data port SHM_DataType::errorData;
+  displayR_error_action: in event data port SHM_DataType::actionData;
+  
+end voter_display;
+
+system implementation voter_display.impl
+subcomponents
+   voter_mem  : memory voter_memory.impl;
+   voter_cpu  : processor powerpc_voter_display.impl;
+   voter_displayL_pr  : process  voter_displayL_process.impl;
+   voter_displayC_pr  : process  voter_displayC_process.impl;
+   voter_displayR_pr  : process  voter_displayR_process.impl;
+connections
+  port  voterL_input1-> voter_displayL_pr. ADIRU1_input;
+  port  voterL_input2-> voter_displayL_pr. ADIRU2_input; 
+  port  voterL_input3-> voter_displayL_pr. ADIRU3_input;
+  port  voterL_input4-> voter_displayL_pr. ADIRU4_input;
+  port  voterR_input1-> voter_displayR_pr. ADIRU1_input;
+  port  voterR_input2-> voter_displayR_pr. ADIRU2_input; 
+  port  voterR_input3-> voter_displayR_pr. ADIRU3_input; 
+  port  voterR_input4-> voter_displayR_pr. ADIRU4_input;
+  port  voterC_input1-> voter_displayC_pr. ADIRU1_input;
+  port  voterC_input2-> voter_displayC_pr. ADIRU2_input; 
+  port  voterC_input3-> voter_displayC_pr. ADIRU3_input; 
+  port  voterC_input4-> voter_displayC_pr. ADIRU4_input;
+  
+  port  voter_displayL_pr.voter_output-> voter_displayC_pr.displayL_Data_input;
+  port  voter_displayL_pr.voter_output-> voter_displayR_pr.displayL_Data_input;
+  port  voter_displayC_pr.voter_output-> voter_displayL_pr.displayC_Data_input;
+  port  voter_displayC_pr.voter_output-> voter_displayR_pr.displayC_Data_input;
+  port  voter_displayR_pr.voter_output-> voter_displayL_pr.displayR_Data_input;
+  port  voter_displayR_pr.voter_output-> voter_displayC_pr.displayR_Data_input;
+  
+  port voter_displayL_pr.voter_error_out->voterL_error_out;
+  port voter_displayL_pr.display_error_out->displayL_error_out;
+  port voterL_error_action-> voter_displayL_pr.voter_error_action;
+  port displayL_error_action-> voter_displayL_pr.display_error_action;
+  
+  port voter_displayC_pr.voter_error_out->voterC_error_out;
+  port voter_displayC_pr.display_error_out->displayC_error_out;
+  port voterC_error_action-> voter_displayC_pr.voter_error_action;
+  port displayC_error_action-> voter_displayC_pr.display_error_action;
+  
+  port voter_displayR_pr.voter_error_out->voterR_error_out;
+  port voter_displayR_pr.display_error_out->displayR_error_out;
+  port voterR_error_action-> voter_displayR_pr.voter_error_action;
+  port displayR_error_action-> voter_displayR_pr.display_error_action;
+  
+properties
+   --  bind partition process to their associated       
+   --  runtime (virtual processor)
+   Actual_Processor_Binding => 
+      (reference (voter_cpu.part1)) applies to voter_displayL_pr;
+   Actual_Processor_Binding =>
+      (reference (voter_cpu.part2)) applies to voter_displayC_pr;
+   Actual_Processor_Binding =>
+      (reference (voter_cpu.part3)) applies to voter_displayR_pr;
+  
+   --  bind partition process to their address spaces       
+   --  (memory components)
+   Actual_Memory_Binding =>
+     (reference (voter_mem.voter1Mem)) applies to voter_displayL_pr;
+   Actual_Memory_Binding =>
+     (reference (voter_mem.voter2Mem)) applies to voter_displayC_pr;
+   Actual_Memory_Binding =>
+     (reference (voter_mem.voter3Mem)) applies to voter_displayR_pr;
+    
+end voter_display.impl;
+end VD_Module;

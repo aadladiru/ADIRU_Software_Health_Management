@@ -1,0 +1,13 @@
+package SHM_DataType
+public
+
+data accData
+end accData;
+
+data errorData
+end  errorData;
+
+data actionData
+end actionData;
+
+end SHM_DataType;

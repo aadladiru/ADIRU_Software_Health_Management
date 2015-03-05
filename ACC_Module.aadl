@@ -1,0 +1,297 @@
+package ACC_Module
+public
+with ARINC653;
+with SHM_DataType;
+with ADIRU_BUS;
+with SEI;
+
+virtual processor acc_partition
+properties
+  Scheduling_Protocol => (FixedTimeline);
+  
+end acc_partition;
+
+virtual processor implementation acc_partition.impl
+end acc_partition.impl;
+
+subprogram  acc_dataOutput_spg
+features
+ accDataOut: out parameter SHM_DataType::accData {Source_Name=>"accData";};
+properties
+ Source_Language =>(C);
+ --file that contains c code.
+ Source_Text => ("acc_dataOutput.c");
+ --c function that will be executed.
+end   acc_dataOutput_spg;
+
+subprogram  acc_HM_spg
+features
+ in_para: in parameter SHM_DataType::accData;
+ out_error_data: out parameter SHM_DataType::errorData;
+ in_action_command: in parameter SHM_DataType::actionData;
+properties
+ Source_Language =>(C);
+ --file that contains c code.
+ Source_Text => ("acc_HM.c");
+ --c function that will be executed.
+end         acc_HM_spg;
+
+thread  acc_dataOutput
+features
+   accout: out data port SHM_DataType::accData;
+properties
+   Reference_Processor=>classifier(ACC_Module::powerpc_acc);
+   Initialize_Entrypoint => classifier (ACC_Module::acc_dataOutput_spg);
+   Dispatch_Protocol => Periodic;
+   Priority => 1;
+   Source_Stack_Size => 20 KByte;
+   Source_Code_Size => 100 KByte;
+   Source_Data_Size => 1 KByte;
+   Period => 50 ms;
+   Compute_Execution_Time => 20 ms .. 30 ms;
+   Deadline => 30 ms;
+   ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
+   ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+end  acc_dataOutput;
+
+thread implementation    acc_dataOutput.impl
+calls
+sub1: {
+	   accDataOutput: subprogram acc_dataOutput_spg;
+};
+
+connections
+ parameter accDataOutput.accDataOut->accout;
+end  acc_dataOutput.impl;
+
+thread  acc_HM
+features
+   acc_data_monitor: in data port SHM_DataType::accData;
+   acc_error_action: in event data port SHM_DataType::actionData;
+   acc_error_out: out event data port SHM_DataType::errorData;
+properties
+   Reference_Processor=>classifier(ACC_Module::powerpc_acc);
+   Initialize_Entrypoint => classifier (ACC_Module::acc_HM_spg);
+   Dispatch_Protocol => Periodic;
+   Priority => 2;
+   Source_Stack_Size => 20 KByte;
+   Source_Code_Size => 100 KByte;
+   Source_Data_Size => 1 KByte;
+   Period => 50 ms;
+   Compute_Execution_Time => 20 ms .. 30 ms;
+   Deadline => 30 ms;
+   ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
+   ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+end  acc_HM;
+
+thread implementation    acc_HM.impl
+calls
+sub1: {
+	   accHM: subprogram acc_HM_spg;
+};
+
+connections
+ parameter acc_data_monitor->accHM.in_para;
+ parameter acc_error_action->accHM.in_action_command;
+ parameter accHM.out_error_data->acc_error_out;
+ 
+end  acc_HM.impl;
+
+process acc_process
+features
+   acc_output: out data port SHM_DataType::accData;
+   acc_error_out: out event data port SHM_DataType::errorData;
+   acc_error_action: in event data port SHM_DataType::actionData;
+end acc_process;
+
+process implementation acc_process.impl
+subcomponents
+   acc: thread acc_dataOutput.impl;
+   acc_HM: thread acc_HM.impl;
+connections
+   port acc.accout->acc_output;
+   port acc.accout->acc_HM.acc_data_monitor {Timing=>Delayed;};
+   port acc_HM.acc_error_out->acc_error_out;
+   port acc_error_action->acc_HM.acc_error_action;
+end acc_process.impl;
+
+processor powerpc_acc
+end powerpc_acc;
+
+processor implementation powerpc_acc.impl
+subcomponents
+   part1:   virtual processor acc_partition.impl;
+   part2:   virtual processor acc_partition.impl;
+   part3:   virtual processor acc_partition.impl;
+   part4:   virtual processor acc_partition.impl;
+   part5:   virtual processor acc_partition.impl;
+   part6:   virtual processor acc_partition.impl;
+properties
+   --ARINC653::Scheduling_Protocol=>Static;
+   SEI::MIPSCapacity=>0.65 MIPS;
+   ARINC653::Module_Major_Frame => 960 ms;
+   ARINC653::Partition_Slots => (160 ms, 160 ms, 160 ms,160 ms, 160 ms, 160 ms);
+   ARINC653::Slots_Allocation => 
+     (reference (part1), reference (part2), reference (part3),reference (part4), reference (part5), reference (part6));
+   --ARINC653::Process_Swap_Execution_Time =>1 ms;
+   ARINC653::HM_Errors => (Power_Fail);
+   ARINC653::HM_Module_Recovery_Actions => (Reset);
+end powerpc_acc.impl;
+
+-- Memory
+memory acc1_partition_memory
+properties
+   Base_Address => 0;
+   Byte_Count=>300000 ;
+   ARINC653::Memory_Type => (Code_Memory);
+   ARINC653::Access_Type => (read, write, execute);
+   
+end acc1_partition_memory;
+
+memory acc2_partition_memory
+properties
+   Base_Address => 300010;
+   ARINC653::Memory_Type => (Code_Memory);
+   Byte_Count=>300000;
+   ARINC653::Access_Type => (read, write, execute);
+end acc2_partition_memory;
+
+memory acc3_partition_memory
+properties
+   Base_Address => 600020;
+   ARINC653::Memory_Type => (Code_Memory);
+   Byte_Count=>300000;
+   ARINC653::Access_Type => (read, write, execute);
+end acc3_partition_memory;
+
+memory acc4_partition_memory
+properties
+   Base_Address => 900030;
+   ARINC653::Memory_Type => (Code_Memory);
+   Byte_Count=>300000;
+   ARINC653::Access_Type => (read, write, execute);
+end acc4_partition_memory;
+
+memory acc5_partition_memory
+properties
+   Base_Address => 1200040;
+   ARINC653::Memory_Type => (Code_Memory);
+   Byte_Count=>300000;
+   ARINC653::Access_Type => (read, write, execute);
+end acc5_partition_memory;
+
+memory acc6_partition_memory
+properties
+   Base_Address => 1500050;
+   ARINC653::Memory_Type => (Code_Memory);
+   Byte_Count=>300000;
+   ARINC653::Access_Type => (read, write, execute);
+end acc6_partition_memory;
+
+memory acc_memory
+--properties
+--   Base_Address => 0;
+--   ARINC653::Memory_Type => (Code_Memory);
+--   Byte_Count=>2000000;
+--   ARINC653::Access_Type => (read, write, execute);
+end acc_memory;
+
+memory implementation acc_memory.impl
+subcomponents
+   acc1Mem: memory acc1_partition_memory;
+   acc2Mem: memory acc2_partition_memory;
+   acc3Mem: memory acc3_partition_memory;
+   acc4Mem: memory acc4_partition_memory;
+   acc5Mem: memory acc5_partition_memory;
+   acc6Mem: memory acc6_partition_memory;
+end acc_memory.impl;
+
+system acc
+features
+  acc1_output: out data port SHM_DataType::accData;
+  acc2_output: out data port SHM_DataType::accData;
+  acc3_output: out data port SHM_DataType::accData;
+  acc4_output: out data port SHM_DataType::accData;
+  acc5_output: out data port SHM_DataType::accData;
+  acc6_output: out data port SHM_DataType::accData;
+  acc1_error_out: out event data port SHM_DataType::errorData;
+  acc1_error_action: in event data port SHM_DataType::actionData;
+  acc2_error_out: out event data port SHM_DataType::errorData;
+  acc2_error_action: in event data port SHM_DataType::actionData;
+  acc3_error_out: out event data port SHM_DataType::errorData;
+  acc3_error_action: in event data port SHM_DataType::actionData;
+  acc4_error_out: out event data port SHM_DataType::errorData;
+  acc4_error_action: in event data port SHM_DataType::actionData;
+  acc5_error_out: out event data port SHM_DataType::errorData;
+  acc5_error_action: in event data port SHM_DataType::actionData;
+  acc6_error_out: out event data port SHM_DataType::errorData;
+  acc6_error_action: in event data port SHM_DataType::actionData;
+end acc;
+
+system implementation acc.impl
+subcomponents
+   acc_mem  : memory acc_memory.impl;
+   acc_cpu  : processor powerpc_acc.impl;
+   acc1_pr  : process acc_process.impl;
+   acc2_pr  : process acc_process.impl;
+   acc3_pr  : process acc_process.impl;
+   acc4_pr  : process acc_process.impl;
+   acc5_pr  : process acc_process.impl;
+   acc6_pr  : process acc_process.impl;
+   --acc_bus  :bus ADIRU_BUS::acc_bus;
+connections
+  acc1:port acc1_pr. acc_output->acc1_output; 
+  acc2:port acc2_pr. acc_output->acc2_output; 
+  acc3:port acc3_pr. acc_output->acc3_output; 
+  acc4:port acc4_pr. acc_output->acc4_output; 
+  acc5:port acc5_pr. acc_output->acc5_output; 
+  acc6:port acc6_pr. acc_output->acc6_output; 
+  
+  acc7:port acc1_pr.acc_error_out->acc1_error_out;
+  acc8:port acc1_error_action->acc1_pr.acc_error_action;
+  acc9:port acc2_pr.acc_error_out->acc2_error_out;
+  acc10:port acc2_error_action->acc2_pr.acc_error_action;
+  acc11:port acc3_pr.acc_error_out->acc3_error_out;
+  acc12:port acc3_error_action->acc3_pr.acc_error_action;
+  acc13:port acc4_pr.acc_error_out->acc4_error_out;
+  acc14:port acc4_error_action->acc4_pr.acc_error_action;
+  acc15:port acc5_pr.acc_error_out->acc5_error_out;
+  acc16:port acc5_error_action->acc5_pr.acc_error_action;
+  acc17:port acc6_pr.acc_error_out->acc6_error_out;
+  acc18:port acc6_error_action->acc6_pr.acc_error_action;
+  
+properties
+   --  bind partition process to their associated       
+   --  runtime (virtual processor)
+   Actual_Processor_Binding => 
+      (reference (acc_cpu.part1)) applies to acc1_pr;
+   Actual_Processor_Binding =>
+      (reference (acc_cpu.part2)) applies to acc2_pr;
+   Actual_Processor_Binding =>
+      (reference (acc_cpu.part3)) applies to acc3_pr;
+   Actual_Processor_Binding =>
+      (reference (acc_cpu.part4)) applies to acc4_pr;
+   Actual_Processor_Binding =>
+      (reference (acc_cpu.part5)) applies to acc5_pr;
+   Actual_Processor_Binding =>
+      (reference (acc_cpu.part6)) applies to acc6_pr;   
+   --  bind partition process to their address spaces       
+   --  (memory components)
+   Actual_Memory_Binding =>
+     (reference (acc_mem.acc1Mem)) applies to acc1_pr;
+   Actual_Memory_Binding =>
+     (reference (acc_mem.acc2Mem)) applies to acc2_pr;
+   Actual_Memory_Binding =>
+     (reference (acc_mem.acc6Mem)) applies to acc3_pr;
+   Actual_Memory_Binding =>
+     (reference (acc_mem.acc4Mem)) applies to acc4_pr;
+   Actual_Memory_Binding =>
+     (reference (acc_mem.acc5Mem)) applies to acc5_pr;
+   Actual_Memory_Binding =>
+     (reference (acc_mem.acc6Mem)) applies to acc6_pr;
+    
+   --Actual_Connection_Binding => (reference (acc_bus)) applies to acc1,acc2,acc3,acc4,
+     --acc5,acc6,acc7,acc8,acc9,acc10,acc11,acc12,acc13,acc14,acc15,acc16,acc17,acc18;
+   
+end acc.impl;
+end ACC_Module;

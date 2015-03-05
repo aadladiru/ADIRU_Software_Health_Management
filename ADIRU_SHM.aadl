@@ -1,0 +1,100 @@
+package ADIRU_SHM
+public
+with ARINC653;
+with SHM_DataType;
+with ACC_Module;
+with ADIRUp_Module;
+with VD_Module;
+with HM_Module;
+with ADIRU_Bus;
+
+system ADIRU_SHM
+end ADIRU_SHM;
+
+system implementation ADIRU_SHM.impl
+subcomponents
+  acc_module: system ACC_Module::acc.impl;
+  ADIRU_module: system ADIRUp_Module::ADIRU_processor.impl;
+  voter_module: system VD_Module::voter_display.impl;
+  systemHM_module: system HM_Module::systemHM.impl;
+  --sysBus: bus ADIRU_BUS::system_bus;
+connections
+  ap11:port acc_module. acc1_output->ADIRU_module.ADIRU_p1_input1;
+  ap12:port acc_module. acc1_output->ADIRU_module.ADIRU_p2_input1;
+  ap13:port acc_module. acc1_output->ADIRU_module.ADIRU_p3_input1;
+  ap14:port acc_module. acc1_output->ADIRU_module.ADIRU_p4_input1;
+  ap21:port acc_module. acc2_output->ADIRU_module.ADIRU_p1_input2;
+  ap22:port acc_module. acc2_output->ADIRU_module.ADIRU_p2_input2;
+  ap23:port acc_module. acc2_output->ADIRU_module.ADIRU_p3_input2;
+  ap24:port acc_module. acc2_output->ADIRU_module.ADIRU_p4_input2;
+  ap31:port acc_module. acc3_output->ADIRU_module.ADIRU_p1_input3;
+  ap32:port acc_module. acc3_output->ADIRU_module.ADIRU_p2_input3;
+  ap33:port acc_module. acc3_output->ADIRU_module.ADIRU_p3_input3;
+  ap34:port acc_module. acc3_output->ADIRU_module.ADIRU_p4_input3;
+  ap41:port acc_module. acc4_output->ADIRU_module.ADIRU_p1_input4;
+  ap42:port acc_module. acc4_output->ADIRU_module.ADIRU_p2_input4;
+  ap43:port acc_module. acc4_output->ADIRU_module.ADIRU_p3_input4;
+  ap44:port acc_module. acc4_output->ADIRU_module.ADIRU_p4_input4;
+  ap51:port acc_module. acc5_output->ADIRU_module.ADIRU_p1_input5;
+  ap52:port acc_module. acc5_output->ADIRU_module.ADIRU_p2_input5;
+  ap53:port acc_module. acc5_output->ADIRU_module.ADIRU_p3_input5;
+  ap54:port acc_module. acc5_output->ADIRU_module.ADIRU_p4_input5;
+  ap61:port acc_module. acc6_output->ADIRU_module.ADIRU_p1_input6;
+  ap62:port acc_module. acc6_output->ADIRU_module.ADIRU_p2_input6;
+  ap63:port acc_module. acc6_output->ADIRU_module.ADIRU_p3_input6;
+  ap64:port acc_module. acc6_output->ADIRU_module.ADIRU_p4_input6;
+  
+  av1L1:port ADIRU_module.ADIRU_p1_output->voter_module.voterL_input1;
+  av1C1:port ADIRU_module.ADIRU_p1_output->voter_module.voterC_input1;
+  av1R1:port ADIRU_module.ADIRU_p1_output->voter_module.voterR_input1;
+  av2L2:port ADIRU_module.ADIRU_p2_output->voter_module.voterL_input2;
+  av2C2:port ADIRU_module.ADIRU_p2_output->voter_module.voterC_input2;
+  av2R2:port ADIRU_module.ADIRU_p2_output->voter_module.voterR_input2;
+  av3L3:port ADIRU_module.ADIRU_p3_output->voter_module.voterL_input3;
+  av3C3:port ADIRU_module.ADIRU_p3_output->voter_module.voterC_input3;
+  av3R3:port ADIRU_module.ADIRU_p3_output->voter_module.voterR_input3;
+  av4L4:port ADIRU_module.ADIRU_p4_output->voter_module.voterL_input4;
+  av4C4:port ADIRU_module.ADIRU_p4_output->voter_module.voterC_input4;
+  av4R4:port ADIRU_module.ADIRU_p4_output->voter_module.voterR_input4;
+  
+  port acc_module.acc1_error_out->systemHM_module.systemHM_arlarm_in;
+  port systemHM_module.systemHM_action->acc_module.acc1_error_action;
+  port acc_module.acc2_error_out->systemHM_module.systemHM_arlarm_in;
+  port systemHM_module.systemHM_action->acc_module.acc2_error_action;
+  port acc_module.acc3_error_out->systemHM_module.systemHM_arlarm_in;
+  port systemHM_module.systemHM_action->acc_module.acc3_error_action;
+  port acc_module.acc4_error_out->systemHM_module.systemHM_arlarm_in;
+  port systemHM_module.systemHM_action->acc_module.acc4_error_action;
+  port acc_module.acc5_error_out->systemHM_module.systemHM_arlarm_in;
+  port systemHM_module.systemHM_action->acc_module.acc5_error_action;
+  port acc_module.acc6_error_out->systemHM_module.systemHM_arlarm_in;
+  port systemHM_module.systemHM_action->acc_module.acc6_error_action;
+  
+  port ADIRU_module.ADIRUp1_error_out->systemHM_module.systemHM_arlarm_in;
+  port systemHM_module.systemHM_action->ADIRU_module.ADIRUp1_error_action;
+  port ADIRU_module.ADIRUp2_error_out->systemHM_module.systemHM_arlarm_in;
+  port systemHM_module.systemHM_action->ADIRU_module.ADIRUp2_error_action;
+  port ADIRU_module.ADIRUp3_error_out->systemHM_module.systemHM_arlarm_in;
+  port systemHM_module.systemHM_action->ADIRU_module.ADIRUp3_error_action;
+  port ADIRU_module.ADIRUp4_error_out->systemHM_module.systemHM_arlarm_in;
+  port systemHM_module.systemHM_action->ADIRU_module.ADIRUp4_error_action;
+  
+  port voter_module.voterL_error_out->systemHM_module.systemHM_arlarm_in;
+  port systemHM_module.systemHM_action->voter_module.voterL_error_action;
+  port voter_module.voterC_error_out->systemHM_module.systemHM_arlarm_in;
+  port systemHM_module.systemHM_action->voter_module.voterC_error_action;
+  port voter_module.voterR_error_out->systemHM_module.systemHM_arlarm_in;
+  port systemHM_module.systemHM_action->voter_module.voterR_error_action;
+  
+  port voter_module.displayL_error_out->systemHM_module.systemHM_arlarm_in;
+  port systemHM_module.systemHM_action->voter_module.displayL_error_action;
+  port voter_module.displayC_error_out->systemHM_module.systemHM_arlarm_in;
+  port systemHM_module.systemHM_action->voter_module.displayC_error_action;
+  port voter_module.displayR_error_out->systemHM_module.systemHM_arlarm_in;
+  port systemHM_module.systemHM_action->voter_module.displayR_error_action;
+  --properties
+  --Actual_Connection_Binding => (reference (sysBus)) applies to ap11;
+  
+end ADIRU_SHM.impl;
+
+end ADIRU_SHM;

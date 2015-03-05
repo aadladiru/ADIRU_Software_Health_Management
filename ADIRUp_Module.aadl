@@ -1,0 +1,356 @@
+package ADIRUp_Module
+public
+with ARINC653;
+with SHM_DataType;
+with SEI;
+virtual processor ADIRU_partition
+properties
+      Scheduling_Protocol => (FixedTimeline);
+end ADIRU_partition;
+
+virtual processor implementation ADIRU_partition.impl
+end ADIRU_partition.impl;
+
+subprogram  ADIRUp_solve_spg
+features
+ inData_para1: in parameter SHM_DataType::accData {Source_Name=>"accData1";};
+ inData_para2: in parameter SHM_DataType::accData {Source_Name=>"accData2";};
+ inData_para3: in parameter SHM_DataType::accData {Source_Name=>"accData3";};
+ inData_para4: in parameter SHM_DataType::accData {Source_Name=>"accData4";};
+ inData_para5: in parameter SHM_DataType::accData {Source_Name=>"accData5";};
+ inData_para6: in parameter SHM_DataType::accData {Source_Name=>"accData6";};
+ outdata_para: out parameter SHM_DataType::accData;
+properties
+ Source_Language =>(C);
+ Source_Text => ("ADIRUp_solve.c");
+end   ADIRUp_solve_spg;
+
+subprogram  ADIRUp_HM_spg
+features
+ inData_para1: in parameter SHM_DataType::accData {Source_Name=>"accData1";};
+ inData_para2: in parameter SHM_DataType::accData {Source_Name=>"accData2";};
+ inData_para3: in parameter SHM_DataType::accData {Source_Name=>"accData3";};
+ inData_para4: in parameter SHM_DataType::accData {Source_Name=>"accData4";};
+ inData_para5: in parameter SHM_DataType::accData {Source_Name=>"accData5";};
+ inData_para6: in parameter SHM_DataType::accData {Source_Name=>"accData6";};
+ outdata_para1: out parameter SHM_DataType::accData;
+ outdata_para2: out parameter SHM_DataType::accData;
+ outdata_para3: out parameter SHM_DataType::accData;
+ outdata_para4: out parameter SHM_DataType::accData;
+ outdata_para5: out parameter SHM_DataType::accData;
+ outdata_para6: out parameter SHM_DataType::accData;
+ error_data_out: out parameter SHM_DataType::errorData;
+ error_action_in: in parameter SHM_DataType::actionData;
+properties
+ Source_Language =>(C);
+ Source_Text => ("ADIRUp_HM.c");
+end    ADIRUp_HM_spg;
+
+thread  ADIRUp_solve
+features
+   accData_in1:  in data port SHM_DataType::accData;
+   accData_in2:  in data port SHM_DataType::accData;
+   accData_in3:  in data port SHM_DataType::accData;
+   accData_in4:  in data port SHM_DataType::accData;
+   accData_in5:  in data port SHM_DataType::accData;
+   accData_in6:  in data port SHM_DataType::accData;
+   ADIRUpout: out data port SHM_DataType::accData;
+properties
+   Initialize_Entrypoint => classifier (ADIRUp_Module::ADIRUp_solve_spg);
+   Priority => 2;
+   Source_Stack_Size => 20 KByte;
+   Source_Code_Size => 100 KByte;
+   Source_Data_Size => 1 KByte;
+   Dispatch_Protocol => Periodic;
+   Period => 50 ms;
+   Compute_Execution_Time => 20 ms .. 50 ms;
+   Deadline => 50 ms;
+   ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
+   ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+end  ADIRUp_solve;
+
+thread implementation    ADIRUp_solve.impl
+calls
+sub1: {
+	   ADIRUp_solve: subprogram ADIRUp_solve_spg;
+};
+
+connections
+ parameter accData_in1->ADIRUp_solve.inData_para1;
+ parameter accData_in2->ADIRUp_solve.inData_para2;
+ parameter accData_in3->ADIRUp_solve.inData_para3;
+ parameter accData_in4->ADIRUp_solve.inData_para4;
+ parameter accData_in5->ADIRUp_solve.inData_para5;
+ parameter accData_in6->ADIRUp_solve.inData_para6;
+ parameter ADIRUp_solve.outdata_para-> ADIRUpout;
+end    ADIRUp_solve.impl;
+
+thread  ADIRUp_HM
+features
+   accData_in1:  in data port SHM_DataType::accData;
+   accData_in2:  in data port SHM_DataType::accData;
+   accData_in3:  in data port SHM_DataType::accData;
+   accData_in4:  in data port SHM_DataType::accData;
+   accData_in5:  in data port SHM_DataType::accData;
+   accData_in6:  in data port SHM_DataType::accData;
+   accData_out1:  out data port SHM_DataType::accData;
+   accData_out2:  out data port SHM_DataType::accData;
+   accData_out3:  out data port SHM_DataType::accData;
+   accData_out4:  out data port SHM_DataType::accData;
+   accData_out5:  out data port SHM_DataType::accData;
+   accData_out6:  out data port SHM_DataType::accData;
+   ADIRUp_error_out: out event data port SHM_DataType::errorData;
+   ADIRUp_error_action: in event data port SHM_DataType::actionData;
+properties
+   Initialize_Entrypoint => classifier (ADIRUp_Module::ADIRUp_HM_spg);
+   Priority => 1;
+   Source_Stack_Size => 20 KByte;
+   Source_Code_Size => 100 KByte;
+   Source_Data_Size => 1 KByte;
+   Dispatch_Protocol => Periodic;
+   Period => 50 ms;
+   Compute_Execution_Time => 20 ms .. 50 ms;
+   Deadline => 50 ms;
+   ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
+   ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+end  ADIRUp_HM;
+
+thread implementation    ADIRUp_HM.impl
+calls
+sub1: {
+	   ADIRUp_HM: subprogram ADIRUp_HM_spg;
+};
+
+connections
+ parameter accData_in1->ADIRUp_HM.inData_para1;
+ parameter accData_in2->ADIRUp_HM.inData_para2;
+ parameter accData_in3->ADIRUp_HM.inData_para3;
+ parameter accData_in4->ADIRUp_HM.inData_para4;
+ parameter accData_in5->ADIRUp_HM.inData_para5;
+ parameter accData_in6->ADIRUp_HM.inData_para6;
+ 
+ parameter ADIRUp_HM.outdata_para1->accData_out1;
+ parameter ADIRUp_HM.outdata_para2->accData_out2;
+ parameter ADIRUp_HM.outdata_para3->accData_out3;
+ parameter ADIRUp_HM.outdata_para4->accData_out4;
+ parameter ADIRUp_HM.outdata_para5->accData_out5;
+ parameter ADIRUp_HM.outdata_para6->accData_out6;
+ 
+ parameter ADIRUp_error_action->ADIRUp_HM.error_action_in;
+ parameter  ADIRUp_HM.error_data_out->ADIRUp_error_out;
+end    ADIRUp_HM.impl;
+
+process ADIRUp_process
+features
+   acc1_input: in data port SHM_DataType::accData;
+   acc2_input: in data port SHM_DataType::accData;
+   acc3_input: in data port SHM_DataType::accData;
+   acc4_input: in data port SHM_DataType::accData;
+   acc5_input: in data port SHM_DataType::accData;
+   acc6_input: in data port SHM_DataType::accData;
+   ADIRUp_output: out data port SHM_DataType::accData;
+   ADIRUp_error_out: out event data port SHM_DataType::errorData;
+   ADIRUp_error_action: in event data port SHM_DataType::actionData;
+end ADIRUp_process;
+
+process implementation ADIRUp_process.impl
+subcomponents
+   ADIRUp_solve_th: thread ADIRUp_solve.impl;
+   ADIRUp_HM_th: thread ADIRUp_HM.impl;
+connections
+   port acc1_input->ADIRUp_HM_th.accData_in1 {Timing=>Delayed;};
+   port acc2_input->ADIRUp_HM_th.accData_in2 {Timing=>Delayed;};
+   port acc3_input->ADIRUp_HM_th.accData_in3 {Timing=>Delayed;};
+   port acc4_input->ADIRUp_HM_th.accData_in4 {Timing=>Delayed;};
+   port acc5_input->ADIRUp_HM_th.accData_in5 {Timing=>Delayed;};
+   port acc6_input->ADIRUp_HM_th.accData_in6 {Timing=>Delayed;};
+   
+   port ADIRUp_HM_th.accData_out1->ADIRUp_solve_th.accData_in1 {Timing=>Delayed;};
+   port ADIRUp_HM_th.accData_out2->ADIRUp_solve_th.accData_in2 {Timing=>Delayed;};
+   port ADIRUp_HM_th.accData_out3->ADIRUp_solve_th.accData_in3 {Timing=>Delayed;};
+   port ADIRUp_HM_th.accData_out4->ADIRUp_solve_th.accData_in4 {Timing=>Delayed;};
+   port ADIRUp_HM_th.accData_out5->ADIRUp_solve_th.accData_in5 {Timing=>Delayed;};
+   port ADIRUp_HM_th.accData_out6->ADIRUp_solve_th.accData_in6 {Timing=>Delayed;};
+   port ADIRUp_solve_th.ADIRUpout->ADIRUp_output;
+   
+   port ADIRUp_error_action->ADIRUp_HM_th.ADIRUp_error_action;
+   port ADIRUp_HM_th.ADIRUp_error_out->ADIRUp_error_out;
+end ADIRUp_process.impl;
+
+processor powerpc_ADIRU
+end powerpc_ADIRU;
+
+processor implementation powerpc_ADIRU.impl
+subcomponents
+   part1:   virtual processor ADIRU_partition.impl;
+   part2:   virtual processor ADIRU_partition.impl;
+   part3:   virtual processor ADIRU_partition.impl;
+   part4:   virtual processor ADIRU_partition.impl;
+properties
+   SEI::MIPSCapacity=>0.65 MIPS;
+   ARINC653::Module_Major_Frame => 960 ms;
+   ARINC653::Partition_Slots => (240 ms, 240 ms, 240 ms,240 ms);
+   ARINC653::Slots_Allocation => 
+     (reference (part1), reference (part2), reference (part3),reference (part4));
+   ARINC653::HM_Errors => (Power_Fail);
+   ARINC653::HM_Module_Recovery_Actions => (Reset);
+end powerpc_ADIRU.impl;
+
+-- Memory
+memory ADIRU1_partition_memory
+properties
+   Base_Address => 0;
+   Byte_Count=>300000 ;
+   ARINC653::Memory_Type => (Code_Memory);
+   ARINC653::Access_Type => (read, write, execute);
+end ADIRU1_partition_memory;
+
+memory ADIRU2_partition_memory
+properties
+   Base_Address => 300010;
+   ARINC653::Memory_Type => (Code_Memory);
+   Byte_Count=>300000;
+   ARINC653::Access_Type => (read, write, execute);
+end ADIRU2_partition_memory;
+
+memory ADIRU3_partition_memory
+properties
+   Base_Address => 600020;
+   ARINC653::Memory_Type => (Code_Memory);
+   Byte_Count=>300000;
+   ARINC653::Access_Type => (read, write, execute);
+end ADIRU3_partition_memory;
+
+memory ADIRU4_partition_memory
+properties
+   Base_Address => 900030;
+   ARINC653::Memory_Type => (Code_Memory);
+   Byte_Count=>300000;
+   ARINC653::Access_Type => (read, write, execute);
+end ADIRU4_partition_memory;
+
+memory ADIRU_memory
+end ADIRU_memory;
+
+memory implementation ADIRU_memory.impl
+subcomponents
+   ADIRU1Mem: memory ADIRU1_partition_memory;
+   ADIRU2Mem: memory ADIRU2_partition_memory;
+   ADIRU3Mem: memory ADIRU3_partition_memory;
+   ADIRU4Mem: memory ADIRU4_partition_memory;
+   
+end ADIRU_memory.impl;
+
+system ADIRU_processor
+features
+  ADIRU_p1_input1: in data port SHM_DataType::accData;
+  ADIRU_p1_input2: in data port SHM_DataType::accData;
+  ADIRU_p1_input3: in data port SHM_DataType::accData;
+  ADIRU_p1_input4: in data port SHM_DataType::accData;
+  ADIRU_p1_input5: in data port SHM_DataType::accData;
+  ADIRU_p1_input6: in data port SHM_DataType::accData;
+  ADIRU_p2_input1: in data port SHM_DataType::accData;
+  ADIRU_p2_input2: in data port SHM_DataType::accData;
+  ADIRU_p2_input3: in data port SHM_DataType::accData;
+  ADIRU_p2_input4: in data port SHM_DataType::accData;
+  ADIRU_p2_input5: in data port SHM_DataType::accData;
+  ADIRU_p2_input6: in data port SHM_DataType::accData;
+  ADIRU_p3_input1: in data port SHM_DataType::accData;
+  ADIRU_p3_input2: in data port SHM_DataType::accData;
+  ADIRU_p3_input3: in data port SHM_DataType::accData;
+  ADIRU_p3_input4: in data port SHM_DataType::accData;
+  ADIRU_p3_input5: in data port SHM_DataType::accData;
+  ADIRU_p3_input6: in data port SHM_DataType::accData;
+  ADIRU_p4_input1: in data port SHM_DataType::accData;
+  ADIRU_p4_input2: in data port SHM_DataType::accData;
+  ADIRU_p4_input3: in data port SHM_DataType::accData;
+  ADIRU_p4_input4: in data port SHM_DataType::accData;
+  ADIRU_p4_input5: in data port SHM_DataType::accData;
+  ADIRU_p4_input6: in data port SHM_DataType::accData;
+  ADIRU_p1_output: out data port SHM_DataType::accData;
+  ADIRU_p2_output: out data port SHM_DataType::accData;
+  ADIRU_p3_output: out data port SHM_DataType::accData;
+  ADIRU_p4_output: out data port SHM_DataType::accData;
+  
+  ADIRUp1_error_out: out event data port SHM_DataType::errorData;
+  ADIRUp1_error_action: in event data port SHM_DataType::actionData;
+  ADIRUp2_error_out: out event data port SHM_DataType::errorData;
+  ADIRUp2_error_action: in event data port SHM_DataType::actionData;
+  ADIRUp3_error_out: out event data port SHM_DataType::errorData;
+  ADIRUp3_error_action: in event data port SHM_DataType::actionData;
+  ADIRUp4_error_out: out event data port SHM_DataType::errorData;
+  ADIRUp4_error_action: in event data port SHM_DataType::actionData;
+end ADIRU_processor;
+
+system implementation ADIRU_processor.impl
+subcomponents
+   ADIRU_mem  : memory ADIRU_memory.impl;
+   ADIRU_cpu  : processor powerpc_ADIRU.impl;
+   ADIRU1_pr  : process ADIRUp_process.impl;
+   ADIRU2_pr  : process ADIRUp_process.impl;
+   ADIRU3_pr  : process ADIRUp_process.impl;
+   ADIRU4_pr  : process ADIRUp_process.impl;
+connections
+  port ADIRU_p1_input1-> ADIRU1_pr.acc1_input;
+  port ADIRU_p1_input2-> ADIRU1_pr.acc2_input;
+  port ADIRU_p1_input3-> ADIRU1_pr.acc3_input;
+  port ADIRU_p1_input4-> ADIRU1_pr.acc4_input;
+  port ADIRU_p1_input5-> ADIRU1_pr.acc5_input;
+  port ADIRU_p1_input6-> ADIRU1_pr.acc6_input;
+  port ADIRU_p2_input1-> ADIRU2_pr.acc1_input;
+  port ADIRU_p2_input2-> ADIRU2_pr.acc2_input;
+  port ADIRU_p2_input3-> ADIRU2_pr.acc3_input;
+  port ADIRU_p2_input4-> ADIRU2_pr.acc4_input;
+  port ADIRU_p2_input5-> ADIRU2_pr.acc5_input;
+  port ADIRU_p2_input6-> ADIRU2_pr.acc6_input;
+  port ADIRU_p3_input1-> ADIRU3_pr.acc1_input;
+  port ADIRU_p3_input2-> ADIRU3_pr.acc2_input;
+  port ADIRU_p3_input3-> ADIRU3_pr.acc3_input;
+  port ADIRU_p3_input4-> ADIRU3_pr.acc4_input;
+  port ADIRU_p3_input5-> ADIRU3_pr.acc5_input;
+  port ADIRU_p3_input6-> ADIRU3_pr.acc6_input;
+  port ADIRU_p4_input1-> ADIRU4_pr.acc1_input;
+  port ADIRU_p4_input2-> ADIRU4_pr.acc2_input;
+  port ADIRU_p4_input3-> ADIRU4_pr.acc3_input;
+  port ADIRU_p4_input4-> ADIRU4_pr.acc4_input;
+  port ADIRU_p4_input5-> ADIRU4_pr.acc5_input;
+  port ADIRU_p4_input6-> ADIRU4_pr.acc6_input;
+  port ADIRU1_pr.ADIRUp_output-> ADIRU_p1_output;
+  port ADIRU2_pr.ADIRUp_output-> ADIRU_p2_output;
+  port ADIRU3_pr.ADIRUp_output-> ADIRU_p3_output;
+  port ADIRU4_pr.ADIRUp_output-> ADIRU_p4_output;
+  
+  port ADIRU1_pr.ADIRUp_error_out-> ADIRUp1_error_out;
+  port ADIRUp1_error_action->ADIRU1_pr.ADIRUp_error_action;
+  port ADIRU2_pr.ADIRUp_error_out-> ADIRUp2_error_out;
+  port ADIRUp2_error_action->ADIRU2_pr.ADIRUp_error_action;
+  port ADIRU3_pr.ADIRUp_error_out-> ADIRUp3_error_out;
+  port ADIRUp3_error_action->ADIRU3_pr.ADIRUp_error_action;
+  port ADIRU4_pr.ADIRUp_error_out-> ADIRUp4_error_out;
+  port ADIRUp4_error_action->ADIRU4_pr.ADIRUp_error_action;
+  
+properties
+   --  bind partition process to their associated       
+   --  runtime (virtual processor)
+   Actual_Processor_Binding => 
+      (reference (ADIRU_cpu.part1)) applies to ADIRU1_pr;
+   Actual_Processor_Binding =>
+      (reference (ADIRU_cpu.part2)) applies to ADIRU2_pr;
+   Actual_Processor_Binding =>
+      (reference (ADIRU_cpu.part3)) applies to ADIRU3_pr;
+   Actual_Processor_Binding =>
+      (reference (ADIRU_cpu.part4)) applies to ADIRU4_pr;
+  
+   --  bind partition process to their address spaces       
+   --  (memory components)
+   Actual_Memory_Binding =>
+     (reference (ADIRU_mem.ADIRU1Mem)) applies to ADIRU1_pr;
+   Actual_Memory_Binding =>
+     (reference (ADIRU_mem.ADIRU2Mem)) applies to ADIRU2_pr;
+   Actual_Memory_Binding =>
+     (reference (ADIRU_mem.ADIRU3Mem)) applies to ADIRU3_pr;
+   Actual_Memory_Binding =>
+     (reference (ADIRU_mem.ADIRU4Mem)) applies to ADIRU4_pr;
+   
+end ADIRU_processor.impl;
+end ADIRUp_Module;

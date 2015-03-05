@@ -1,0 +1,25 @@
+package ADIRU_BUS
+
+public
+
+bus acc_bus
+end acc_bus;
+bus implementation acc_bus.impl
+end acc_bus.impl;
+
+bus ADIRUp_bus
+end ADIRUp_bus;
+bus implementation ADIRUp_bus.impl
+end ADIRUp_bus.impl;
+
+bus VD_bus
+end VD_bus;
+bus implementation VD_bus.impl
+end VD_bus.impl;
+
+bus system_bus
+end system_bus;
+bus implementation system_bus.impl
+end system_bus.impl;
+
+end ADIRU_BUS;
