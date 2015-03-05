@@ -371,9 +371,16 @@ subcomponents
 properties
    SEI::MIPSCapacity=>0.65 MIPS;
    ARINC653::Module_Major_Frame => 990 ms;
-   ARINC653::Partition_Slots => (330 ms, 330 ms, 330 ms);
-   ARINC653::Slots_Allocation => 
-     (reference (part1), reference (part2), reference (part3));
+   ARINC653::Module_Schedule => ( [ Partition=>reference(part1);
+   									Duration=>330ms;
+   									Periodic_Processing_Start=>true;],
+   								  [ Partition=>reference(part2);
+   									Duration=>330ms;
+   									Periodic_Processing_Start=>true;],
+   							      [ Partition=>reference(part3);
+   									Duration=>330ms;
+   									Periodic_Processing_Start=>true;]
+   								);
    ARINC653::HM_Errors => (Power_Fail);
    ARINC653::HM_Module_Recovery_Actions => (Reset);
 end powerpc_voter_display.impl;

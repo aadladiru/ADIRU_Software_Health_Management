@@ -244,9 +244,10 @@ properties
    SEI::MIPSCapacity=>0.65 MIPS;
    --ARINC653::Scheduling_Protocol=>Static;
    ARINC653::Module_Major_Frame => 1000 ms;
-   ARINC653::Partition_Slots => (1000 ms);
-   ARINC653::Slots_Allocation => 
-     (reference (part1));
+   ARINC653::Module_Schedule => ( [ Partition=>reference(part1);
+   									Duration=>1000ms;
+   									Periodic_Processing_Start=>true;]
+   								);
    --ARINC653::Process_Swap_Execution_Time =>1 ms;
    --ARINC653::HM_Errors => (Power_Fail);
    ARINC653::HM_Module_Recovery_Actions => (Reset);

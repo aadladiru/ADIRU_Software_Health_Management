@@ -130,9 +130,25 @@ properties
    --ARINC653::Scheduling_Protocol=>Static;
    SEI::MIPSCapacity=>0.65 MIPS;
    ARINC653::Module_Major_Frame => 960 ms;
-   ARINC653::Partition_Slots => (160 ms, 160 ms, 160 ms,160 ms, 160 ms, 160 ms);
-   ARINC653::Slots_Allocation => 
-     (reference (part1), reference (part2), reference (part3),reference (part4), reference (part5), reference (part6));
+   ARINC653::Module_Schedule => ( [ Partition=>reference(part1);
+   									Duration=>160ms;
+   									Periodic_Processing_Start=>true;],
+   								  [ Partition=>reference(part2);
+   									Duration=>160ms;
+   									Periodic_Processing_Start=>true;],
+   							      [ Partition=>reference(part3);
+   									Duration=>160ms;
+   									Periodic_Processing_Start=>true;],
+   							      [ Partition=>reference(part4);
+   									Duration=>160ms;
+   									Periodic_Processing_Start=>true;],
+   								  [ Partition=>reference(part5);
+   									Duration=>160ms;
+   									Periodic_Processing_Start=>true;],
+   								  [ Partition=>reference(part6);
+   									Duration=>160ms;
+   									Periodic_Processing_Start=>true;]
+   								);
    --ARINC653::Process_Swap_Execution_Time =>1 ms;
    ARINC653::HM_Errors => (Power_Fail);
    ARINC653::HM_Module_Recovery_Actions => (Reset);
