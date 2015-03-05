@@ -160,7 +160,7 @@ properties
    Base_Address => 0;
    Memory_Size=>300 KByte;
    ARINC653::Memory_Type => (Code_Memory);
-   ARINC653::Access_Type => (read, write, execute);
+   -- ARINC653::Access_Type => (read, write, execute);
    
 end acc1_partition_memory;
 
@@ -169,7 +169,7 @@ properties
    Base_Address => 300010;
    ARINC653::Memory_Type => (Code_Memory);
    Memory_Size=>300 KByte;
-   ARINC653::Access_Type => (read, write, execute);
+   -- ARINC653::Access_Type => (read, write, execute);
 end acc2_partition_memory;
 
 memory acc3_partition_memory
@@ -177,7 +177,7 @@ properties
    Base_Address => 600020;
    ARINC653::Memory_Type => (Code_Memory);
    Memory_Size=>300 KByte;
-   ARINC653::Access_Type => (read, write, execute);
+   -- ARINC653::Access_Type => (read, write, execute);
 end acc3_partition_memory;
 
 memory acc4_partition_memory
@@ -185,7 +185,7 @@ properties
    Base_Address => 900030;
    ARINC653::Memory_Type => (Code_Memory);
    Memory_Size=>300 KByte;
-   ARINC653::Access_Type => (read, write, execute);
+   -- ARINC653::Access_Type => (read, write, execute);
 end acc4_partition_memory;
 
 memory acc5_partition_memory
@@ -193,7 +193,7 @@ properties
    Base_Address => 1200040;
    ARINC653::Memory_Type => (Code_Memory);
    Memory_Size=>300 KByte;
-   ARINC653::Access_Type => (read, write, execute);
+   -- ARINC653::Access_Type => (read, write, execute);
 end acc5_partition_memory;
 
 memory acc6_partition_memory
@@ -201,7 +201,7 @@ properties
    Base_Address => 1500050;
    ARINC653::Memory_Type => (Code_Memory);
    Memory_Size=>300 KByte;
-   ARINC653::Access_Type => (read, write, execute);
+   -- ARINC653::Access_Type => (read, write, execute);
 end acc6_partition_memory;
 
 memory acc_memory

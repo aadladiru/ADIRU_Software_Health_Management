@@ -259,7 +259,7 @@ properties
    Base_Address => 0;
    Memory_Size =>500 KByte ;
    ARINC653::Memory_Type => (Code_Memory);
-   ARINC653::Access_Type => (read, write, execute);
+   -- ARINC653::Access_Type => (read, write, execute);
 end HM_partition_memory;
 
 memory systemHM_memory

@@ -212,7 +212,7 @@ properties
    Base_Address => 0;
    Memory_Size=>300 KByte;
    ARINC653::Memory_Type => (Code_Memory);
-   ARINC653::Access_Type => (read, write, execute);
+   -- ARINC653::Access_Type => (read, write, execute);
 end ADIRU1_partition_memory;
 
 memory ADIRU2_partition_memory
@@ -220,7 +220,7 @@ properties
    Base_Address => 300010;
    ARINC653::Memory_Type => (Code_Memory);
    Memory_Size=>300 KByte;
-   ARINC653::Access_Type => (read, write, execute);
+   -- ARINC653::Access_Type => (read, write, execute);
 end ADIRU2_partition_memory;
 
 memory ADIRU3_partition_memory
@@ -228,7 +228,7 @@ properties
    Base_Address => 600020;
    ARINC653::Memory_Type => (Code_Memory);
    Memory_Size=>300 KByte;
-   ARINC653::Access_Type => (read, write, execute);
+   -- ARINC653::Access_Type => (read, write, execute);
 end ADIRU3_partition_memory;
 
 memory ADIRU4_partition_memory
@@ -236,7 +236,7 @@ properties
    Base_Address => 900030;
    ARINC653::Memory_Type => (Code_Memory);
    Memory_Size=>300 KByte;
-   ARINC653::Access_Type => (read, write, execute);
+   -- ARINC653::Access_Type => (read, write, execute);
 end ADIRU4_partition_memory;
 
 memory ADIRU_memory

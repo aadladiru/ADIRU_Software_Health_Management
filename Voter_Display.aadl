@@ -391,7 +391,7 @@ properties
    Base_Address => 0;
    Memory_Size=>500 KByte;
    ARINC653::Memory_Type => (Code_Memory);
-   ARINC653::Access_Type => (read, write, execute);
+   -- ARINC653::Access_Type => (read, write, execute);
 end voter1_partition_memory;
 
 memory voter2_partition_memory
@@ -399,7 +399,7 @@ properties
    Base_Address => 1000010;
    Memory_Size=>500 KByte;
    ARINC653::Memory_Type => (Code_Memory);
-   ARINC653::Access_Type => (read, write, execute);
+   -- ARINC653::Access_Type => (read, write, execute);
 end voter2_partition_memory;
 
 memory voter3_partition_memory
@@ -407,7 +407,7 @@ properties
    Base_Address => 1500020;
    Memory_Size=>500 KByte;
    ARINC653::Memory_Type => (Code_Memory);
-   ARINC653::Access_Type => (read, write, execute);
+   -- ARINC653::Access_Type => (read, write, execute);
 end voter3_partition_memory;
 
 memory voter_memory
