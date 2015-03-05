@@ -58,9 +58,9 @@ features
 properties
    Initialize_Entrypoint => classifier (ADIRUp_Module::ADIRUp_solve_spg);
    Priority => 2;
-   Source_Stack_Size => 20 KByte;
-   Source_Code_Size => 100 KByte;
-   Source_Data_Size => 1 KByte;
+   Stack_Size => 20 KByte;
+   Code_Size => 100 KByte;
+   Data_Size => 1 KByte;
    Dispatch_Protocol => Periodic;
    Period => 50 ms;
    Compute_Execution_Time => 20 ms .. 50 ms;
@@ -104,9 +104,9 @@ features
 properties
    Initialize_Entrypoint => classifier (ADIRUp_Module::ADIRUp_HM_spg);
    Priority => 1;
-   Source_Stack_Size => 20 KByte;
-   Source_Code_Size => 100 KByte;
-   Source_Data_Size => 1 KByte;
+   Stack_Size => 20 KByte;
+   Code_Size => 100 KByte;
+   Data_Size => 1 KByte;
    Dispatch_Protocol => Periodic;
    Period => 50 ms;
    Compute_Execution_Time => 20 ms .. 50 ms;
@@ -200,7 +200,7 @@ end powerpc_ADIRU.impl;
 memory ADIRU1_partition_memory
 properties
    Base_Address => 0;
-   Byte_Count=>300000 ;
+   Memory_Size=>300 KByte;
    ARINC653::Memory_Type => (Code_Memory);
    ARINC653::Access_Type => (read, write, execute);
 end ADIRU1_partition_memory;
@@ -209,7 +209,7 @@ memory ADIRU2_partition_memory
 properties
    Base_Address => 300010;
    ARINC653::Memory_Type => (Code_Memory);
-   Byte_Count=>300000;
+   Memory_Size=>300 KByte;
    ARINC653::Access_Type => (read, write, execute);
 end ADIRU2_partition_memory;
 
@@ -217,7 +217,7 @@ memory ADIRU3_partition_memory
 properties
    Base_Address => 600020;
    ARINC653::Memory_Type => (Code_Memory);
-   Byte_Count=>300000;
+   Memory_Size=>300 KByte;
    ARINC653::Access_Type => (read, write, execute);
 end ADIRU3_partition_memory;
 
@@ -225,7 +225,7 @@ memory ADIRU4_partition_memory
 properties
    Base_Address => 900030;
    ARINC653::Memory_Type => (Code_Memory);
-   Byte_Count=>300000;
+   Memory_Size=>300 KByte;
    ARINC653::Access_Type => (read, write, execute);
 end ADIRU4_partition_memory;
 
