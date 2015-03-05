@@ -76,13 +76,13 @@ sub1: {
 };
 
 connections
- parameter accData_in1->ADIRUp_solve.inData_para1;
- parameter accData_in2->ADIRUp_solve.inData_para2;
- parameter accData_in3->ADIRUp_solve.inData_para3;
- parameter accData_in4->ADIRUp_solve.inData_para4;
- parameter accData_in5->ADIRUp_solve.inData_para5;
- parameter accData_in6->ADIRUp_solve.inData_para6;
- parameter ADIRUp_solve.outdata_para-> ADIRUpout;
+ cAccData_in1 : parameter accData_in1->ADIRUp_solve.inData_para1;
+ cAccData_in2 : parameter accData_in2->ADIRUp_solve.inData_para2;
+ cAccData_in3 : parameter accData_in3->ADIRUp_solve.inData_para3;
+ cAccData_in4 : parameter accData_in4->ADIRUp_solve.inData_para4;
+ cAccData_in5 : parameter accData_in5->ADIRUp_solve.inData_para5;
+ cAccData_in6 : parameter accData_in6->ADIRUp_solve.inData_para6;
+ cADIRUpout : parameter ADIRUp_solve.outdata_para-> ADIRUpout;
 end    ADIRUp_solve.impl;
 
 thread  ADIRUp_HM
@@ -122,22 +122,22 @@ sub1: {
 };
 
 connections
- parameter accData_in1->ADIRUp_HM.inData_para1;
- parameter accData_in2->ADIRUp_HM.inData_para2;
- parameter accData_in3->ADIRUp_HM.inData_para3;
- parameter accData_in4->ADIRUp_HM.inData_para4;
- parameter accData_in5->ADIRUp_HM.inData_para5;
- parameter accData_in6->ADIRUp_HM.inData_para6;
+ cAccData_in1 : parameter accData_in1->ADIRUp_HM.inData_para1;
+ cAccData_in2 : parameter accData_in2->ADIRUp_HM.inData_para2;
+ cAccData_in3 : parameter accData_in3->ADIRUp_HM.inData_para3;
+ cAccData_in4 : parameter accData_in4->ADIRUp_HM.inData_para4;
+ cAccData_in5 : parameter accData_in5->ADIRUp_HM.inData_para5;
+ cAccData_in6 : parameter accData_in6->ADIRUp_HM.inData_para6;
  
- parameter ADIRUp_HM.outdata_para1->accData_out1;
- parameter ADIRUp_HM.outdata_para2->accData_out2;
- parameter ADIRUp_HM.outdata_para3->accData_out3;
- parameter ADIRUp_HM.outdata_para4->accData_out4;
- parameter ADIRUp_HM.outdata_para5->accData_out5;
- parameter ADIRUp_HM.outdata_para6->accData_out6;
+ cAccData_out1 : parameter ADIRUp_HM.outdata_para1->accData_out1;
+ cAccData_out2 : parameter ADIRUp_HM.outdata_para2->accData_out2;
+ cAccData_out3 : parameter ADIRUp_HM.outdata_para3->accData_out3;
+ cAccData_out4 : parameter ADIRUp_HM.outdata_para4->accData_out4;
+ cAccData_out5 : parameter ADIRUp_HM.outdata_para5->accData_out5;
+ cAccData_out6 : parameter ADIRUp_HM.outdata_para6->accData_out6;
  
- parameter ADIRUp_error_action->ADIRUp_HM.error_action_in;
- parameter  ADIRUp_HM.error_data_out->ADIRUp_error_out;
+ cADIRUp_error_action : parameter ADIRUp_error_action->ADIRUp_HM.error_action_in;
+ cADIRUp_error_out : parameter  ADIRUp_HM.error_data_out->ADIRUp_error_out;
 end    ADIRUp_HM.impl;
 
 process ADIRUp_process
@@ -158,23 +158,23 @@ subcomponents
    ADIRUp_solve_th: thread ADIRUp_solve.impl;
    ADIRUp_HM_th: thread ADIRUp_HM.impl;
 connections
-   port acc1_input->ADIRUp_HM_th.accData_in1 {Timing=>Delayed;};
-   port acc2_input->ADIRUp_HM_th.accData_in2 {Timing=>Delayed;};
-   port acc3_input->ADIRUp_HM_th.accData_in3 {Timing=>Delayed;};
-   port acc4_input->ADIRUp_HM_th.accData_in4 {Timing=>Delayed;};
-   port acc5_input->ADIRUp_HM_th.accData_in5 {Timing=>Delayed;};
-   port acc6_input->ADIRUp_HM_th.accData_in6 {Timing=>Delayed;};
+   cAcc1_input : port acc1_input->ADIRUp_HM_th.accData_in1 {Timing=>Delayed;};
+   cAcc2_input : port acc2_input->ADIRUp_HM_th.accData_in2 {Timing=>Delayed;};
+   cAcc3_input : port acc3_input->ADIRUp_HM_th.accData_in3 {Timing=>Delayed;};
+   cAcc4_input : port acc4_input->ADIRUp_HM_th.accData_in4 {Timing=>Delayed;};
+   cAcc5_input : port acc5_input->ADIRUp_HM_th.accData_in5 {Timing=>Delayed;};
+   cAcc6_input : port acc6_input->ADIRUp_HM_th.accData_in6 {Timing=>Delayed;};
    
-   port ADIRUp_HM_th.accData_out1->ADIRUp_solve_th.accData_in1 {Timing=>Delayed;};
-   port ADIRUp_HM_th.accData_out2->ADIRUp_solve_th.accData_in2 {Timing=>Delayed;};
-   port ADIRUp_HM_th.accData_out3->ADIRUp_solve_th.accData_in3 {Timing=>Delayed;};
-   port ADIRUp_HM_th.accData_out4->ADIRUp_solve_th.accData_in4 {Timing=>Delayed;};
-   port ADIRUp_HM_th.accData_out5->ADIRUp_solve_th.accData_in5 {Timing=>Delayed;};
-   port ADIRUp_HM_th.accData_out6->ADIRUp_solve_th.accData_in6 {Timing=>Delayed;};
-   port ADIRUp_solve_th.ADIRUpout->ADIRUp_output;
+   cAccData1 : port ADIRUp_HM_th.accData_out1->ADIRUp_solve_th.accData_in1 {Timing=>Delayed;};
+   cAccData2 : port ADIRUp_HM_th.accData_out2->ADIRUp_solve_th.accData_in2 {Timing=>Delayed;};
+   cAccData3 : port ADIRUp_HM_th.accData_out3->ADIRUp_solve_th.accData_in3 {Timing=>Delayed;};
+   cAccData4 : port ADIRUp_HM_th.accData_out4->ADIRUp_solve_th.accData_in4 {Timing=>Delayed;};
+   cAccData5 : port ADIRUp_HM_th.accData_out5->ADIRUp_solve_th.accData_in5 {Timing=>Delayed;};
+   cAccData6 : port ADIRUp_HM_th.accData_out6->ADIRUp_solve_th.accData_in6 {Timing=>Delayed;};
+   cADIRUp_output : port ADIRUp_solve_th.ADIRUpout->ADIRUp_output;
    
-   port ADIRUp_error_action->ADIRUp_HM_th.ADIRUp_error_action;
-   port ADIRUp_HM_th.ADIRUp_error_out->ADIRUp_error_out;
+   cADIRUp_error_action : port ADIRUp_error_action->ADIRUp_HM_th.ADIRUp_error_action;
+   cADIRUp_error_out : port ADIRUp_HM_th.ADIRUp_error_out->ADIRUp_error_out;
 end ADIRUp_process.impl;
 
 processor powerpc_ADIRU
@@ -291,43 +291,43 @@ subcomponents
    ADIRU3_pr  : process ADIRUp_process.impl;
    ADIRU4_pr  : process ADIRUp_process.impl;
 connections
-  port ADIRU_p1_input1-> ADIRU1_pr.acc1_input;
-  port ADIRU_p1_input2-> ADIRU1_pr.acc2_input;
-  port ADIRU_p1_input3-> ADIRU1_pr.acc3_input;
-  port ADIRU_p1_input4-> ADIRU1_pr.acc4_input;
-  port ADIRU_p1_input5-> ADIRU1_pr.acc5_input;
-  port ADIRU_p1_input6-> ADIRU1_pr.acc6_input;
-  port ADIRU_p2_input1-> ADIRU2_pr.acc1_input;
-  port ADIRU_p2_input2-> ADIRU2_pr.acc2_input;
-  port ADIRU_p2_input3-> ADIRU2_pr.acc3_input;
-  port ADIRU_p2_input4-> ADIRU2_pr.acc4_input;
-  port ADIRU_p2_input5-> ADIRU2_pr.acc5_input;
-  port ADIRU_p2_input6-> ADIRU2_pr.acc6_input;
-  port ADIRU_p3_input1-> ADIRU3_pr.acc1_input;
-  port ADIRU_p3_input2-> ADIRU3_pr.acc2_input;
-  port ADIRU_p3_input3-> ADIRU3_pr.acc3_input;
-  port ADIRU_p3_input4-> ADIRU3_pr.acc4_input;
-  port ADIRU_p3_input5-> ADIRU3_pr.acc5_input;
-  port ADIRU_p3_input6-> ADIRU3_pr.acc6_input;
-  port ADIRU_p4_input1-> ADIRU4_pr.acc1_input;
-  port ADIRU_p4_input2-> ADIRU4_pr.acc2_input;
-  port ADIRU_p4_input3-> ADIRU4_pr.acc3_input;
-  port ADIRU_p4_input4-> ADIRU4_pr.acc4_input;
-  port ADIRU_p4_input5-> ADIRU4_pr.acc5_input;
-  port ADIRU_p4_input6-> ADIRU4_pr.acc6_input;
-  port ADIRU1_pr.ADIRUp_output-> ADIRU_p1_output;
-  port ADIRU2_pr.ADIRUp_output-> ADIRU_p2_output;
-  port ADIRU3_pr.ADIRUp_output-> ADIRU_p3_output;
-  port ADIRU4_pr.ADIRUp_output-> ADIRU_p4_output;
+  cADIRU_p1_input1 : port ADIRU_p1_input1-> ADIRU1_pr.acc1_input;
+  cADIRU_p1_input2 : port ADIRU_p1_input2-> ADIRU1_pr.acc2_input;
+  cADIRU_p1_input3 : port ADIRU_p1_input3-> ADIRU1_pr.acc3_input;
+  cADIRU_p1_input4 : port ADIRU_p1_input4-> ADIRU1_pr.acc4_input;
+  cADIRU_p1_input5 : port ADIRU_p1_input5-> ADIRU1_pr.acc5_input;
+  cADIRU_p1_input6 : port ADIRU_p1_input6-> ADIRU1_pr.acc6_input;
+  cADIRU_p2_input1 : port ADIRU_p2_input1-> ADIRU2_pr.acc1_input;
+  cADIRU_p2_input2 : port ADIRU_p2_input2-> ADIRU2_pr.acc2_input;
+  cADIRU_p2_input3 : port ADIRU_p2_input3-> ADIRU2_pr.acc3_input;
+  cADIRU_p2_input4 : port ADIRU_p2_input4-> ADIRU2_pr.acc4_input;
+  cADIRU_p2_input5 : port ADIRU_p2_input5-> ADIRU2_pr.acc5_input;
+  cADIRU_p2_input6 : port ADIRU_p2_input6-> ADIRU2_pr.acc6_input;
+  cADIRU_p3_input1 : port ADIRU_p3_input1-> ADIRU3_pr.acc1_input;
+  cADIRU_p3_input2 : port ADIRU_p3_input2-> ADIRU3_pr.acc2_input;
+  cADIRU_p3_input3 : port ADIRU_p3_input3-> ADIRU3_pr.acc3_input;
+  cADIRU_p3_input4 : port ADIRU_p3_input4-> ADIRU3_pr.acc4_input;
+  cADIRU_p3_input5 : port ADIRU_p3_input5-> ADIRU3_pr.acc5_input;
+  cADIRU_p3_input6 : port ADIRU_p3_input6-> ADIRU3_pr.acc6_input;
+  cADIRU_p4_input1 : port ADIRU_p4_input1-> ADIRU4_pr.acc1_input;
+  cADIRU_p4_input2 : port ADIRU_p4_input2-> ADIRU4_pr.acc2_input;
+  cADIRU_p4_input3 : port ADIRU_p4_input3-> ADIRU4_pr.acc3_input;
+  cADIRU_p4_input4 : port ADIRU_p4_input4-> ADIRU4_pr.acc4_input;
+  cADIRU_p4_input5 : port ADIRU_p4_input5-> ADIRU4_pr.acc5_input;
+  cADIRU_p4_input6 : port ADIRU_p4_input6-> ADIRU4_pr.acc6_input;
+  cADIRU_p1_output : port ADIRU1_pr.ADIRUp_output-> ADIRU_p1_output;
+  cADIRU_p2_output : port ADIRU2_pr.ADIRUp_output-> ADIRU_p2_output;
+  cADIRU_p3_output : port ADIRU3_pr.ADIRUp_output-> ADIRU_p3_output;
+  cADIRU_p4_output : port ADIRU4_pr.ADIRUp_output-> ADIRU_p4_output;
   
-  port ADIRU1_pr.ADIRUp_error_out-> ADIRUp1_error_out;
-  port ADIRUp1_error_action->ADIRU1_pr.ADIRUp_error_action;
-  port ADIRU2_pr.ADIRUp_error_out-> ADIRUp2_error_out;
-  port ADIRUp2_error_action->ADIRU2_pr.ADIRUp_error_action;
-  port ADIRU3_pr.ADIRUp_error_out-> ADIRUp3_error_out;
-  port ADIRUp3_error_action->ADIRU3_pr.ADIRUp_error_action;
-  port ADIRU4_pr.ADIRUp_error_out-> ADIRUp4_error_out;
-  port ADIRUp4_error_action->ADIRU4_pr.ADIRUp_error_action;
+  cADIRUp1_error_out : port ADIRU1_pr.ADIRUp_error_out-> ADIRUp1_error_out;
+  cADIRUp1_error_action : port ADIRUp1_error_action->ADIRU1_pr.ADIRUp_error_action;
+  cADIRUp2_error_out : port ADIRU2_pr.ADIRUp_error_out-> ADIRUp2_error_out;
+  cADIRUp2_error_action : port ADIRUp2_error_action->ADIRU2_pr.ADIRUp_error_action;
+  cADIRUp3_error_out : port ADIRU3_pr.ADIRUp_error_out-> ADIRUp3_error_out;
+  cADIRUp3_error_action : port ADIRUp3_error_action->ADIRU3_pr.ADIRUp_error_action;
+  cADIRUp4_error_out : port ADIRU4_pr.ADIRUp_error_out-> ADIRUp4_error_out;
+  cADIRUp4_error_action : port ADIRUp4_error_action->ADIRU4_pr.ADIRUp_error_action;
   
 properties
    --  bind partition process to their associated       
