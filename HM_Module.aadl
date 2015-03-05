@@ -79,8 +79,8 @@ sub1: {
 };
 
 connections
- parameter  arlarm_in->alarmAggregator.inData_para;
- parameter  alarmAggregator.outData_para->alarmAggregator_out;
+ cAlarm_in : parameter  arlarm_in->alarmAggregator.inData_para;
+ cAlarmAggregator_out : parameter  alarmAggregator.outData_para->alarmAggregator_out;
 end     alarmAggregator.impl;
 
 
@@ -109,8 +109,8 @@ sub1: {
 };
 
 connections
- parameter  diagnosis_in->diagnosisEngine.inData_para;
- parameter  diagnosisEngine.outData_para->diagnosis_out;
+ cDiagnosis_in : parameter  diagnosis_in->diagnosisEngine.inData_para;
+ cDiagnosis_out : parameter  diagnosisEngine.outData_para->diagnosis_out;
 end    diagnosisEngine.impl;
 
 
@@ -154,8 +154,8 @@ sub1: {
 };
 
 connections
- parameter  mitigation_in->mitigationActor.inData_para;
- parameter  mitigationActor.outData_para->mitigation_command;
+ cMitigation_in : parameter  mitigation_in->mitigationActor.inData_para;
+ cMitigation_command : parameter  mitigationActor.outData_para->mitigation_command;
 end  mitigationActor_th.impl;
 
 process systemHM_process
@@ -198,7 +198,7 @@ subcomponents
    diagnosisEngine: thread diagnosisEngine.impl;
    mitigationActor: thread mitigationActor_th.impl;
 connections
-     port arlarm_in->alarmAggregator.arlarm_in;
+     cAlarm_in : port arlarm_in->alarmAggregator.arlarm_in;
 --   port systemHM_acc1_error->alarmAggregator.acc1_error;
 --   port systemHM_acc2_error->alarmAggregator.acc2_error;
 --   port systemHM_acc3_error->alarmAggregator.acc3_error;
@@ -215,7 +215,7 @@ connections
 --   port systemHM_VDc_error->alarmAggregator.VDc_error;
 --   port systemHM_VDr_error->alarmAggregator.VDr_error;
    
-   port  mitigationActor.mitigation_command-> systemHM_action;
+   cSystemHM_action : port  mitigationActor.mitigation_command-> systemHM_action;
 --   port systemHMEngine.acc2_action-> systemHM_acc2_action;
 --   port systemHMEngine.acc3_action-> systemHM_acc3_action;
 --   port systemHMEngine.acc4_action-> systemHM_acc4_action;
@@ -229,8 +229,8 @@ connections
 --   port systemHMEngine.VDc_action-> systemHM_VDc_action;
 --   port systemHMEngine.VDr_action-> systemHM_VDr_action;
    
-   port alarmAggregator.alarmAggregator_out->diagnosisEngine.diagnosis_in;
-   port diagnosisEngine.diagnosis_out-> mitigationActor.mitigation_in;
+   cAlarmAggregator_diagnosisEngine : port alarmAggregator.alarmAggregator_out->diagnosisEngine.diagnosis_in;
+   cDiagnosisEngine_mitigationActor : port diagnosisEngine.diagnosis_out-> mitigationActor.mitigation_in;
   
 end systemHM_process.impl;
 
@@ -309,7 +309,7 @@ subcomponents
    HM_cpu  : processor powerpc_HM.impl;
    systemHM_pr  : process systemHM_process.impl;
 connections
-    port systemHM_arlarm_in->systemHM_pr.arlarm_in;
+    cSystemHM_alarm_in : port systemHM_arlarm_in->systemHM_pr.arlarm_in;
 --  port systemHM_acc1_error->systemHM_pr.systemHM_acc1_error; 
 --  port systemHM_acc2_error->systemHM_pr.systemHM_acc2_error; 
 --  --port systemHM_pr.systemHM_acc2_action->systemHM_acc2_action;
@@ -337,7 +337,7 @@ connections
 --  --port systemHM_pr.systemHM_VDc_action->systemHM_VDc_action;
 --  port systemHM_VDr_error->systemHM_pr.systemHM_VDr_error; 
   --port systemHM_pr.systemHM_VDr_action->systemHM_VDr_action;
-  port systemHM_pr.systemHM_action->systemHM_action;
+  cSystemHM_action : port systemHM_pr.systemHM_action->systemHM_action;
 properties
    --  bind partition process to their associated       
    --  runtime (virtual processor)
