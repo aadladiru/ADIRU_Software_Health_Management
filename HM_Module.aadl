@@ -61,9 +61,9 @@ features
 properties
    Initialize_Entrypoint => classifier (HM_Module::alarmAggregator_spg);
    Priority => 1;
-   Source_Stack_Size => 20 KByte;
-   Source_Code_Size => 100 KByte;
-   Source_Data_Size => 1 KByte;
+   Stack_Size => 20 KByte;
+   Code_Size => 100 KByte;
+   Data_Size => 1 KByte;
    Dispatch_Protocol => Periodic;
    Period => 100 ms;
    Compute_Execution_Time => 50 ms .. 100 ms;
@@ -91,9 +91,9 @@ features
 properties
    Initialize_Entrypoint => classifier (HM_Module::diagnosisEngine_spg);
    Priority => 2;
-   Source_Stack_Size => 20 KByte;
-   Source_Code_Size => 100 KByte;
-   Source_Data_Size => 1 KByte;
+   Stack_Size => 20 KByte;
+   Code_Size => 100 KByte;
+   Data_Size => 1 KByte;
    Dispatch_Protocol => Periodic;
    Period => 100 ms;
    Compute_Execution_Time => 50 ms .. 100 ms;
@@ -136,9 +136,9 @@ features
 properties
    Initialize_Entrypoint => classifier (HM_Module::mitigationActor_spg);
    Priority => 3;
-   Source_Stack_Size => 20 KByte;
-   Source_Code_Size => 100 KByte;
-   Source_Data_Size => 1 KByte;
+   Stack_Size => 20 KByte;
+   Code_Size => 100 KByte;
+   Data_Size => 1 KByte;
    Dispatch_Protocol => Periodic;
    Period => 100 ms;
    Compute_Execution_Time => 50 ms .. 100 ms;
@@ -256,7 +256,7 @@ end powerpc_HM.impl;
 memory HM_partition_memory
 properties
    Base_Address => 0;
-   Byte_Count=>500000 ;
+   Memory_Size =>500 KByte ;
    ARINC653::Memory_Type => (Code_Memory);
    ARINC653::Access_Type => (read, write, execute);
 end HM_partition_memory;
