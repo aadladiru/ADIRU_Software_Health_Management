@@ -68,8 +68,8 @@ properties
    Period => 100 ms;
    Compute_Execution_Time => 50 ms .. 100 ms;
    Deadline => 100 ms;
-   ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
+   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
 end  alarmAggregator;
 
 thread implementation   alarmAggregator.impl
@@ -98,8 +98,8 @@ properties
    Period => 100 ms;
    Compute_Execution_Time => 50 ms .. 100 ms;
    Deadline => 100 ms;
-   ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
+   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
 end  diagnosisEngine;
 
 thread implementation   diagnosisEngine.impl
@@ -143,8 +143,8 @@ properties
    Period => 100 ms;
    Compute_Execution_Time => 50 ms .. 100 ms;
    Deadline => 100 ms;
-   ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
+   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
 end mitigationActor_th;
 
 thread implementation  mitigationActor_th.impl
@@ -250,7 +250,7 @@ properties
    								);
    --ARINC653::Process_Swap_Execution_Time =>1 ms;
    --ARINC653::HM_Errors => (Power_Fail);
-   ARINC653::HM_Module_Recovery_Actions => (Reset);
+   -- ARINC653::HM_Module_Recovery_Actions => (Reset);
 end powerpc_HM.impl;
 
 -- Memory

@@ -50,8 +50,8 @@ properties
    Period => 50 ms;
    Compute_Execution_Time => 20 ms .. 30 ms;
    Deadline => 30 ms;
-   ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
+   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
 end  acc_dataOutput;
 
 thread implementation    acc_dataOutput.impl
@@ -80,8 +80,8 @@ properties
    Period => 50 ms;
    Compute_Execution_Time => 20 ms .. 30 ms;
    Deadline => 30 ms;
-   ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
+   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
 end  acc_HM;
 
 thread implementation    acc_HM.impl
@@ -150,8 +150,8 @@ properties
    									Periodic_Processing_Start=>true;]
    								);
    --ARINC653::Process_Swap_Execution_Time =>1 ms;
-   ARINC653::HM_Errors => (Power_Fail);
-   ARINC653::HM_Module_Recovery_Actions => (Reset);
+   -- ARINC653::HM_Errors => (Power_Fail);
+   -- ARINC653::HM_Module_Recovery_Actions => (Reset);
 end powerpc_acc.impl;
 
 -- Memory

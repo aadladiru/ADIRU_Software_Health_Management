@@ -80,8 +80,8 @@ properties
    Period => 50 ms;
    Compute_Execution_Time => 25 ms .. 50 ms;
    Deadline => 50 ms;
-   ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
+   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
 end  voter_dataOutput;
 
 thread implementation    voter_dataOutput.impl
@@ -122,8 +122,8 @@ properties
    Period => 50 ms;
    Compute_Execution_Time => 20 ms .. 50 ms;
    Deadline => 50 ms;
-   ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
+   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
 end  voter_HM;
 
 thread implementation    voter_HM.impl
@@ -161,8 +161,8 @@ properties
    Period => 50 ms;
    Compute_Execution_Time => 20 ms .. 50 ms;
    Deadline => 50 ms;
-   ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
+   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
 end  display;
 
 thread implementation   display.impl
@@ -188,8 +188,8 @@ properties
    Period => 50 ms;
    Compute_Execution_Time => 20 ms .. 50 ms;
    Deadline => 50 ms;
-   ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
+   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
 end  display_HM;
 
 thread implementation   display_HM.impl
@@ -381,8 +381,8 @@ properties
    									Duration=>330ms;
    									Periodic_Processing_Start=>true;]
    								);
-   ARINC653::HM_Errors => (Power_Fail);
-   ARINC653::HM_Module_Recovery_Actions => (Reset);
+   -- ARINC653::HM_Errors => (Power_Fail);
+   -- ARINC653::HM_Module_Recovery_Actions => (Reset);
 end powerpc_voter_display.impl;
 
 -- Memory
