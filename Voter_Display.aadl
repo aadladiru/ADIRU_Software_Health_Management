@@ -69,7 +69,6 @@ features
    accData_in3:  in data port SHM_DataType::accData;
    accData_in4:  in data port SHM_DataType::accData;
    voter_out: out data port SHM_DataType::accData;
-  
 properties
    Initialize_Entrypoint => classifier (VD_Module::voter_spg);
    Priority => 1;
@@ -80,8 +79,19 @@ properties
    Period => 50 ms;
    Compute_Execution_Time => 25 ms .. 50 ms;
    Deadline => 50 ms;
-   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   ARINC653::HM_Error_ID_Actions => ( [	ErrorIdentifier => 1; 
+   										Description => "Process restart on deadline miss error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 2; 
+   										Description => "Process restart on application error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 3; 
+   										Description => "Ignore numeric error";
+   										Action => "Ignore";],
+   									  [	ErrorIdentifier => 4; 
+   										Description => "Ignore illegal request error";
+   										Action => "Ignore";]
+   									);
 end  voter_dataOutput;
 
 thread implementation    voter_dataOutput.impl
@@ -89,7 +99,6 @@ calls
 sub1: {
 	   voter: subprogram voter_spg;
 };
-
 connections
  cAccData_in1 : parameter accData_in1->voter.inData_para1;
  cAccData_in2 : parameter accData_in2->voter.inData_para2;
@@ -111,7 +120,6 @@ features
    accData_out4:  out data port SHM_DataType::accData;
    voter_error_out: out event data port SHM_DataType::errorData;
    voter_error_action: in event data port SHM_DataType::actionData;
-  
 properties
    Initialize_Entrypoint => classifier (VD_Module::voter_HM_spg);
    Priority => 2;
@@ -122,8 +130,19 @@ properties
    Period => 50 ms;
    Compute_Execution_Time => 20 ms .. 50 ms;
    Deadline => 50 ms;
-   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   ARINC653::HM_Error_ID_Actions => ( [	ErrorIdentifier => 1; 
+   										Description => "Process restart on deadline miss error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 2; 
+   										Description => "Process restart on application error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 3; 
+   										Description => "Ignore numeric error";
+   										Action => "Ignore";],
+   									  [	ErrorIdentifier => 4; 
+   										Description => "Ignore illegal request error";
+   										Action => "Ignore";]
+   									);
 end  voter_HM;
 
 thread implementation    voter_HM.impl
@@ -131,7 +150,6 @@ calls
 sub1: {
 	   voter_HM: subprogram voter_HM_spg;
 };
-
 connections
  cAccData_in1 : parameter  accData_in1->voter_HM.inData_para1;
  cAccData_in2 : parameter  accData_in2->voter_HM.inData_para2;
@@ -143,7 +161,6 @@ connections
  cAccData_out4 : parameter  voter_HM.outData_para4->accData_out4;
  cVoter_error_action : parameter  voter_error_action->voter_HM.error_action_in;
  cVoter_error_out : parameter  voter_HM.error_data_out->voter_error_out;
- 
 end    voter_HM.impl;
 
 thread  display
@@ -161,8 +178,19 @@ properties
    Period => 50 ms;
    Compute_Execution_Time => 20 ms .. 50 ms;
    Deadline => 50 ms;
-   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   ARINC653::HM_Error_ID_Actions => ( [	ErrorIdentifier => 1; 
+   										Description => "Process restart on deadline miss error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 2; 
+   										Description => "Process restart on application error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 3; 
+   										Description => "Ignore numeric error";
+   										Action => "Ignore";],
+   									  [	ErrorIdentifier => 4; 
+   										Description => "Ignore illegal request error";
+   										Action => "Ignore";]
+   									);
 end  display;
 
 thread implementation   display.impl
@@ -188,8 +216,19 @@ properties
    Period => 50 ms;
    Compute_Execution_Time => 20 ms .. 50 ms;
    Deadline => 50 ms;
-   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   ARINC653::HM_Error_ID_Actions => ( [	ErrorIdentifier => 1; 
+   										Description => "Process restart on deadline miss error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 2; 
+   										Description => "Process restart on application error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 3; 
+   										Description => "Ignore numeric error";
+   										Action => "Ignore";],
+   									  [	ErrorIdentifier => 4; 
+   										Description => "Ignore illegal request error";
+   										Action => "Ignore";]
+   									);
 end  display_HM;
 
 thread implementation   display_HM.impl
@@ -369,7 +408,6 @@ subcomponents
    part1:   virtual processor voter_partition.impl;
    part2:   virtual processor voter_partition.impl;
    part3:   virtual processor voter_partition.impl;
-  
 properties
    SEI::MIPSCapacity=>0.65 MIPS;
    ARINC653::Module_Major_Frame => 990 ms;
@@ -383,8 +421,10 @@ properties
    									Duration=>330ms;
    									Periodic_Processing_Start=>true;]
    								);
-   -- ARINC653::HM_Errors => (Power_Fail);
-   -- ARINC653::HM_Module_Recovery_Actions => (Reset);
+    ARINC653::HM_Error_ID_Actions => ( [ErrorIdentifier => 0; 
+   										Description => "Reset the module on power failure";
+   										Action => "Reset";]
+   								     );
 end powerpc_voter_display.impl;
 
 -- Memory
@@ -522,6 +562,29 @@ properties
      (reference (voter_mem.voter2Mem)) applies to voter_displayC_pr;
    Actual_Memory_Binding =>
      (reference (voter_mem.voter3Mem)) applies to voter_displayR_pr;
+     
+   -- error management in ARINC653
+   ARINC653::HM_Error_ID_Levels => ( [	ErrorIdentifier => 0;
+										Description => "Power Failure in ADIRUp Module";
+										ErrorLevel => Module_Level;
+										ErrorCode => Power_Fail;],
+									[	ErrorIdentifier => 1;
+										Description => "Process deadline miss";
+										ErrorLevel => Process_Level;
+										ErrorCode => Deadline_Miss;],
+									[	ErrorIdentifier => 2;
+										Description => "Application Error";
+										ErrorLevel => Process_Level;
+										ErrorCode => Application_Error;],
+									[	ErrorIdentifier => 3;
+										Description => "Numeric error in process";
+										ErrorLevel => Process_Level;
+										ErrorCode => Numeric_Error;],
+									[	ErrorIdentifier => 4;
+										Description => "Illegal request in process";
+										ErrorLevel => Process_Level;
+										ErrorCode => Illegal_Request;]
+								   ) applies to voter_cpu;
     
 end voter_display.impl;
 end VD_Module;

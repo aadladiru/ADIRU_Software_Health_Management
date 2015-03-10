@@ -51,8 +51,19 @@ properties
    Period => 50 ms;
    Compute_Execution_Time => 20 ms .. 30 ms;
    Deadline => 30 ms;
-   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   ARINC653::HM_Error_ID_Actions => ( [	ErrorIdentifier => 1; 
+   										Description => "Process restart on deadline miss error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 2; 
+   										Description => "Process restart on application error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 3; 
+   										Description => "Ignore numeric error";
+   										Action => "Ignore";],
+   									  [	ErrorIdentifier => 4; 
+   										Description => "Ignore illegal request error";
+   										Action => "Ignore";]
+   									);
 end  acc_dataOutput;
 
 thread implementation    acc_dataOutput.impl
@@ -81,8 +92,19 @@ properties
    Period => 50 ms;
    Compute_Execution_Time => 20 ms .. 30 ms;
    Deadline => 30 ms;
-   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   ARINC653::HM_Error_ID_Actions => ( [	ErrorIdentifier => 1; 
+   										Description => "Process restart on deadline miss error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 2; 
+   										Description => "Process restart on application error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 3; 
+   										Description => "Ignore numeric error";
+   										Action => "Ignore";],
+   									  [	ErrorIdentifier => 4; 
+   										Description => "Ignore illegal request error";
+   										Action => "Ignore";]
+   									);
 end  acc_HM;
 
 thread implementation    acc_HM.impl
@@ -152,9 +174,11 @@ properties
    									Duration=>160ms;
    									Periodic_Processing_Start=>true;]
    								);
+  ARINC653::HM_Error_ID_Actions => ( [	ErrorIdentifier => 0; 
+   										Description => "Reset the module on power failure";
+   										Action => "Reset";]
+   								   );
    --ARINC653::Process_Swap_Execution_Time =>1 ms;
-   -- ARINC653::HM_Errors => (Power_Fail);
-   -- ARINC653::HM_Module_Recovery_Actions => (Reset);
 end powerpc_acc.impl;
 
 -- Memory
@@ -309,7 +333,36 @@ properties
      (reference (acc_mem.acc5Mem)) applies to acc5_pr;
    Actual_Memory_Binding =>
      (reference (acc_mem.acc6Mem)) applies to acc6_pr;
-    
+
+   -- error management in ARINC653
+   ARINC653::HM_Error_ID_Levels => ( [	ErrorIdentifier => 0;
+										Description => "Power Failure in ADIRUp Module";
+										ErrorLevel => Module_Level;
+										ErrorCode => Power_Fail;],
+									[	ErrorIdentifier => 1;
+										Description => "Process deadline miss";
+										ErrorLevel => Process_Level;
+										ErrorCode => Deadline_Miss;],
+									[	ErrorIdentifier => 2;
+										Description => "Application Error";
+										ErrorLevel => Process_Level;
+										ErrorCode => Application_Error;],
+									[	ErrorIdentifier => 3;
+										Description => "Numeric error in process";
+										ErrorLevel => Process_Level;
+										ErrorCode => Numeric_Error;],
+									[	ErrorIdentifier => 4;
+										Description => "Illegal request in process";
+										ErrorLevel => Process_Level;
+										ErrorCode => Illegal_Request;]
+								   ) applies to acc_cpu;
+  ARINC653::Error_Handling => reference(acc1_pr.acc_HM) applies to acc_cpu.part1;
+  ARINC653::Error_Handling => reference(acc2_pr.acc_HM) applies to acc_cpu.part2;
+  ARINC653::Error_Handling => reference(acc3_pr.acc_HM) applies to acc_cpu.part3;
+  ARINC653::Error_Handling => reference(acc4_pr.acc_HM) applies to acc_cpu.part4;
+  ARINC653::Error_Handling => reference(acc5_pr.acc_HM) applies to acc_cpu.part5;
+  ARINC653::Error_Handling => reference(acc6_pr.acc_HM) applies to acc_cpu.part6;
+  
    --Actual_Connection_Binding => (reference (acc_bus)) applies to acc1,acc2,acc3,acc4,
      --acc5,acc6,acc7,acc8,acc9,acc10,acc11,acc12,acc13,acc14,acc15,acc16,acc17,acc18;
    

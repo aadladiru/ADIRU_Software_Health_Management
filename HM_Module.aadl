@@ -68,8 +68,19 @@ properties
    Period => 100 ms;
    Compute_Execution_Time => 50 ms .. 100 ms;
    Deadline => 100 ms;
-   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   ARINC653::HM_Error_ID_Actions => ( [	ErrorIdentifier => 1; 
+   										Description => "Process restart on deadline miss error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 2; 
+   										Description => "Process restart on application error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 3; 
+   										Description => "Ignore numeric error";
+   										Action => "Ignore";],
+   									  [	ErrorIdentifier => 4; 
+   										Description => "Ignore illegal request error";
+   										Action => "Ignore";]
+   									);
 end  alarmAggregator;
 
 thread implementation   alarmAggregator.impl
@@ -98,8 +109,19 @@ properties
    Period => 100 ms;
    Compute_Execution_Time => 50 ms .. 100 ms;
    Deadline => 100 ms;
-   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   ARINC653::HM_Error_ID_Actions => ( [	ErrorIdentifier => 1; 
+   										Description => "Process restart on deadline miss error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 2; 
+   										Description => "Process restart on application error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 3; 
+   										Description => "Ignore numeric error";
+   										Action => "Ignore";],
+   									  [	ErrorIdentifier => 4; 
+   										Description => "Ignore illegal request error";
+   										Action => "Ignore";]
+   									);
 end  diagnosisEngine;
 
 thread implementation   diagnosisEngine.impl
@@ -143,8 +165,19 @@ properties
    Period => 100 ms;
    Compute_Execution_Time => 50 ms .. 100 ms;
    Deadline => 100 ms;
-   -- ARINC653::HM_Errors =>(Deadline_Miss, Application_Error, Numeric_Error, Illegal_Request);
-   -- ARINC653::HM_Process_Recovery_Actions =>(Process_Restart, Process_Restart, Ignore, Ignore);
+   ARINC653::HM_Error_ID_Actions => ( [	ErrorIdentifier => 1; 
+   										Description => "Process restart on deadline miss error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 2; 
+   										Description => "Process restart on application error";
+   										Action => "Process_Restart";],
+   									  [	ErrorIdentifier => 3; 
+   										Description => "Ignore numeric error";
+   										Action => "Ignore";],
+   									  [	ErrorIdentifier => 4; 
+   										Description => "Ignore illegal request error";
+   										Action => "Ignore";]
+   									);
 end mitigationActor_th;
 
 thread implementation  mitigationActor_th.impl
@@ -250,9 +283,11 @@ properties
    									Duration=>1000ms;
    									Periodic_Processing_Start=>true;]
    								);
+    ARINC653::HM_Error_ID_Actions => ( [ErrorIdentifier => 0; 
+   										Description => "Reset the module on power failure";
+   										Action => "Reset";]
+   								     );
    --ARINC653::Process_Swap_Execution_Time =>1 ms;
-   --ARINC653::HM_Errors => (Power_Fail);
-   -- ARINC653::HM_Module_Recovery_Actions => (Reset);
 end powerpc_HM.impl;
 
 -- Memory
@@ -358,6 +393,28 @@ properties
    --  (memory components)
    Actual_Memory_Binding =>
      (reference (HM_mem.systemHMMem)) applies to systemHM_pr;
+   -- error management in ARINC653
+   ARINC653::HM_Error_ID_Levels => ( [	ErrorIdentifier => 0;
+										Description => "Power Failure in ADIRUp Module";
+										ErrorLevel => Module_Level;
+										ErrorCode => Power_Fail;],
+									[	ErrorIdentifier => 1;
+										Description => "Process deadline miss";
+										ErrorLevel => Process_Level;
+										ErrorCode => Deadline_Miss;],
+									[	ErrorIdentifier => 2;
+										Description => "Application Error";
+										ErrorLevel => Process_Level;
+										ErrorCode => Application_Error;],
+									[	ErrorIdentifier => 3;
+										Description => "Numeric error in process";
+										ErrorLevel => Process_Level;
+										ErrorCode => Numeric_Error;],
+									[	ErrorIdentifier => 4;
+										Description => "Illegal request in process";
+										ErrorLevel => Process_Level;
+										ErrorCode => Illegal_Request;]
+								   ) applies to HM_cpu;
 end systemHM.impl;
 
 end HM_Module;
