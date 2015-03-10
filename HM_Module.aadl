@@ -235,6 +235,8 @@ connections
 end systemHM_process.impl;
 
 processor powerpc_HM
+features
+	systemHM_internal_bus : requires bus access systemHM_cpuMem_bus {Memory_Properties::Access_Right => by_method;};
 end powerpc_HM;
 
 processor implementation powerpc_HM.impl
@@ -259,16 +261,20 @@ properties
    Base_Address => 0;
    Memory_Size =>500 KByte ;
    ARINC653::Memory_Type => (Code_Memory);
-   -- ARINC653::Access_Type => (read, write, execute);
 end HM_partition_memory;
 
 memory systemHM_memory
+features
+	systemHM_internal_bus : requires bus access systemHM_cpuMem_bus {Memory_Properties::Access_Right => write_only;};
 end systemHM_memory;
 
 memory implementation systemHM_memory.impl
 subcomponents
    systemHMMem: memory HM_partition_memory;
 end systemHM_memory.impl;
+
+bus systemHM_cpuMem_bus
+end systemHM_cpuMem_bus;
 
 system systemHM
 features
@@ -309,7 +315,11 @@ subcomponents
    HM_mem  : memory systemHM_memory.impl;
    HM_cpu  : processor powerpc_HM.impl;
    systemHM_pr  : process systemHM_process.impl;
+   systemHM_internal_bus : bus systemHM_cpuMem_bus;
 connections
+  systemHM_internal_bus_cpu : bus access systemHM_internal_bus <-> HM_cpu.systemHM_internal_bus;
+  systemHM_internal_bus_mem : bus access systemHM_internal_bus <-> HM_mem.systemHM_internal_bus;
+
     cSystemHM_alarm_in : port systemHM_arlarm_in->systemHM_pr.arlarm_in;
 --  port systemHM_acc1_error->systemHM_pr.systemHM_acc1_error; 
 --  port systemHM_acc2_error->systemHM_pr.systemHM_acc2_error; 

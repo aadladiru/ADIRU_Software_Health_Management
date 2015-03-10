@@ -4,6 +4,7 @@ with ARINC653;
 with SHM_DataType;
 with ADIRU_BUS;
 with SEI;
+with Memory_Properties;
 
 virtual processor acc_partition
 properties
@@ -116,6 +117,8 @@ connections
 end acc_process.impl;
 
 processor powerpc_acc
+features
+	acc_internal_bus : requires bus access acc_cpuMem_bus {Memory_Properties::Access_Right => by_method;};
 end powerpc_acc;
 
 processor implementation powerpc_acc.impl
@@ -160,8 +163,6 @@ properties
    Base_Address => 0;
    Memory_Size=>300 KByte;
    ARINC653::Memory_Type => (Code_Memory);
-   -- ARINC653::Access_Type => (read, write, execute);
-   
 end acc1_partition_memory;
 
 memory acc2_partition_memory
@@ -169,7 +170,6 @@ properties
    Base_Address => 300010;
    ARINC653::Memory_Type => (Code_Memory);
    Memory_Size=>300 KByte;
-   -- ARINC653::Access_Type => (read, write, execute);
 end acc2_partition_memory;
 
 memory acc3_partition_memory
@@ -177,7 +177,6 @@ properties
    Base_Address => 600020;
    ARINC653::Memory_Type => (Code_Memory);
    Memory_Size=>300 KByte;
-   -- ARINC653::Access_Type => (read, write, execute);
 end acc3_partition_memory;
 
 memory acc4_partition_memory
@@ -185,7 +184,6 @@ properties
    Base_Address => 900030;
    ARINC653::Memory_Type => (Code_Memory);
    Memory_Size=>300 KByte;
-   -- ARINC653::Access_Type => (read, write, execute);
 end acc4_partition_memory;
 
 memory acc5_partition_memory
@@ -193,7 +191,6 @@ properties
    Base_Address => 1200040;
    ARINC653::Memory_Type => (Code_Memory);
    Memory_Size=>300 KByte;
-   -- ARINC653::Access_Type => (read, write, execute);
 end acc5_partition_memory;
 
 memory acc6_partition_memory
@@ -201,15 +198,15 @@ properties
    Base_Address => 1500050;
    ARINC653::Memory_Type => (Code_Memory);
    Memory_Size=>300 KByte;
-   -- ARINC653::Access_Type => (read, write, execute);
 end acc6_partition_memory;
 
 memory acc_memory
+features
+	acc_internal_bus : requires bus access acc_cpuMem_bus {Memory_Properties::Access_Right => write_only;};
 --properties
 --   Base_Address => 0;
 --   ARINC653::Memory_Type => (Code_Memory);
 --   Byte_Count=>2000000;
---   ARINC653::Access_Type => (read, write, execute);
 end acc_memory;
 
 memory implementation acc_memory.impl
@@ -221,6 +218,9 @@ subcomponents
    acc5Mem: memory acc5_partition_memory;
    acc6Mem: memory acc6_partition_memory;
 end acc_memory.impl;
+
+bus acc_cpuMem_bus
+end acc_cpuMem_bus;
 
 system acc
 features
@@ -254,7 +254,8 @@ subcomponents
    acc4_pr  : process acc_process.impl;
    acc5_pr  : process acc_process.impl;
    acc6_pr  : process acc_process.impl;
-   --acc_bus  :bus ADIRU_BUS::acc_bus;
+   acc_internal_bus : bus acc_cpuMem_bus;
+
 connections
   acc1:port acc1_pr. acc_output->acc1_output; 
   acc2:port acc2_pr. acc_output->acc2_output; 
@@ -275,6 +276,9 @@ connections
   acc16:port acc5_error_action->acc5_pr.acc_error_action;
   acc17:port acc6_pr.acc_error_out->acc6_error_out;
   acc18:port acc6_error_action->acc6_pr.acc_error_action;
+  
+  acc_internal_bus_cpu : bus access acc_internal_bus <-> acc_cpu.acc_internal_bus;
+  acc_internal_bus_mem : bus access acc_internal_bus <-> acc_mem.acc_internal_bus; 
   
 properties
    --  bind partition process to their associated       

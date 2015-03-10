@@ -3,6 +3,8 @@ public
 with ARINC653;
 with SHM_DataType;
 with SEI;
+with Memory_Properties;
+
 virtual processor ADIRU_partition
 properties
       Scheduling_Protocol => (FixedTimeline);
@@ -178,6 +180,8 @@ connections
 end ADIRUp_process.impl;
 
 processor powerpc_ADIRU
+features
+	ADIRU_internal_bus : requires bus access ADIRU_cpuMem_bus {Memory_Properties::Access_Right => by_method;};
 end powerpc_ADIRU;
 
 processor implementation powerpc_ADIRU.impl
@@ -212,7 +216,6 @@ properties
    Base_Address => 0;
    Memory_Size=>300 KByte;
    ARINC653::Memory_Type => (Code_Memory);
-   -- ARINC653::Access_Type => (read, write, execute);
 end ADIRU1_partition_memory;
 
 memory ADIRU2_partition_memory
@@ -220,7 +223,6 @@ properties
    Base_Address => 300010;
    ARINC653::Memory_Type => (Code_Memory);
    Memory_Size=>300 KByte;
-   -- ARINC653::Access_Type => (read, write, execute);
 end ADIRU2_partition_memory;
 
 memory ADIRU3_partition_memory
@@ -228,7 +230,6 @@ properties
    Base_Address => 600020;
    ARINC653::Memory_Type => (Code_Memory);
    Memory_Size=>300 KByte;
-   -- ARINC653::Access_Type => (read, write, execute);
 end ADIRU3_partition_memory;
 
 memory ADIRU4_partition_memory
@@ -236,10 +237,11 @@ properties
    Base_Address => 900030;
    ARINC653::Memory_Type => (Code_Memory);
    Memory_Size=>300 KByte;
-   -- ARINC653::Access_Type => (read, write, execute);
 end ADIRU4_partition_memory;
 
 memory ADIRU_memory
+features
+	ADIRU_internal_bus : requires bus access ADIRU_cpuMem_bus {Memory_Properties::Access_Right => write_only;};
 end ADIRU_memory;
 
 memory implementation ADIRU_memory.impl
@@ -250,6 +252,9 @@ subcomponents
    ADIRU4Mem: memory ADIRU4_partition_memory;
    
 end ADIRU_memory.impl;
+
+bus ADIRU_cpuMem_bus
+end ADIRU_cpuMem_bus;
 
 system ADIRU_processor
 features
@@ -300,7 +305,11 @@ subcomponents
    ADIRU2_pr  : process ADIRUp_process.impl;
    ADIRU3_pr  : process ADIRUp_process.impl;
    ADIRU4_pr  : process ADIRUp_process.impl;
+   ADIRU_internal_bus : bus ADIRU_cpuMem_bus;
 connections
+  ADIRU_internal_bus_cpu : bus access ADIRU_internal_bus <-> ADIRU_cpu.ADIRU_internal_bus;
+  ADIRU_internal_bus_mem : bus access ADIRU_internal_bus <-> ADIRU_mem.ADIRU_internal_bus;
+
   cADIRU_p1_input1 : port ADIRU_p1_input1-> ADIRU1_pr.acc1_input;
   cADIRU_p1_input2 : port ADIRU_p1_input2-> ADIRU1_pr.acc2_input;
   cADIRU_p1_input3 : port ADIRU_p1_input3-> ADIRU1_pr.acc3_input;

@@ -360,6 +360,8 @@ connections
 end voter_displayR_process.impl;
 
 processor powerpc_voter_display
+features
+	voter_internal_bus : requires bus access voter_cpuMem_bus {Memory_Properties::Access_Right => by_method;};
 end powerpc_voter_display;
 
 processor implementation powerpc_voter_display.impl
@@ -391,7 +393,6 @@ properties
    Base_Address => 0;
    Memory_Size=>500 KByte;
    ARINC653::Memory_Type => (Code_Memory);
-   -- ARINC653::Access_Type => (read, write, execute);
 end voter1_partition_memory;
 
 memory voter2_partition_memory
@@ -399,7 +400,6 @@ properties
    Base_Address => 1000010;
    Memory_Size=>500 KByte;
    ARINC653::Memory_Type => (Code_Memory);
-   -- ARINC653::Access_Type => (read, write, execute);
 end voter2_partition_memory;
 
 memory voter3_partition_memory
@@ -407,10 +407,11 @@ properties
    Base_Address => 1500020;
    Memory_Size=>500 KByte;
    ARINC653::Memory_Type => (Code_Memory);
-   -- ARINC653::Access_Type => (read, write, execute);
 end voter3_partition_memory;
 
 memory voter_memory
+features
+	voter_internal_bus : requires bus access voter_cpuMem_bus {Memory_Properties::Access_Right => write_only;};
 end voter_memory;
 
 memory implementation voter_memory.impl
@@ -420,6 +421,9 @@ subcomponents
    voter3Mem: memory voter3_partition_memory;
   
 end voter_memory.impl;
+
+bus voter_cpuMem_bus
+end voter_cpuMem_bus;
 
 system voter_display
 features
@@ -460,7 +464,11 @@ subcomponents
    voter_displayL_pr  : process  voter_displayL_process.impl;
    voter_displayC_pr  : process  voter_displayC_process.impl;
    voter_displayR_pr  : process  voter_displayR_process.impl;
+   voter_internal_bus : bus voter_cpuMem_bus;
 connections
+  voter_internal_bus_cpu : bus access voter_internal_bus <-> voter_cpu.voter_internal_bus;
+  voter_internal_bus_mem : bus access voter_internal_bus <-> voter_mem.voter_internal_bus;
+
   cVoterL_input1 : port  voterL_input1->voter_displayL_pr.ADIRU1_input;
   cVoterL_input2 : port  voterL_input2->voter_displayL_pr.ADIRU2_input; 
   cVoterL_input3 : port  voterL_input3->voter_displayL_pr.ADIRU3_input;
