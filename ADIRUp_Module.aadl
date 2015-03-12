@@ -4,6 +4,7 @@ with ARINC653;
 with SHM_DataType;
 with SEI;
 with Memory_Properties;
+with ADIRU_errLibrary;
 
 virtual processor ADIRU_partition
 properties
@@ -175,6 +176,34 @@ features
    ADIRUp_output: out data port SHM_DataType::accData;
    ADIRUp_error_out: out event data port SHM_DataType::errorData;
    ADIRUp_error_action: in event data port SHM_DataType::actionData;
+
+annex EMV2{**
+    use types ADIRU_errLibrary;
+    
+    error propagations
+        acc1_input : in propagation {ValueError, NoValue};
+        acc2_input : in propagation {ValueError, NoValue};
+        acc3_input : in propagation {ValueError, NoValue};
+        acc4_input : in propagation {ValueError, NoValue};
+        acc5_input : in propagation {ValueError, NoValue};
+        acc6_input : in propagation {ValueError, NoValue};
+        ADIRUp_output : out propagation {ValueError};
+    flows
+        f1 : error sink acc1_input{NoValue};
+        f2 : error sink acc2_input{NoValue};
+        f3 : error sink acc3_input{NoValue};
+        f4 : error sink acc4_input{NoValue};
+        f5 : error sink acc5_input{NoValue};
+        f6 : error sink acc6_input{NoValue};
+        fp1 : error path acc1_input{ValueError} -> ADIRUp_output{ValueError};
+        fp2 : error path acc2_input{ValueError} -> ADIRUp_output{ValueError};
+        fp3 : error path acc3_input{ValueError} -> ADIRUp_output{ValueError};
+        fp4 : error path acc4_input{ValueError} -> ADIRUp_output{ValueError};
+        fp5 : error path acc5_input{ValueError} -> ADIRUp_output{ValueError};
+        fp6 : error path acc6_input{ValueError} -> ADIRUp_output{ValueError};
+    end propagations;
+**};
+
 end ADIRUp_process;
 
 process implementation ADIRUp_process.impl

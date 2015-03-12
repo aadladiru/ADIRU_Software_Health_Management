@@ -4,6 +4,7 @@ with ARINC653;
 with SHM_DataType;
 with SEI;
 with Memory_Properties;
+with ADIRU_errLibrary;
 
 virtual processor voter_partition
 properties
@@ -92,6 +93,22 @@ properties
    										Description => "Ignore illegal request error";
    										Action => "Ignore";]
    									);
+annex EMV2{**
+    use types ADIRU_errLibrary;
+    
+    error propagations
+        accData_in1 : in propagation{ValueError};
+        accData_in2 : in propagation{ValueError};
+        accData_in3 : in propagation{ValueError};
+        accData_in4 : in propagation{ValueError};
+        voter_out : out propagation{ValueError};
+    flows
+        f1 : error path accData_in1 -> voter_out;
+        f2 : error path accData_in2 -> voter_out;
+        f3 : error path accData_in3 -> voter_out;
+        f4 : error path accData_in4 -> voter_out;
+    end propagations;
+**};
 end  voter_dataOutput;
 
 thread implementation    voter_dataOutput.impl
@@ -143,6 +160,26 @@ properties
    										Description => "Ignore illegal request error";
    										Action => "Ignore";]
    									);
+
+annex EMV2{**
+    use types ADIRU_errLibrary;
+    
+    error propagations
+        accData_in1 : in propagation{ValueError};
+        accData_in2 : in propagation{ValueError};
+        accData_in3 : in propagation{ValueError};
+        accData_in4 : in propagation{ValueError};
+        accData_out1 : out propagation{ValueError};
+        accData_out2 : out propagation{ValueError};
+        accData_out3 : out propagation{ValueError};
+        accData_out4 : out propagation{ValueError};
+    flows
+        f1 : error path accData_in1 -> accData_out1;
+        f2 : error path accData_in2 -> accData_out2;
+        f3 : error path accData_in3 -> accData_out3;
+        f4 : error path accData_in4 -> accData_out4;
+    end propagations;
+**};
 end  voter_HM;
 
 thread implementation    voter_HM.impl
@@ -191,6 +228,27 @@ properties
    										Description => "Ignore illegal request error";
    										Action => "Ignore";]
    									);
+annex EMV2{**
+    use types ADIRU_errLibrary;
+    use behavior ADIRU_errLibrary::simple;
+    
+    error propagations
+        display_in1 : in propagation {ValueError};
+        display_in2 : in propagation {ValueError};
+        display_in3 : in propagation {ValueError};
+    flows
+        f1 : error sink display_in1;
+        f2 : error sink display_in2;
+        f3 : error sink display_in3;
+    end propagations;
+    
+    component error behavior
+    transitions
+        operational -[display_in1{ValueError}]-> failed;
+        operational -[display_in2{ValueError}]-> failed;
+        operational -[display_in3{ValueError}]-> failed;
+    end component;
+**};
 end  display;
 
 thread implementation   display.impl
@@ -229,6 +287,24 @@ properties
    										Description => "Ignore illegal request error";
    										Action => "Ignore";]
    									);
+   									
+annex EMV2{**
+    use types ADIRU_errLibrary;
+    
+    error propagations
+        displayData_in1 : in propagation {ValueError};
+        displayData_in2 : in propagation {ValueError};
+        displayData_in3 : in propagation {ValueError};
+        displayData_out1 : out propagation{ValueError};
+        displayData_out2 : out propagation{ValueError};
+        displayData_out3 : out propagation{ValueError};
+    flows
+        f1 : error path displayData_in1 -> displayData_out1;
+        f2 : error path displayData_in2 -> displayData_out2;
+        f3 : error path displayData_in3 -> displayData_out3;
+    end propagations;
+**};
+
 end  display_HM;
 
 thread implementation   display_HM.impl
@@ -494,7 +570,7 @@ features
   voterR_error_action: in event data port SHM_DataType::actionData;
   displayR_error_out: out event data port SHM_DataType::errorData;
   displayR_error_action: in event data port SHM_DataType::actionData;
-  
+
 end voter_display;
 
 system implementation voter_display.impl
@@ -585,6 +661,5 @@ properties
 										ErrorLevel => Process_Level;
 										ErrorCode => Illegal_Request;]
 								   ) applies to voter_cpu;
-    
 end voter_display.impl;
 end VD_Module;

@@ -1,0 +1,23 @@
+package ADIRU_errLibrary
+public
+
+annex EMV2 {**
+    error types
+        ValueError: type;
+        NoValue : type; 
+    end types;
+    
+    error behavior simple
+    events
+        op : error event;
+        failure : error event;
+    states
+        Operational : initial state;
+        Failed : state;
+    transitions
+        t1 : operational -[failure]-> failed;
+        t2 : failed -[op]-> operational;
+    end behavior;
+**};
+
+end ADIRU_errLibrary;

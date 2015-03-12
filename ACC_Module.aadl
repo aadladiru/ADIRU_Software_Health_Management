@@ -5,6 +5,7 @@ with SHM_DataType;
 with ADIRU_BUS;
 with SEI;
 with Memory_Properties;
+with ADIRU_errLibrary;
 
 virtual processor acc_partition
 properties
@@ -125,6 +126,17 @@ features
    acc_output: out data port SHM_DataType::accData;
    acc_error_out: out event data port SHM_DataType::errorData;
    acc_error_action: in event data port SHM_DataType::actionData;
+   
+annex EMV2{**
+    use types ADIRU_errLibrary;
+    use behavior ADIRU_errLibrary::simple;
+    
+    error propagations
+        acc_output : out propagation{ValueError};
+    flows
+        f1 : error source acc_output{ValueError};
+    end propagations;
+**};
 end acc_process;
 
 process implementation acc_process.impl
