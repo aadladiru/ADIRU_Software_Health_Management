@@ -5,6 +5,8 @@ annex EMV2 {**
     error types
         ValueError: type;
         NoValue : type; 
+        DoNotUseAcc5 : type;
+        DoNotUseAcc6 : type;
     end types;
     
     error behavior simple
@@ -17,6 +19,29 @@ annex EMV2 {**
     transitions
         t1 : operational -[failure]-> failed;
         t2 : failed -[op]-> operational;
+    end behavior;
+    
+    error behavior ADIRUp_simple
+    states
+        operational : initial state;
+        useAllButAcc5 : state;
+        useAllButAcc6 : state;
+    end behavior;
+    
+    error behavior display_simple
+    states
+        operational : initial state;
+        displayErroneousValue : state;
+    end behavior;
+    
+    error behavior HM_simple
+    events
+        reboot : error event;
+    states
+        operational : initial state;
+        rebooted : state;
+    transitions
+        t1 : operational -[reboot]-> rebooted;
     end behavior;
 **};
 
