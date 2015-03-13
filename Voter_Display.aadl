@@ -6,7 +6,7 @@ with SEI;
 with Memory_Properties;
 with ADIRU_errLibrary;
 
-system voter_display
+device voter_display
 features
   ADIRU_input1: in data port SHM_DataType::accData;
   ADIRU_input2: in data port SHM_DataType::accData;
@@ -55,7 +55,7 @@ annex EMV2{**
 **};
 end voter_display;
 
-system implementation voter_display.impl
+device implementation voter_display.impl
 end voter_display.impl;
 
 end VD_Module;

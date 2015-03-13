@@ -6,7 +6,7 @@ with SEI;
 with Memory_Properties;
 with ADIRU_errLibrary;
 
-system ADIRU_processor
+device ADIRU_processor
 features
   acc_input1: in data port SHM_DataType::accData;
   acc_input2: in data port SHM_DataType::accData;
@@ -75,7 +75,7 @@ annex EMV2{**
 **};
 end ADIRU_processor;
 
-system implementation ADIRU_processor.impl
+device implementation ADIRU_processor.impl
 end ADIRU_processor.impl;
 
 end ADIRUp_Module;

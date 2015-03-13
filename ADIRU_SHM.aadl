@@ -13,10 +13,10 @@ end ADIRU_SHM;
 
 system implementation ADIRU_SHM.impl
 subcomponents
-  acc_module: system ACC_Module::acc.impl;
-  ADIRU_module: system ADIRUp_Module::ADIRU_processor.impl;
-  voter_module: system VD_Module::voter_display.impl;
-  systemHM_module: system HM_Module::systemHM.impl;
+  acc_module: device ACC_Module::acc.impl;
+  ADIRU_module: device ADIRUp_Module::ADIRU_processor.impl;
+  voter_module: device VD_Module::voter_display.impl;
+  systemHM_module: device HM_Module::systemHM.impl;
 
 connections
   acc1_ADIRU : port acc_module.acc1_output->ADIRU_module.acc_input1;

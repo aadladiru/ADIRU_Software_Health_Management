@@ -4,13 +4,13 @@ with ARINC653;
 with SHM_DataType;
 with SEI;
 
-system systemHM
+device systemHM
 features
     systemHM_arlarm_in: in event data  port SHM_DataType::errorData;
     systemHM_action: out event data  port SHM_DataType::actionData;
 end systemHM;
 
-system implementation systemHM.impl
+device implementation systemHM.impl
 annex EMV2{**
     use types ADIRU_errLibrary;
     use behavior ADIRU_errLibrary::HM_simple;

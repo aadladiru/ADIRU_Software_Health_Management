@@ -3,7 +3,7 @@ public
 with SHM_DataType;
 with ADIRU_errLibrary;
 
-system acc
+device acc
 features
   acc1_output: out data port SHM_DataType::accData;
   acc2_output: out data port SHM_DataType::accData;
@@ -26,7 +26,7 @@ features
   acc6_error_action: in event data port SHM_DataType::actionData;
 end acc;
 
-system implementation acc.impl
+device implementation acc.impl
 annex EMV2{**
     use types ADIRU_errLibrary;
     use behavior ADIRU_errLibrary::simple;
