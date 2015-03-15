@@ -12,34 +12,45 @@ features
   acc5_output: out data port SHM_DataType::accData;
   acc6_output: out data port SHM_DataType::accData;
   
-  acc1_error_out: out event data port SHM_DataType::errorData;
-  acc1_error_action: in event data port SHM_DataType::actionData;
-  acc2_error_out: out event data port SHM_DataType::errorData;
-  acc2_error_action: in event data port SHM_DataType::actionData;
-  acc3_error_out: out event data port SHM_DataType::errorData;
-  acc3_error_action: in event data port SHM_DataType::actionData;
-  acc4_error_out: out event data port SHM_DataType::errorData;
-  acc4_error_action: in event data port SHM_DataType::actionData;
-  acc5_error_out: out event data port SHM_DataType::errorData;
-  acc5_error_action: in event data port SHM_DataType::actionData;
-  acc6_error_out: out event data port SHM_DataType::errorData;
-  acc6_error_action: in event data port SHM_DataType::actionData;
+  acc_error_out: out event data port SHM_DataType::errorData;
+  acc_error_action: in event data port SHM_DataType::actionData;
+
 end acc;
 
 system implementation acc.impl
 annex EMV2{**
     use types ADIRU_errLibrary;
-    use behavior ADIRU_errLibrary::simple;
+    use behavior ADIRU_errLibrary::acc_simple;
     
     error propagations
         acc5_output : out propagation {ValueError};
+        acc6_output : out propagation {ValueError};
+        acc_error_out : out propagation{AccFailure};
+        acc_error_action : in propagation{DoNotUseAcc};
     flows
         f1 : error source acc5_output{ValueError};
+        f2 : error source acc6_output{ValueError};
+        f3 : error sink acc_error_action{DoNotUseAcc};
     end propagations;
     
+    -- TODO: if SHM tells not to use accX is it required
+    -- to stop sending data out of accX_output ?
     component error behavior
     propagations
-        p1 : failed -[]-> acc5_output{ValueError};
+        p1 : failed5 -[]-> acc5_output{ValueError};
+        p2 : failed5 -[]-> acc_error_out{Acc5Failure};
+        
+        p3 : failed6 -[]-> acc6_output{ValueError};
+        p4 : failed6 -[]-> acc_error_out{Acc6Failure};
+        
+        -- Need this state where acc 5 and 6 are failed because
+        -- we consider that the acc module continuously sends
+        -- error messages for each failed acc AND we need to check 
+        -- that the acc error does not propagate furhter down in the
+        -- system
+        p5 : failed56 -[]-> acc5_output{ValueError};
+        p6 : failed56 -[]-> acc6_output{ValueError};
+        p7 : failed56 -[]-> acc_error_out{Acc56Failure};
     end component;
 **};
 end acc.impl;

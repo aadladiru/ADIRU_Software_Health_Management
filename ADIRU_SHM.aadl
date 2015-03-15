@@ -31,40 +31,24 @@ connections
   ADIRU3_voter : port ADIRU_module.ADIRU3_output->voter_module.ADIRU_input3;
   ADIRU4_voter : port ADIRU_module.ADIRU4_output->voter_module.ADIRU_input4;
   
-  cAccAcc1Error_sytemHMAlarm : port acc_module.acc1_error_out->systemHM_module.systemHM_arlarm_in;
-  cSystemHMAction_accAcc1ErrorAction : port systemHM_module.systemHM_action->acc_module.acc1_error_action;
-  cAccAcc2Error_sytemHMAlarm : port acc_module.acc2_error_out->systemHM_module.systemHM_arlarm_in;
-  cSystemHMAction_accAcc2ErrorAction : port systemHM_module.systemHM_action->acc_module.acc2_error_action;
-  cAccAcc3Error_sytemHMAlarm : port acc_module.acc3_error_out->systemHM_module.systemHM_arlarm_in;
-  cSystemHMAction_accAcc3ErrorAction : port systemHM_module.systemHM_action->acc_module.acc3_error_action;
-  cAccAcc4Error_sytemHMAlarm : port acc_module.acc4_error_out->systemHM_module.systemHM_arlarm_in;
-  cSystemHMAction_accAcc4ErrorAction : port systemHM_module.systemHM_action->acc_module.acc4_error_action;
-  cAccAcc5Error_sytemHMAlarm : port acc_module.acc5_error_out->systemHM_module.systemHM_arlarm_in;
-  cSystemHMAction_accAcc5ErrorAction : port systemHM_module.systemHM_action->acc_module.acc5_error_action;
-  cAccAcc6Error_sytemHMAlarm : port acc_module.acc6_error_out->systemHM_module.systemHM_arlarm_in;
-  cSystemHMAction_accAcc6ErrorAction : port systemHM_module.systemHM_action->acc_module.acc6_error_action;
+  cAccAccError_sytemHMAlarm : port acc_module.acc_error_out->systemHM_module.systemHM_alarm_in;
+  cSystemHMAction_accAccErrorAction : port systemHM_module.systemHM_action->acc_module.acc_error_action;
   
-  cADIRUADIRUp1Error_systemHMAlarm : port ADIRU_module.ADIRUp1_error_out->systemHM_module.systemHM_arlarm_in;
-  cSystemHMSytemHMAction_ADIRUADIRUp1ErrorAction : port systemHM_module.systemHM_action->ADIRU_module.ADIRUp1_error_action;
-  cADIRUADIRUp2Error_systemHMAlarm : port ADIRU_module.ADIRUp2_error_out->systemHM_module.systemHM_arlarm_in;
-  cSystemHMSytemHMAction_ADIRUADIRUp2ErrorAction : port systemHM_module.systemHM_action->ADIRU_module.ADIRUp2_error_action;
-  cADIRUADIRUp3Error_systemHMAlarm : port ADIRU_module.ADIRUp3_error_out->systemHM_module.systemHM_arlarm_in;
-  cSystemHMSytemHMAction_ADIRUADIRUp3ErrorAction : port systemHM_module.systemHM_action->ADIRU_module.ADIRUp3_error_action;
-  cADIRUADIRUp4Error_systemHMAlarm : port ADIRU_module.ADIRUp4_error_out->systemHM_module.systemHM_arlarm_in;
-  cSystemHMSytemHMAction_ADIRUADIRUp4ErrorAction : port systemHM_module.systemHM_action->ADIRU_module.ADIRUp4_error_action;
+  cADIRUADIRUError_systemHMAlarm : port ADIRU_module.ADIRU_error_out->systemHM_module.systemHM_alarm_in;
+  cSystemHMSytemHMAction_ADIRUADIRUErrorAction : port systemHM_module.systemHM_action->ADIRU_module.ADIRU_error_action;
   
-  cVoterVoterLError_systemHMSystemHMAlarm : port voter_module.voterL_error_out->systemHM_module.systemHM_arlarm_in;
+  cVoterVoterLError_systemHMSystemHMAlarm : port voter_module.voterL_error_out->systemHM_module.systemHM_alarm_in;
   cSystemHMSytemHMAction_voterVoterLErrorAction : port systemHM_module.systemHM_action->voter_module.voterL_error_action;
-  cVoterVoterCError_systemHMSystemHMAlarm : port voter_module.voterC_error_out->systemHM_module.systemHM_arlarm_in;
+  cVoterVoterCError_systemHMSystemHMAlarm : port voter_module.voterC_error_out->systemHM_module.systemHM_alarm_in;
   cSystemHMSytemHMAction_voterVoterCErrorAction : port systemHM_module.systemHM_action->voter_module.voterC_error_action;
-  cVoterVoterRError_systemHMSystemHMAlarm : port voter_module.voterR_error_out->systemHM_module.systemHM_arlarm_in;
+  cVoterVoterRError_systemHMSystemHMAlarm : port voter_module.voterR_error_out->systemHM_module.systemHM_alarm_in;
   cSystemHMSytemHMAction_voterVoterRErrorAction : port systemHM_module.systemHM_action->voter_module.voterR_error_action;
   
-  cVoterDisplayLError_systemHMAlarm : port voter_module.displayL_error_out->systemHM_module.systemHM_arlarm_in;
+  cVoterDisplayLError_systemHMAlarm : port voter_module.displayL_error_out->systemHM_module.systemHM_alarm_in;
   cSystemHMSystemHMAction_voterDisplayLErrorAction : port systemHM_module.systemHM_action->voter_module.displayL_error_action;
-  cVoterDisplayCError_systemHMAlarm : port voter_module.displayC_error_out->systemHM_module.systemHM_arlarm_in;
+  cVoterDisplayCError_systemHMAlarm : port voter_module.displayC_error_out->systemHM_module.systemHM_alarm_in;
   cSystemHMSystemHMAction_voterDisplayCErrorAction : port systemHM_module.systemHM_action->voter_module.displayC_error_action;
-  cVoterDisplayRError_systemHMAlarm : port voter_module.displayR_error_out->systemHM_module.systemHM_arlarm_in;
+  cVoterDisplayRError_systemHMAlarm : port voter_module.displayR_error_out->systemHM_module.systemHM_alarm_in;
   cSystemHMSystemHMAction_voterDisplayRErrorAction : port systemHM_module.systemHM_action->voter_module.displayR_error_action;
 
 annex EMV2{**

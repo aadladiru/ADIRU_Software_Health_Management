@@ -6,7 +6,7 @@ with SEI;
 
 system systemHM
 features
-    systemHM_arlarm_in: in event data  port SHM_DataType::errorData;
+    systemHM_alarm_in: in event data  port SHM_DataType::errorData;
     systemHM_action: out event data  port SHM_DataType::actionData;
 end systemHM;
 
@@ -14,6 +14,26 @@ system implementation systemHM.impl
 annex EMV2{**
     use types ADIRU_errLibrary;
     use behavior ADIRU_errLibrary::HM_simple;
+
+    error propagations
+      systemHM_alarm_in : in propagation {AccFailure};
+      systemHM_action : out propagation {DoNotUseAcc};
+    flows
+      f1 : error sink systemHM_alarm_in{AccFailure};
+    end propagations;
+    
+    component error behavior
+    transitions
+        t1 : operational -[systemHM_alarm_in{Acc5Failure}]-> notUsing5;
+        t2 : operational -[systemHM_alarm_in{Acc6Failure}]-> notUsing6;
+        t3 : operational -[systemHM_alarm_in{Acc56Failure}]-> notUsing56;
+        t4 : notUsing6 -[systemHM_alarm_in{Acc5Failure}]-> notUsing56;
+        t5 : notUsing5 -[systemHM_alarm_in{Acc6Failure}]-> notUsing56;
+    propagations
+        p1 : notUsing5 -[]-> systemHM_action{DoNotUseAcc5};
+        p2 : notUsing6 -[]-> systemHM_action{DoNotUseAcc6};
+        p3 : notUsing56 -[]-> systemHM_action{DoNotUseAcc56};
+    end component;
 **};
 end systemHM.impl;
 
