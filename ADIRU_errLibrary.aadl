@@ -4,6 +4,9 @@ public
 annex EMV2 {**
     error types
         ValueError: type;
+        ValueStuckHigh : type extends ValueError;
+        ValueStuckLow : type extends ValueError;
+        ValueChangeTooFast : type extends ValueError;
         NoValue : type; 
         DoNotUseAcc5 : type;
         DoNotUseAcc6 : type;
