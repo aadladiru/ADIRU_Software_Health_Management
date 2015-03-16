@@ -27,7 +27,9 @@ features
   voterR_error_action: in event data port SHM_DataType::actionData;
   displayR_error_out: out event data port SHM_DataType::errorData;
   displayR_error_action: in event data port SHM_DataType::actionData;
+end voter_display;
 
+system implementation voter_display.impl
 annex EMV2{**
     use types ADIRU_errLibrary;
     use behavior ADIRU_errLibrary::display_simple;
@@ -53,9 +55,6 @@ annex EMV2{**
                         ]-> displayErroneousValue;
     end component;
 **};
-end voter_display;
-
-system implementation voter_display.impl
 end voter_display.impl;
 
 end VD_Module;

@@ -21,7 +21,9 @@ features
   
   ADIRU_error_out: out event data port SHM_DataType::errorData;
   ADIRU_error_action: in event data port SHM_DataType::actionData;
+end ADIRU_processor;
 
+system implementation ADIRU_processor.impl
 annex EMV2{**
   use types ADIRU_errLibrary;
   use behavior ADIRU_errLibrary::ADIRUp_simple;
@@ -69,9 +71,6 @@ annex EMV2{**
     p_not6_4 : UseAllButAcc6 -[acc_input5{ValueError}]-> ADIRU4_output{ValueError};
   end component;
 **};
-end ADIRU_processor;
-
-system implementation ADIRU_processor.impl
 end ADIRU_processor.impl;
 
 end ADIRUp_Module;
