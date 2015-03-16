@@ -6,35 +6,48 @@ with SEI;
 
 system systemHM
 features
-    systemHM_alarm_in: in event data  port SHM_DataType::errorData;
-    systemHM_action: out event data  port SHM_DataType::actionData;
+    acc1_error : in event data port SHM_DataType::errorData;
+    acc2_error : in event data port SHM_DataType::errorData;
+    acc3_error : in event data port SHM_DataType::errorData;
+    acc4_error : in event data port SHM_DataType::errorData;
+    acc5_error : in event data port SHM_DataType::errorData;
+    acc6_error : in event data port SHM_DataType::errorData;
+
+    acc1_errorAction : in event data port SHM_DataType::actionData;
+    acc2_errorAction : in event data port SHM_DataType::actionData;
+    acc3_errorAction : in event data port SHM_DataType::actionData;
+    acc4_errorAction : in event data port SHM_DataType::actionData;
+    acc5_errorAction : in event data port SHM_DataType::actionData;
+    acc6_errorAction : in event data port SHM_DataType::actionData;
+    
+    ADIRU1_error : in event data port SHM_DataType::errorData;
+    ADIRU2_error : in event data port SHM_DataType::errorData;
+    ADIRU3_error : in event data port SHM_DataType::errorData;
+    ADIRU4_error : in event data port SHM_DataType::errorData;
+    
+    ADIRU1_errorAction : out event data port SHM_DataType::actionData;
+    ADIRU2_errorAction : out event data port SHM_DataType::actionData;
+    ADIRU3_errorAction : out event data port SHM_DataType::actionData;
+    ADIRU4_errorAction : out event data port SHM_DataType::actionData;
+    
+    voterL_error: in event data port SHM_DataType::errorData;
+    voterC_error: in event data port SHM_DataType::errorData;
+    voterR_error: in event data port SHM_DataType::errorData;
+
+    displayL_error: in event data port SHM_DataType::errorData;
+    displayC_error: in event data port SHM_DataType::errorData;
+    displayR_error: in event data port SHM_DataType::errorData;
+
+    voterL_errorAction: out event data port SHM_DataType::actionData;
+    voterC_errorAction: out event data port SHM_DataType::actionData;
+    voterR_errorAction: out event data port SHM_DataType::actionData;
+    
+    displayL_errorAction: out event data port SHM_DataType::actionData;
+    displayC_errorAction: out event data port SHM_DataType::actionData;
+    displayR_errorAction: out event data port SHM_DataType::actionData;
 end systemHM;
 
 system implementation systemHM.impl
-annex EMV2{**
-    use types ADIRU_errLibrary;
-    use behavior ADIRU_errLibrary::HM_simple;
-
-    error propagations
-      systemHM_alarm_in : in propagation {AccFailure};
-      systemHM_action : out propagation {DoNotUseAcc};
-    flows
-      f1 : error sink systemHM_alarm_in{AccFailure};
-    end propagations;
-    
-    component error behavior
-    transitions
-        t1 : operational -[systemHM_alarm_in{Acc5Failure}]-> notUsing5;
-        t2 : operational -[systemHM_alarm_in{Acc6Failure}]-> notUsing6;
-        t3 : operational -[systemHM_alarm_in{Acc56Failure}]-> notUsing56;
-        t4 : notUsing6 -[systemHM_alarm_in{Acc5Failure}]-> notUsing56;
-        t5 : notUsing5 -[systemHM_alarm_in{Acc6Failure}]-> notUsing56;
-    propagations
-        p1 : notUsing5 -[]-> systemHM_action{DoNotUseAcc5};
-        p2 : notUsing6 -[]-> systemHM_action{DoNotUseAcc6};
-        p3 : notUsing56 -[]-> systemHM_action{DoNotUseAcc56};
-    end component;
-**};
 end systemHM.impl;
 
 end HM_Module;

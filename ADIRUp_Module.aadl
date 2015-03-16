@@ -8,68 +8,74 @@ with ADIRU_errLibrary;
 
 system ADIRU_processor
 features
-  acc_input1: in data port SHM_DataType::accData;
-  acc_input2: in data port SHM_DataType::accData;
-  acc_input3: in data port SHM_DataType::accData;
-  acc_input4: in data port SHM_DataType::accData;
-  acc_input5: in data port SHM_DataType::accData;
-  acc_input6: in data port SHM_DataType::accData;
-  ADIRU1_output: out data port SHM_DataType::accData;
-  ADIRU2_output: out data port SHM_DataType::accData;
-  ADIRU3_output: out data port SHM_DataType::accData;
-  ADIRU4_output: out data port SHM_DataType::accData;
+  acc1_data: in data port SHM_DataType::accData;
+  acc2_data: in data port SHM_DataType::accData;
+  acc3_data: in data port SHM_DataType::accData;
+  acc4_data: in data port SHM_DataType::accData;
+  acc5_data: in data port SHM_DataType::accData;
+  acc6_data: in data port SHM_DataType::accData;
+
+  ADIRU1_data: out data port SHM_DataType::accData;
+  ADIRU2_data: out data port SHM_DataType::accData;
+  ADIRU3_data: out data port SHM_DataType::accData;
+  ADIRU4_data: out data port SHM_DataType::accData;
   
-  ADIRU_error_out: out event data port SHM_DataType::errorData;
-  ADIRU_error_action: in event data port SHM_DataType::actionData;
+  ADIRU1_error : out event data port SHM_DataType::errorData;
+  ADIRU2_error : out event data port SHM_DataType::errorData;
+  ADIRU3_error : out event data port SHM_DataType::errorData;
+  ADIRU4_error : out event data port SHM_DataType::errorData;
+
+  ADIRU1_errorAction: in event data port SHM_DataType::actionData;
+  ADIRU2_errorAction: in event data port SHM_DataType::actionData;
+  ADIRU3_errorAction: in event data port SHM_DataType::actionData;
+  ADIRU4_errorAction: in event data port SHM_DataType::actionData;
 end ADIRU_processor;
 
 system implementation ADIRU_processor.impl
 annex EMV2{**
   use types ADIRU_errLibrary;
-  use behavior ADIRU_errLibrary::ADIRUp_simple;
   
   error propagations
-    acc_input5 : in propagation{ValueError}:
-    acc_input6 : in propagation{ValueError}:
-    ADIRU1_output: out propagation{ValueError};
-    ADIRU2_output: out propagation{ValueError};
-    ADIRU3_output: out propagation{ValueError}; 
-    ADIRU4_output: out propagation{ValueError};
-    ADIRU_error_action: in propagation{DoNotUseAcc};
+    acc1_data : in propagation{ValueErroneous}:
+    acc2_data : in propagation{ValueErroneous}:
+    acc3_data : in propagation{ValueErroneous}:
+    acc4_data : in propagation{ValueErroneous}:
+    acc5_data : in propagation{ValueErroneous}:
+    acc6_data : in propagation{ValueErroneous}:
+
+    ADIRU1_data: out propagation{ValueErroneous};
+    ADIRU2_data: out propagation{ValueErroneous};
+    ADIRU3_data: out propagation{ValueErroneous}; 
+    ADIRU4_data: out propagation{ValueErroneous};
   flows
-    f5 : error sink acc_input5{ValueError};
-    f6 : error sink acc_input6{ValueError};
-    fa : error sink ADIRU_error_action {DoNotUseAcc};
+    f11 : error path acc1_data{ValueErroneous} -> ADIRU1_data{ValueErroneous};
+    f12 : error path acc2_data{ValueErroneous} -> ADIRU1_data{ValueErroneous};
+    f13 : error path acc3_data{ValueErroneous} -> ADIRU1_data{ValueErroneous};
+    f14 : error path acc4_data{ValueErroneous} -> ADIRU1_data{ValueErroneous};
+    f15 : error path acc5_data{ValueErroneous} -> ADIRU1_data{ValueErroneous};
+    f16 : error path acc6_data{ValueErroneous} -> ADIRU1_data{ValueErroneous};
+    
+    f21 : error path acc1_data{ValueErroneous} -> ADIRU2_data{ValueErroneous};
+    f22 : error path acc2_data{ValueErroneous} -> ADIRU2_data{ValueErroneous};
+    f23 : error path acc3_data{ValueErroneous} -> ADIRU2_data{ValueErroneous};
+    f24 : error path acc4_data{ValueErroneous} -> ADIRU2_data{ValueErroneous};
+    f25 : error path acc5_data{ValueErroneous} -> ADIRU2_data{ValueErroneous};
+    f26 : error path acc6_data{ValueErroneous} -> ADIRU2_data{ValueErroneous};
+
+    f31 : error path acc1_data{ValueErroneous} -> ADIRU3_data{ValueErroneous};
+    f32 : error path acc2_data{ValueErroneous} -> ADIRU3_data{ValueErroneous};
+    f33 : error path acc3_data{ValueErroneous} -> ADIRU3_data{ValueErroneous};
+    f34 : error path acc4_data{ValueErroneous} -> ADIRU3_data{ValueErroneous};
+    f35 : error path acc5_data{ValueErroneous} -> ADIRU3_data{ValueErroneous};
+    f36 : error path acc6_data{ValueErroneous} -> ADIRU3_data{ValueErroneous};
+
+    f41 : error path acc1_data{ValueErroneous} -> ADIRU4_data{ValueErroneous};
+    f42 : error path acc2_data{ValueErroneous} -> ADIRU4_data{ValueErroneous};
+    f43 : error path acc3_data{ValueErroneous} -> ADIRU4_data{ValueErroneous};
+    f44 : error path acc4_data{ValueErroneous} -> ADIRU4_data{ValueErroneous};
+    f45 : error path acc5_data{ValueErroneous} -> ADIRU4_data{ValueErroneous};
+    f46 : error path acc6_data{ValueErroneous} -> ADIRU4_data{ValueErroneous};
   end propagations;
-
-  component error behavior
-  transitions
-    t1 : operational -[ADIRU_error_action{DoNotUseAcc5}]-> useAllButAcc5; 
-    t2 : operational -[ADIRU_error_action{DoNotUseAcc6}]-> useAllButAcc6; 
-    t3 : operational -[ADIRU_error_action{DoNotUseAcc56}]-> useAllButAcc56; 
-    t4 : useAllButAcc6 -[ADIRU_error_action{DoNotUseAcc5}]-> useAllButAcc5;
-    t5 : useAllButAcc5 -[ADIRU_error_action{DoNotUseAcc6}]-> useAllButAcc6;
-    t6 : useAllButAcc5 -[ADIRU_error_action{DoNotUseAcc56}]-> useAllButAcc56;
-    t7 : useAllButAcc6 -[ADIRU_error_action{DoNotUseAcc56}]-> useAllButAcc56;
-  propagations
-    p_op_acc5_1 : operational -[acc_input5{ValueError}]-> ADIRU1_output{ValueError};
-    p_op_acc5_2 : operational -[acc_input5{ValueError}]-> ADIRU2_output{ValueError};
-    p_op_acc5_3 : operational -[acc_input5{ValueError}]-> ADIRU3_output{ValueError};
-    p_op_acc5_4 : operational -[acc_input5{ValueError}]-> ADIRU4_output{ValueError};
-    p_op_acc6_1 : operational -[acc_input6{ValueError}]-> ADIRU1_output{ValueError};
-    p_op_acc6_2 : operational -[acc_input6{ValueError}]-> ADIRU2_output{ValueError};
-    p_op_acc6_3 : operational -[acc_input6{ValueError}]-> ADIRU3_output{ValueError};
-    p_op_acc6_4 : operational -[acc_input6{ValueError}]-> ADIRU4_output{ValueError};
-
-    p_not5_1 : UseAllButAcc5 -[acc_input6{ValueError}]-> ADIRU1_output{ValueError};
-    p_not5_2 : UseAllButAcc5 -[acc_input6{ValueError}]-> ADIRU2_output{ValueError};
-    p_not5_3 : UseAllButAcc5 -[acc_input6{ValueError}]-> ADIRU3_output{ValueError};
-    p_not5_4 : UseAllButAcc5 -[acc_input6{ValueError}]-> ADIRU4_output{ValueError};
-    p_not6_1 : UseAllButAcc6 -[acc_input5{ValueError}]-> ADIRU1_output{ValueError};
-    p_not6_2 : UseAllButAcc6 -[acc_input5{ValueError}]-> ADIRU2_output{ValueError};
-    p_not6_3 : UseAllButAcc6 -[acc_input5{ValueError}]-> ADIRU3_output{ValueError};
-    p_not6_4 : UseAllButAcc6 -[acc_input5{ValueError}]-> ADIRU4_output{ValueError};
-  end component;
 **};
 end ADIRU_processor.impl;
 

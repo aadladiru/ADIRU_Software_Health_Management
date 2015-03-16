@@ -19,37 +19,60 @@ subcomponents
   systemHM_module: system HM_Module::systemHM.impl;
 
 connections
-  acc1_ADIRU : port acc_module.acc1_output->ADIRU_module.acc_input1;
-  acc2_ADIRU : port acc_module.acc2_output->ADIRU_module.acc_input2;
-  acc3_ADIRU : port acc_module.acc3_output->ADIRU_module.acc_input3;
-  acc4_ADIRU : port acc_module.acc4_output->ADIRU_module.acc_input4;
-  acc5_ADIRU : port acc_module.acc5_output->ADIRU_module.acc_input5;
-  acc6_ADIRU : port acc_module.acc6_output->ADIRU_module.acc_input6;
+  -- ACC to ADIRU
+  acc1_ADIRU : port acc_module.acc1_data -> ADIRU_module.acc1_data;
+  acc2_ADIRU : port acc_module.acc2_data -> ADIRU_module.acc2_data;
+  acc3_ADIRU : port acc_module.acc3_data -> ADIRU_module.acc3_data;
+  acc4_ADIRU : port acc_module.acc4_data -> ADIRU_module.acc4_data;
+  acc5_ADIRU : port acc_module.acc5_data -> ADIRU_module.acc5_data;
+  acc6_ADIRU : port acc_module.acc6_data -> ADIRU_module.acc6_data;
   
-  ADIRU1_voter : port ADIRU_module.ADIRU1_output->voter_module.ADIRU_input1;
-  ADIRU2_voter : port ADIRU_module.ADIRU2_output->voter_module.ADIRU_input2;
-  ADIRU3_voter : port ADIRU_module.ADIRU3_output->voter_module.ADIRU_input3;
-  ADIRU4_voter : port ADIRU_module.ADIRU4_output->voter_module.ADIRU_input4;
+  -- ADIRU to VOTERS
+  ADIRU1_voter : port ADIRU_module.ADIRU1_data -> voter_module.ADIRU1_data;
+  ADIRU2_voter : port ADIRU_module.ADIRU2_data -> voter_module.ADIRU2_data;
+  ADIRU3_voter : port ADIRU_module.ADIRU3_data -> voter_module.ADIRU3_data;
+  ADIRU4_voter : port ADIRU_module.ADIRU4_data -> voter_module.ADIRU4_data;
+
+  -- ACC to SHM
+  cAcc1SHM_Error : port acc_module.acc1_error -> systemHM_module.acc1_error;
+  cAcc2SHM_Error : port acc_module.acc2_error -> systemHM_module.acc2_error;
+  cAcc3SHM_Error : port acc_module.acc3_error -> systemHM_module.acc3_error;
+  cAcc4SHM_Error : port acc_module.acc4_error -> systemHM_module.acc4_error;
+  cAcc5SHM_Error : port acc_module.acc5_error -> systemHM_module.acc5_error;
+  cAcc6SHM_Error : port acc_module.acc6_error -> systemHM_module.acc6_error;
   
-  cAccAccError_sytemHMAlarm : port acc_module.acc_error_out->systemHM_module.systemHM_alarm_in;
-  cSystemHMAction_accAccErrorAction : port systemHM_module.systemHM_action->acc_module.acc_error_action;
+  cAcc1SHM_ErrorAction : port systemHM_module.acc1_errorAction -> acc_module.acc1_errorAction;
+  cAcc2SHM_ErrorAction : port systemHM_module.acc2_errorAction -> acc_module.acc2_errorAction;
+  cAcc3SHM_ErrorAction : port systemHM_module.acc3_errorAction -> acc_module.acc3_errorAction;
+  cAcc4SHM_ErrorAction : port systemHM_module.acc4_errorAction -> acc_module.acc4_errorAction;
+  cAcc5SHM_ErrorAction : port systemHM_module.acc5_errorAction -> acc_module.acc5_errorAction;
+  cAcc6SHM_ErrorAction : port systemHM_module.acc6_errorAction -> acc_module.acc6_errorAction;
   
-  cADIRUADIRUError_systemHMAlarm : port ADIRU_module.ADIRU_error_out->systemHM_module.systemHM_alarm_in;
-  cSystemHMSytemHMAction_ADIRUADIRUErrorAction : port systemHM_module.systemHM_action->ADIRU_module.ADIRU_error_action;
+  -- ADIRU to SHM
+  cADIRU1SHM_Error : port ADIRU_module.ADIRU1_error -> systemHM_module.ADIRU1_error;
+  cADIRU2SHM_Error : port ADIRU_module.ADIRU2_error -> systemHM_module.ADIRU2_error;
+  cADIRU3SHM_Error : port ADIRU_module.ADIRU3_error -> systemHM_module.ADIRU3_error;
+  cADIRU4SHM_Error : port ADIRU_module.ADIRU4_error -> systemHM_module.ADIRU4_error;
+
+  cADIRU1SHM_ErrorAction : port systemHM_module.ADIRU1_errorAction -> ADIRU_module.ADIRU1_errorAction;
+  cADIRU2SHM_ErrorAction : port systemHM_module.ADIRU2_errorAction -> ADIRU_module.ADIRU2_errorAction;
+  cADIRU3SHM_ErrorAction : port systemHM_module.ADIRU3_errorAction -> ADIRU_module.ADIRU3_errorAction;
+  cADIRU4SHM_ErrorAction : port systemHM_module.ADIRU4_errorAction -> ADIRU_module.ADIRU4_errorAction;
+
+  -- VOTERS to SHM 
+  cVoterLSHM_Error : port voter_module.voterL_error -> systemHM_module.voterL_error;
+  cVoterCSHM_Error : port voter_module.voterC_error -> systemHM_module.voterC_error;
+  cVoterRSHM_Error : port voter_module.voterR_error -> systemHM_module.voterR_error;
+  cDisplayLSHM_Error : port voter_module.displayL_error -> systemHM_module.displayL_error; 
+  cDisplayCSHM_Error : port voter_module.displayC_error -> systemHM_module.displayC_error; 
+  cDisplayRSHM_Error : port voter_module.displayR_error -> systemHM_module.displayR_error; 
   
-  cVoterVoterLError_systemHMSystemHMAlarm : port voter_module.voterL_error_out->systemHM_module.systemHM_alarm_in;
-  cSystemHMSytemHMAction_voterVoterLErrorAction : port systemHM_module.systemHM_action->voter_module.voterL_error_action;
-  cVoterVoterCError_systemHMSystemHMAlarm : port voter_module.voterC_error_out->systemHM_module.systemHM_alarm_in;
-  cSystemHMSytemHMAction_voterVoterCErrorAction : port systemHM_module.systemHM_action->voter_module.voterC_error_action;
-  cVoterVoterRError_systemHMSystemHMAlarm : port voter_module.voterR_error_out->systemHM_module.systemHM_alarm_in;
-  cSystemHMSytemHMAction_voterVoterRErrorAction : port systemHM_module.systemHM_action->voter_module.voterR_error_action;
-  
-  cVoterDisplayLError_systemHMAlarm : port voter_module.displayL_error_out->systemHM_module.systemHM_alarm_in;
-  cSystemHMSystemHMAction_voterDisplayLErrorAction : port systemHM_module.systemHM_action->voter_module.displayL_error_action;
-  cVoterDisplayCError_systemHMAlarm : port voter_module.displayC_error_out->systemHM_module.systemHM_alarm_in;
-  cSystemHMSystemHMAction_voterDisplayCErrorAction : port systemHM_module.systemHM_action->voter_module.displayC_error_action;
-  cVoterDisplayRError_systemHMAlarm : port voter_module.displayR_error_out->systemHM_module.systemHM_alarm_in;
-  cSystemHMSystemHMAction_voterDisplayRErrorAction : port systemHM_module.systemHM_action->voter_module.displayR_error_action;
+  cVoterLSHM_errorAction : port systemHM_module.voterL_errorAction -> voter_module.voterL_errorAction;
+  cVoterCSHM_errorAction : port systemHM_module.voterC_errorAction -> voter_module.voterC_errorAction;
+  cVoterRSHM_errorAction : port systemHM_module.voterR_errorAction -> voter_module.voterR_errorAction;
+  cDisplayLSHM_errorAction : port systemHM_module.displayL_errorAction -> voter_module.displayL_errorAction;
+  cDisplayCSHM_errorAction : port systemHM_module.displayC_errorAction -> voter_module.displayC_errorAction;
+  cDisplayRSHM_errorAction : port systemHM_module.displayR_errorAction -> voter_module.displayR_errorAction;
 
 annex EMV2{**
   use types ADIRU_errLibrary;
@@ -64,3 +87,4 @@ annex EMV2{**
 end ADIRU_SHM.impl;
 
 end ADIRU_SHM;
+

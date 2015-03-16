@@ -6,22 +6,12 @@ annex EMV2 {**
         -- ACC error types, those type of error can 
         -- propagate through the whole system
         ValueError: type;
-        ValueStuckHigh : type extends ValueError;
+        ValueErroneous : type extends ValueError;
+        ValueStuck : type extends ValueError;
+        ValueStuckHigh : type extends ValueStuck;
         ValueStuckLow : type extends ValueError;
         ValueChangeTooFast : type extends ValueError;
         NoValue : type;
-
-        -- ACC_HM error types
-        AccFailure : type;
-        Acc5Failure : type extends AccFailure;
-        Acc6Failure : type extends AccFailure;
-        Acc56Failure : type extends AccFailure;
-        
-        -- For SHM to configure ADIRU processor
-        DoNotUseAcc : type;
-        DoNotUseAcc5 : type extends DoNotUseAcc;
-        DoNotUseAcc6 : type extends DoNotUseAcc;
-        DoNotUseAcc56 : type extends DoNotUseAcc;
     end types;
     
     -- Simple error state machine
@@ -37,53 +27,11 @@ annex EMV2 {**
         t2 : failed -[op]-> operational;
     end behavior;
     
-    -- ACC error state machine
-    error behavior acc_simple
-    events
-        failure5 : error event;
-        failure6 : error event;
-    states
-        Operational : initial state;
-        Failed5 : state;
-        Failed6 : state;
-        Failed56 : state;
-    transitions
-        t1 : operational -[failure5]-> failed5;
-        t2 : operational -[failure6]-> failed6;
-        t3 : failed5 -[failure6]-> failed56;
-        t4 : failed6 -[failure5]-> failed56;
-    end behavior;
-    
-    -- ADIRU error state machine
-    error behavior ADIRUp_simple
-    states
-        operational : initial state;
-        useAllButAcc5 : state;
-        useAllButAcc6 : state;
-        useAllButAcc56 : state;
-    end behavior;
-    
     -- Voter and Display module error state machine
     error behavior display_simple
     states
         operational : initial state;
         displayErroneousValue : state;
-    end behavior;
-    
-    -- SHM error state machine
-    error behavior HM_simple
-    events
-        reboot : error event;
-    states
-        operational : initial state;
-        notUsing5 : state;
-        notUsing6 : state;
-        notUsing56 : state;
-    transitions
-        t1 : operational -[reboot]-> operational;
-        t2 : notUsing5 -[reboot]-> notUsing5;
-        t3 : notUsing6 -[reboot]-> notUsing6;
-        t4 : notUsing56 -[reboot]-> notUsing56;
     end behavior;
 **};
 

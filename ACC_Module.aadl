@@ -3,55 +3,124 @@ public
 with SHM_DataType;
 with ADIRU_errLibrary;
 
+device acc_device
+features
+    accData : out data port SHM_DataType::accData;
+end acc_device;
+
+device implementation acc_device.impl
+annex EMV2{**
+  use types ADIRU_errLibrary;
+  use behavior ADIRU_errLibrary::simple;
+
+  error propagations
+    accData : out propagation{ValueError};
+  flows
+    f1 : error source accData{ValueError} when failed;
+  end propagations;
+**};
+end acc_device.impl;
+
+process acc_HM
+features
+  accData_in : in event data port SHM_DataType::accData;
+  accData_out : out event data port SHM_DataType::accData;
+  error : out event data port SHM_DataType::errorData;
+  errorAction : out event data port SHM_DataType::actionData;
+end acc_HM;
+
+process implementation acc_HM.impl
+annex EMV2{**
+  use types ADIRU_errLibrary;
+  
+  error propagations
+    accData_in : in propagation{ValueError};
+    accData_out : out propagation{ValueErroneous};
+  flows
+    f1 : error sink accData_in{ValueStuck, ValueChangeTooFast};
+    f2 : error path accData_in{ValueErroneous} -> accData_out{ValueErroneous};
+  end propagations;
+**}; 
+end acc_HM.impl;
+
+system acc_unit
+features
+  accData : out data port SHM_DataType::accData;
+  Error : out event data port SHM_DataType::errorData;
+  ErrorAction : out event data port SHM_DataType::actionData;
+modes
+    off : initial mode;
+    on : mode;
+    defunkt : mode;
+end acc_unit;
+
+system implementation acc_unit.impl
+subcomponents
+  acc_device : device acc_device.impl;
+  acc_HM : process acc_HM.impl;
+connections
+  cAccAccHM : port acc_device.accData -> acc_HM.accData_in;
+
+  cAccData : port acc_HM.accData_out -> accData in modes (on);
+  cAccHMError : port acc_HM.Error -> Error;
+  cAccHMErrorAction : port acc_Hm.ErrorAction -> ErrorAction;
+end acc_unit.impl;
+
+
 system acc
 features
-  acc1_output: out data port SHM_DataType::accData;
-  acc2_output: out data port SHM_DataType::accData;
-  acc3_output: out data port SHM_DataType::accData;
-  acc4_output: out data port SHM_DataType::accData;
-  acc5_output: out data port SHM_DataType::accData;
-  acc6_output: out data port SHM_DataType::accData;
+  acc1_data: out data port SHM_DataType::accData;
+  acc2_data: out data port SHM_DataType::accData;
+  acc3_data: out data port SHM_DataType::accData;
+  acc4_data: out data port SHM_DataType::accData;
+  acc5_data: out data port SHM_DataType::accData;
+  acc6_data: out data port SHM_DataType::accData;
   
-  acc_error_out: out event data port SHM_DataType::errorData;
-  acc_error_action: in event data port SHM_DataType::actionData;
+  acc1_error: out event data port SHM_DataType::errorData;
+  acc2_error: out event data port SHM_DataType::errorData;
+  acc3_error: out event data port SHM_DataType::errorData;
+  acc4_error: out event data port SHM_DataType::errorData;
+  acc5_error: out event data port SHM_DataType::errorData;
+  acc6_error: out event data port SHM_DataType::errorData;
+
+  acc1_errorAction: out event data port SHM_DataType::actionData;
+  acc2_errorAction: out event data port SHM_DataType::actionData;
+  acc3_errorAction: out event data port SHM_DataType::actionData;
+  acc4_errorAction: out event data port SHM_DataType::actionData;
+  acc5_errorAction: out event data port SHM_DataType::actionData;
+  acc6_errorAction: out event data port SHM_DataType::actionData;
 end acc;
 
 system implementation acc.impl
-annex EMV2{**
-    use types ADIRU_errLibrary;
-    use behavior ADIRU_errLibrary::acc_simple;
+subcomponents
+    acc1 : system acc_unit.impl;
+    acc2 : system acc_unit.impl;
+    acc3 : system acc_unit.impl;
+    acc4 : system acc_unit.impl;
+    acc5 : system acc_unit.impl;
+    acc6 : system acc_unit.impl;
+connections
+    cAcc1 : port acc1.accData -> acc1_data;
+    cAcc2 : port acc2.accData -> acc2_data;
+    cAcc3 : port acc3.accData -> acc3_data;
+    cAcc4 : port acc4.accData -> acc4_data;
+    cAcc5 : port acc5.accData -> acc5_data;
+    cAcc6 : port acc6.accData -> acc6_data;
     
-    error propagations
-        acc5_output : out propagation {ValueError};
-        acc6_output : out propagation {ValueError};
-        acc_error_out : out propagation{AccFailure};
-        acc_error_action : in propagation{DoNotUseAcc};
-    flows
-        f1 : error source acc5_output{ValueError};
-        f2 : error source acc6_output{ValueError};
-        f3 : error sink acc_error_action{DoNotUseAcc};
-    end propagations;
-    
-    -- TODO: if SHM tells not to use accX is it required
-    -- to stop sending data out of accX_output ?
-    component error behavior
-    propagations
-        p1 : failed5 -[]-> acc5_output{ValueError};
-        p2 : failed5 -[]-> acc_error_out{Acc5Failure};
-        
-        p3 : failed6 -[]-> acc6_output{ValueError};
-        p4 : failed6 -[]-> acc_error_out{Acc6Failure};
-        
-        -- Need this state where acc 5 and 6 are failed because
-        -- we consider that the acc module continuously sends
-        -- error messages for each failed acc AND we need to check 
-        -- that the acc error does not propagate furhter down in the
-        -- system
-        p5 : failed56 -[]-> acc5_output{ValueError};
-        p6 : failed56 -[]-> acc6_output{ValueError};
-        p7 : failed56 -[]-> acc_error_out{Acc56Failure};
-    end component;
-**};
+    cAcc1Error : port acc1.Error -> acc1_error;
+    cAcc2Error : port acc2.Error -> acc2_error;
+    cAcc3Error : port acc3.Error -> acc3_error;
+    cAcc4Error : port acc4.Error -> acc4_error;
+    cAcc5Error : port acc5.Error -> acc5_error;
+    cAcc6Error : port acc6.Error -> acc6_error;
+
+    cAcc1ErrorAction : port acc1.ErrorAction -> acc1_errorAction;
+    cAcc2ErrorAction : port acc2.ErrorAction -> acc2_errorAction;
+    cAcc3ErrorAction : port acc3.ErrorAction -> acc3_errorAction;
+    cAcc4ErrorAction : port acc4.ErrorAction -> acc4_errorAction;
+    cAcc5ErrorAction : port acc5.ErrorAction -> acc5_errorAction;
+    cAcc6ErrorAction : port acc6.ErrorAction -> acc6_errorAction;
 end acc.impl;
 
 end ACC_Module;
+

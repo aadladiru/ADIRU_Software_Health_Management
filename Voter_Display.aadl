@@ -8,25 +8,26 @@ with ADIRU_errLibrary;
 
 system voter_display
 features
-  ADIRU_input1: in data port SHM_DataType::accData;
-  ADIRU_input2: in data port SHM_DataType::accData;
-  ADIRU_input3: in data port SHM_DataType::accData;
-  ADIRU_input4: in data port SHM_DataType::accData;
+  ADIRU1_data: in data port SHM_DataType::accData;
+  ADIRU2_data: in data port SHM_DataType::accData;
+  ADIRU3_data: in data port SHM_DataType::accData;
+  ADIRU4_data: in data port SHM_DataType::accData;
  
-  voterL_error_out: out event data port SHM_DataType::errorData;
-  voterL_error_action: in event data port SHM_DataType::actionData;
-  displayL_error_out: out event data port SHM_DataType::errorData;
-  displayL_error_action: in event data port SHM_DataType::actionData;
+  voterL_error: out event data port SHM_DataType::errorData;
+  voterC_error: out event data port SHM_DataType::errorData;
+  voterR_error: out event data port SHM_DataType::errorData;
+
+  displayL_error: out event data port SHM_DataType::errorData;
+  displayC_error: out event data port SHM_DataType::errorData;
+  displayR_error: out event data port SHM_DataType::errorData;
+
+  voterL_errorAction: in event data port SHM_DataType::actionData;
+  voterC_errorAction: in event data port SHM_DataType::actionData;
+  voterR_errorAction: in event data port SHM_DataType::actionData;
   
-  voterC_error_out: out event data port SHM_DataType::errorData;
-  voterC_error_action: in event data port SHM_DataType::actionData;
-  displayC_error_out: out event data port SHM_DataType::errorData;
-  displayC_error_action: in event data port SHM_DataType::actionData;
-  
-  voterR_error_out: out event data port SHM_DataType::errorData;
-  voterR_error_action: in event data port SHM_DataType::actionData;
-  displayR_error_out: out event data port SHM_DataType::errorData;
-  displayR_error_action: in event data port SHM_DataType::actionData;
+  displayL_errorAction: in event data port SHM_DataType::actionData;
+  displayC_errorAction: in event data port SHM_DataType::actionData;
+  displayR_errorAction: in event data port SHM_DataType::actionData;
 end voter_display;
 
 system implementation voter_display.impl
@@ -35,23 +36,23 @@ annex EMV2{**
     use behavior ADIRU_errLibrary::display_simple;
     
     error propagations
-      ADIRU_input1: in propagation{ValueError};
-      ADIRU_input2: in propagation{ValueError};
-      ADIRU_input3: in propagation{ValueError};
-      ADIRU_input4: in propagation{ValueError};
+      ADIRU1_data: in propagation{ValueErroneous};
+      ADIRU2_data: in propagation{ValueErroneous};
+      ADIRU3_data: in propagation{ValueErroneous};
+      ADIRU4_data: in propagation{ValueErroneous};
     flows
-      f1 : error sink ADIRU_input1{ValueError};
-      f2 : error sink ADIRU_input2{ValueError};
-      f3 : error sink ADIRU_input3{ValueError};
-      f4 : error sink ADIRU_input4{ValueError};
+      f1 : error sink ADIRU1_data{ValueErroneous};
+      f2 : error sink ADIRU2_data{ValueErroneous};
+      f3 : error sink ADIRU3_data{ValueErroneous};
+      f4 : error sink ADIRU4_data{ValueErroneous};
     end propagations;
 
     component error behavior
     transitions
-      t1 : operational -[ (ADIRU_input1{ValueError} and ADIRU_input2{ValueError} and ADIRU_input3{ValueError}) or
-                          (ADIRU_input1{ValueError} and ADIRU_input2{ValueError} and ADIRU_input4{ValueError}) or
-                          (ADIRU_input1{ValueError} and ADIRU_input3{ValueError} and ADIRU_input4{ValueError}) or
-                          (ADIRU_input2{ValueError} and ADIRU_input3{ValueError} and ADIRU_input4{ValueError})
+      t1 : operational -[ (ADIRU1_data{ValueErroneous} and ADIRU2_data{ValueErroneous} and ADIRU3_data{ValueErroneous}) or
+                          (ADIRU1_data{ValueErroneous} and ADIRU2_data{ValueErroneous} and ADIRU4_data{ValueErroneous}) or
+                          (ADIRU1_data{ValueErroneous} and ADIRU3_data{ValueErroneous} and ADIRU4_data{ValueErroneous}) or
+                          (ADIRU2_data{ValueErroneous} and ADIRU3_data{ValueErroneous} and ADIRU4_data{ValueErroneous})
                         ]-> displayErroneousValue;
     end component;
 **};
