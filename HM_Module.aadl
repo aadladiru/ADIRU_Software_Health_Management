@@ -20,6 +20,27 @@ features
     acc5_errorAction : out event data port SHM_DataType::actionData;
     acc6_errorAction : out event data port SHM_DataType::actionData;
     
+    acc1_toOn : out event port;
+    acc2_toOn : out event port;
+    acc3_toOn : out event port;
+    acc4_toOn : out event port;
+    acc5_toOn : out event port;
+    acc6_toOn : out event port;
+    
+    acc1_toOff : out event port;
+    acc2_toOff : out event port;
+    acc3_toOff : out event port;
+    acc4_toOff : out event port;
+    acc5_toOff : out event port;
+    acc6_toOff : out event port;
+    
+    acc1_toDeactivated : out event port;
+    acc2_toDeactivated : out event port;
+    acc3_toDeactivated : out event port;
+    acc4_toDeactivated : out event port;
+    acc5_toDeactivated : out event port;
+    acc6_toDeactivated : out event port;
+    
     ADIRU1_error : in event data port SHM_DataType::errorData;
     ADIRU2_error : in event data port SHM_DataType::errorData;
     ADIRU3_error : in event data port SHM_DataType::errorData;

@@ -47,6 +47,27 @@ connections
   cAcc4SHM_ErrorAction : port systemHM_module.acc4_errorAction -> acc_module.acc4_errorAction;
   cAcc5SHM_ErrorAction : port systemHM_module.acc5_errorAction -> acc_module.acc5_errorAction;
   cAcc6SHM_ErrorAction : port systemHM_module.acc6_errorAction -> acc_module.acc6_errorAction;
+
+  cAcc1SHM_toOn : port systemHM_module.acc1_toOn -> acc_module.acc1_toOn;
+  cAcc2SHM_toOn : port systemHM_module.acc2_toOn -> acc_module.acc2_toOn;
+  cAcc3SHM_toOn : port systemHM_module.acc3_toOn -> acc_module.acc3_toOn;
+  cAcc4SHM_toOn : port systemHM_module.acc4_toOn -> acc_module.acc4_toOn;
+  cAcc5SHM_toOn : port systemHM_module.acc5_toOn -> acc_module.acc5_toOn;
+  cAcc6SHM_toOn : port systemHM_module.acc6_toOn -> acc_module.acc6_toOn;
+  
+  cAcc1SHM_toOff : port systemHM_module.acc1_toOff -> acc_module.acc1_toOff;
+  cAcc2SHM_toOff : port systemHM_module.acc2_toOff -> acc_module.acc2_toOff;
+  cAcc3SHM_toOff : port systemHM_module.acc3_toOff -> acc_module.acc3_toOff;
+  cAcc4SHM_toOff : port systemHM_module.acc4_toOff -> acc_module.acc4_toOff;
+  cAcc5SHM_toOff : port systemHM_module.acc5_toOff -> acc_module.acc5_toOff;
+  cAcc6SHM_toOff : port systemHM_module.acc6_toOff -> acc_module.acc6_toOff;
+  
+  cAcc1SHM_toDeactivated : port systemHM_module.acc1_toDeactivated -> acc_module.acc1_toDeactivated;
+  cAcc2SHM_toDeactivated : port systemHM_module.acc2_toDeactivated -> acc_module.acc2_toDeactivated;
+  cAcc3SHM_toDeactivated : port systemHM_module.acc3_toDeactivated -> acc_module.acc3_toDeactivated;
+  cAcc4SHM_toDeactivated : port systemHM_module.acc4_toDeactivated -> acc_module.acc4_toDeactivated;
+  cAcc5SHM_toDeactivated : port systemHM_module.acc5_toDeactivated -> acc_module.acc5_toDeactivated;
+  cAcc6SHM_toDeactivated : port systemHM_module.acc6_toDeactivated -> acc_module.acc6_toDeactivated;
   
   -- ADIRU to SHM
   cADIRU1SHM_Error : port ADIRU_module.ADIRU1_error -> systemHM_module.ADIRU1_error;
