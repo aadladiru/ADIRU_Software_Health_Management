@@ -48,10 +48,22 @@ features
   accData : out data port SHM_DataType::accData;
   error : out event data port SHM_DataType::errorData;
   errorAction : in event data port SHM_DataType::actionData;
+  to_off : in event port;
+  to_on : in event port;
+  to_deactivated : in event port;
 modes
     off : initial mode; -- Power OFF mode
     on : mode;          -- Power ON and CONNECTED to ADIRU mode
     deactivated : mode; -- Power ON and **NOT** CONNECTED to ADIRU mode
+annex behavior_specification {**
+    mode transitions
+        off -[to_on?]-> on;
+        off -[to_deactivated?]-> on;
+        on -[to_off?]-> off;
+        on -[to_deactivated?]-> off;
+        deactivated -[to_on]-> on;
+        deactivated -[to_off]-> off;
+**};
 end acc_unit;
 
 system implementation acc_unit.impl
@@ -89,6 +101,27 @@ features
   acc4_errorAction: in event data port SHM_DataType::actionData;
   acc5_errorAction: in event data port SHM_DataType::actionData;
   acc6_errorAction: in event data port SHM_DataType::actionData;
+
+  acc1_toOn : in event port;
+  acc2_toOn : in event port;
+  acc3_toOn : in event port;
+  acc4_toOn : in event port;
+  acc5_toOn : in event port;
+  acc6_toOn : in event port;
+
+  acc1_toOff : in event port;
+  acc2_toOff : in event port;
+  acc3_toOff : in event port;
+  acc4_toOff : in event port;
+  acc5_toOff : in event port;
+  acc6_toOff : in event port;
+
+  acc1_toDeactivated : in event port;
+  acc2_toDeactivated : in event port;
+  acc3_toDeactivated : in event port;
+  acc4_toDeactivated : in event port;
+  acc5_toDeactivated : in event port;
+  acc6_toDeactivated : in event port;
 end acc;
 
 system implementation acc.impl
@@ -120,6 +153,27 @@ connections
     cAcc4ErrorAction : port acc4_errorAction -> acc4.errorAction;
     cAcc5ErrorAction : port acc5_errorAction -> acc5.errorAction;
     cAcc6ErrorAction : port acc6_errorAction -> acc6.errorAction;
+
+    cAcc1ToOn : port acc1_toOn -> acc1.to_on;
+    cAcc2ToOn : port acc2_toOn -> acc2.to_on;
+    cAcc3ToOn : port acc3_toOn -> acc3.to_on;
+    cAcc4ToOn : port acc4_toOn -> acc4.to_on;
+    cAcc5ToOn : port acc5_toOn -> acc5.to_on;
+    cAcc6ToOn : port acc6_toOn -> acc6.to_on;
+
+    cAcc1ToOff : port acc1_toOff -> acc1.to_off;
+    cAcc2ToOff : port acc2_toOff -> acc2.to_off;
+    cAcc3ToOff : port acc3_toOff -> acc3.to_off;
+    cAcc4ToOff : port acc4_toOff -> acc4.to_off;
+    cAcc5ToOff : port acc5_toOff -> acc5.to_off;
+    cAcc6ToOff : port acc6_toOff -> acc6.to_off;
+
+    cAcc1ToDeactivated : port acc1_toDeactivated -> acc1.to_deactivated;
+    cAcc2ToDeactivated : port acc2_toDeactivated -> acc2.to_deactivated;
+    cAcc3ToDeactivated : port acc3_toDeactivated -> acc3.to_deactivated;
+    cAcc4ToDeactivated : port acc4_toDeactivated -> acc4.to_deactivated;
+    cAcc5ToDeactivated : port acc5_toDeactivated -> acc5.to_deactivated;
+    cAcc6ToDeactivated : port acc6_toDeactivated -> acc6.to_deactivated;
 end acc.impl;
 
 end ACC_Module;
