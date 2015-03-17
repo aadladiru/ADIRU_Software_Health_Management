@@ -26,7 +26,7 @@ features
   accData_in : in event data port SHM_DataType::accData;
   accData_out : out event data port SHM_DataType::accData;
   error : out event data port SHM_DataType::errorData;
-  errorAction : out event data port SHM_DataType::actionData;
+  errorAction : in event data port SHM_DataType::actionData;
 end acc_HM;
 
 process implementation acc_HM.impl
@@ -46,8 +46,8 @@ end acc_HM.impl;
 system acc_unit
 features
   accData : out data port SHM_DataType::accData;
-  Error : out event data port SHM_DataType::errorData;
-  ErrorAction : out event data port SHM_DataType::actionData;
+  error : out event data port SHM_DataType::errorData;
+  errorAction : in event data port SHM_DataType::actionData;
 modes
     off : initial mode;
     on : mode;
@@ -62,8 +62,8 @@ connections
   cAccAccHM : port acc_device.accData -> acc_HM.accData_in;
 
   cAccData : port acc_HM.accData_out -> accData in modes (on);
-  cAccHMError : port acc_HM.Error -> Error;
-  cAccHMErrorAction : port acc_Hm.ErrorAction -> ErrorAction;
+  cAccHMError : port acc_HM.Error -> error;
+  cAccHMErrorAction : port errorAction -> acc_Hm.errorAction;
 end acc_unit.impl;
 
 
@@ -83,12 +83,12 @@ features
   acc5_error: out event data port SHM_DataType::errorData;
   acc6_error: out event data port SHM_DataType::errorData;
 
-  acc1_errorAction: out event data port SHM_DataType::actionData;
-  acc2_errorAction: out event data port SHM_DataType::actionData;
-  acc3_errorAction: out event data port SHM_DataType::actionData;
-  acc4_errorAction: out event data port SHM_DataType::actionData;
-  acc5_errorAction: out event data port SHM_DataType::actionData;
-  acc6_errorAction: out event data port SHM_DataType::actionData;
+  acc1_errorAction: in event data port SHM_DataType::actionData;
+  acc2_errorAction: in event data port SHM_DataType::actionData;
+  acc3_errorAction: in event data port SHM_DataType::actionData;
+  acc4_errorAction: in event data port SHM_DataType::actionData;
+  acc5_errorAction: in event data port SHM_DataType::actionData;
+  acc6_errorAction: in event data port SHM_DataType::actionData;
 end acc;
 
 system implementation acc.impl
@@ -114,12 +114,12 @@ connections
     cAcc5Error : port acc5.Error -> acc5_error;
     cAcc6Error : port acc6.Error -> acc6_error;
 
-    cAcc1ErrorAction : port acc1.ErrorAction -> acc1_errorAction;
-    cAcc2ErrorAction : port acc2.ErrorAction -> acc2_errorAction;
-    cAcc3ErrorAction : port acc3.ErrorAction -> acc3_errorAction;
-    cAcc4ErrorAction : port acc4.ErrorAction -> acc4_errorAction;
-    cAcc5ErrorAction : port acc5.ErrorAction -> acc5_errorAction;
-    cAcc6ErrorAction : port acc6.ErrorAction -> acc6_errorAction;
+    cAcc1ErrorAction : port acc1_errorAction -> acc1.errorAction;
+    cAcc2ErrorAction : port acc2_errorAction -> acc2.errorAction;
+    cAcc3ErrorAction : port acc3_errorAction -> acc3.errorAction;
+    cAcc4ErrorAction : port acc4_errorAction -> acc4.errorAction;
+    cAcc5ErrorAction : port acc5_errorAction -> acc5.errorAction;
+    cAcc6ErrorAction : port acc6_errorAction -> acc6.errorAction;
 end acc.impl;
 
 end ACC_Module;

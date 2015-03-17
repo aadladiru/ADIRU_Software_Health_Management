@@ -13,12 +13,12 @@ features
     acc5_error : in event data port SHM_DataType::errorData;
     acc6_error : in event data port SHM_DataType::errorData;
 
-    acc1_errorAction : in event data port SHM_DataType::actionData;
-    acc2_errorAction : in event data port SHM_DataType::actionData;
-    acc3_errorAction : in event data port SHM_DataType::actionData;
-    acc4_errorAction : in event data port SHM_DataType::actionData;
-    acc5_errorAction : in event data port SHM_DataType::actionData;
-    acc6_errorAction : in event data port SHM_DataType::actionData;
+    acc1_errorAction : out event data port SHM_DataType::actionData;
+    acc2_errorAction : out event data port SHM_DataType::actionData;
+    acc3_errorAction : out event data port SHM_DataType::actionData;
+    acc4_errorAction : out event data port SHM_DataType::actionData;
+    acc5_errorAction : out event data port SHM_DataType::actionData;
+    acc6_errorAction : out event data port SHM_DataType::actionData;
     
     ADIRU1_error : in event data port SHM_DataType::errorData;
     ADIRU2_error : in event data port SHM_DataType::errorData;
