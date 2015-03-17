@@ -49,9 +49,9 @@ features
   error : out event data port SHM_DataType::errorData;
   errorAction : in event data port SHM_DataType::actionData;
 modes
-    off : initial mode;
-    on : mode;
-    defunkt : mode;
+    off : initial mode; -- Power OFF mode
+    on : mode;          -- Power ON and CONNECTED to ADIRU mode
+    deactivated : mode; -- Power ON and **NOT** CONNECTED to ADIRU mode
 end acc_unit;
 
 system implementation acc_unit.impl
