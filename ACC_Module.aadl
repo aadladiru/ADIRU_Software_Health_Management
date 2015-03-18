@@ -80,8 +80,8 @@ connections
   cAccAccHM : port acc_device.accData -> acc_HM.accData_in;
 
   cAccData : port acc_HM.accData_out -> accData in modes (on);
-  cAccHMError : port acc_HM.errorData -> errorData;
-  cAccHMErrorAction : port errorAction -> acc_Hm.errorAction;
+  cAccHMError : port acc_HM.errorData -> errorData in modes (on,deactivated);
+  cAccHMErrorAction : port errorAction -> acc_Hm.errorAction in modes (on,deactivated);
 end acc_unit.impl;
 
 
