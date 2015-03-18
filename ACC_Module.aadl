@@ -32,6 +32,7 @@ end acc_HM;
 process implementation acc_HM.impl
 annex EMV2{**
   use types ADIRU_errLibrary;
+  use behavior ADIRU_errLibrary::simple;
   
   error propagations
     accData_in : in propagation{ValueError};
@@ -40,6 +41,11 @@ annex EMV2{**
     f1 : error sink accData_in{ValueStuck, ValueChangeTooFast};
     f2 : error path accData_in{ValueErroneous} -> accData_out{ValueErroneous};
   end propagations;
+  
+  component error behavior
+  detections
+     operational -[1 ormore(accData_in{ValueStuck}, accData_in{ValueChangeTooFast})]-> errorData!;
+  end component;
 **}; 
 end acc_HM.impl;
 
