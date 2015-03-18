@@ -4,6 +4,121 @@ with ARINC653;
 with SHM_DataType;
 with SEI;
 
+system log
+features
+    acc1_errorData_in : in event data port SHM_DataType::errorData;
+    acc2_errorData_in : in event data port SHM_DataType::errorData;
+    acc3_errorData_in : in event data port SHM_DataType::errorData;
+    acc4_errorData_in : in event data port SHM_DataType::errorData;
+    acc5_errorData_in : in event data port SHM_DataType::errorData;
+    acc6_errorData_in : in event data port SHM_DataType::errorData;
+
+    acc1_errorData_out : out event data port SHM_DataType::errorData;
+    acc2_errorData_out : out event data port SHM_DataType::errorData;
+    acc3_errorData_out : out event data port SHM_DataType::errorData;
+    acc4_errorData_out : out event data port SHM_DataType::errorData;
+    acc5_errorData_out : out event data port SHM_DataType::errorData;
+    acc6_errorData_out : out event data port SHM_DataType::errorData;
+        
+    acc1_down : out data port;
+    acc2_down : out data port;
+    acc3_down : out data port;
+    acc4_down : out data port;
+    acc5_down : out data port;
+    acc6_down : out data port;
+flows
+    f1 : flow path acc1_errorData_in -> acc1_errorData_out;
+    f2 : flow path acc2_errorData_in -> acc2_errorData_out;
+    f3 : flow path acc3_errorData_in -> acc3_errorData_out;
+    f4 : flow path acc4_errorData_in -> acc4_errorData_out;
+    f5 : flow path acc5_errorData_in -> acc5_errorData_out;
+    f6 : flow path acc6_errorData_in -> acc6_errorData_out;
+modes
+    allok : initial mode;
+    acc5down : mode;
+    acc56down : mode;
+annex behavior_specification {**
+    mode transitions
+        allok -[acc5_errorData_in?]-> acc5down { acc5_down!; };
+        acc5down -[acc6_errorData_in?]-> acc56down { acc5_down!; acc6_down!; }; 
+**};
+end log;
+
+system implementation log.impl
+end log.impl;
+
+system initializer
+features
+    acc1_down : in data port;
+    acc2_down : in data port;
+    acc3_down : in data port;
+    acc4_down : in data port;
+    acc5_down : in data port;
+    acc6_down : in data port;
+    
+    acc1_errorData : in event data port SHM_DataType::errorData;
+    acc2_errorData : in event data port SHM_DataType::errorData;
+    acc3_errorData : in event data port SHM_DataType::errorData;
+    acc4_errorData : in event data port SHM_DataType::errorData;
+    acc5_errorData : in event data port SHM_DataType::errorData;
+    acc6_errorData : in event data port SHM_DataType::errorData;
+
+    acc1_toOn : out event port;
+    acc2_toOn : out event port;
+    acc3_toOn : out event port;
+    acc4_toOn : out event port;
+    acc5_toOn : out event port;
+    acc6_toOn : out event port;
+    
+    acc1_toOff : out event port;
+    acc2_toOff : out event port;
+    acc3_toOff : out event port;
+    acc4_toOff : out event port;
+    acc5_toOff : out event port;
+    acc6_toOff : out event port;
+    
+    acc1_toDeactivated : out event port;
+    acc2_toDeactivated : out event port;
+    acc3_toDeactivated : out event port;
+    acc4_toDeactivated : out event port;
+    acc5_toDeactivated : out event port;
+    acc6_toDeactivated : out event port;
+end initializer;
+
+system implementation initializer.impl
+modes
+    init : initial mode;
+    running5 : mode;
+    running6 : mode;
+annex behavior_specification {**
+    mode transitions
+        init -[]-> running5 {
+            acc1_toOn!;
+            acc2_toOn!;
+            acc3_toDeactivated!;
+            acc4_toDeactivated!;
+            acc5_toOn!;
+            acc6_toDeactivated!;
+        };
+        running5 -[acc5_errorData?]-> running6 {
+            acc1_toOn!;
+            acc2_toOn!;
+            acc3_toDeactivated!;
+            acc4_toDeactivated!;
+            acc5_toDeactivated!;
+            acc6_toOn!;
+        };
+        running6 -[acc6_errorData?]-> running5{
+            acc1_toOn!;
+            acc2_toOn!;
+            acc3_toDeactivated!;
+            acc4_toDeactivated!;
+            acc5_toOn!;
+            acc6_toDeactivated!;
+        };
+**};
+end initializer.impl;
+
 system systemHM
 features
     acc1_errorData : in event data port SHM_DataType::errorData;
@@ -69,6 +184,51 @@ features
 end systemHM;
 
 system implementation systemHM.impl
+subcomponents
+    log : system log.impl;
+    initializer : system initializer.impl;
+connections
+    cAcc1Log_errorData : port acc1_errorData -> log.acc1_errorData_in;  
+    cAcc2Log_errorData : port acc2_errorData -> log.acc2_errorData_in;  
+    cAcc3Log_errorData : port acc3_errorData -> log.acc3_errorData_in;  
+    cAcc4Log_errorData : port acc4_errorData -> log.acc4_errorData_in;  
+    cAcc5Log_errorData : port acc5_errorData -> log.acc5_errorData_in;  
+    cAcc6Log_errorData : port acc6_errorData -> log.acc6_errorData_in;  
+
+    cLogInitializer_acc1ErrorData : port log.acc1_errorData_out -> initializer.acc1_errorData;  
+    cLogInitializer_acc2ErrorData : port log.acc2_errorData_out -> initializer.acc2_errorData;  
+    cLogInitializer_acc3ErrorData : port log.acc3_errorData_out -> initializer.acc3_errorData;  
+    cLogInitializer_acc4ErrorData : port log.acc4_errorData_out -> initializer.acc4_errorData;  
+    cLogInitializer_acc5ErrorData : port log.acc5_errorData_out -> initializer.acc5_errorData;  
+    cLogInitializer_acc6ErrorData : port log.acc6_errorData_out -> initializer.acc6_errorData;  
+
+    cLogInitializer_acc1down : port log.acc1_down -> initializer.acc1_down;  
+    cLogInitializer_acc2down : port log.acc2_down -> initializer.acc2_down;  
+    cLogInitializer_acc3down : port log.acc3_down -> initializer.acc3_down;  
+    cLogInitializer_acc4down : port log.acc4_down -> initializer.acc4_down;  
+    cLogInitializer_acc5down : port log.acc5_down -> initializer.acc5_down;  
+    cLogInitializer_acc6down : port log.acc6_down -> initializer.acc6_down;  
+    
+    cAcc1_toOn : port initializer.acc1_toOn -> acc1_toOn;
+    cAcc2_toOn : port initializer.acc2_toOn -> acc2_toOn;
+    cAcc3_toOn : port initializer.acc3_toOn -> acc3_toOn;
+    cAcc4_toOn : port initializer.acc4_toOn -> acc4_toOn;
+    cAcc5_toOn : port initializer.acc5_toOn -> acc5_toOn;
+    cAcc6_toOn : port initializer.acc6_toOn -> acc6_toOn;
+    
+    cAcc1_toOff : port initializer.acc1_toOff -> acc1_toOff;
+    cAcc2_toOff : port initializer.acc2_toOff -> acc2_toOff;
+    cAcc3_toOff : port initializer.acc3_toOff -> acc3_toOff;
+    cAcc4_toOff : port initializer.acc4_toOff -> acc4_toOff;
+    cAcc5_toOff : port initializer.acc5_toOff -> acc5_toOff;
+    cAcc6_toOff : port initializer.acc6_toOff -> acc6_toOff;
+    
+    cAcc1_toDeactivated : port initializer.acc1_toDeactivated -> acc1_toDeactivated;
+    cAcc2_toDeactivated : port initializer.acc2_toDeactivated -> acc2_toDeactivated;
+    cAcc3_toDeactivated : port initializer.acc3_toDeactivated -> acc3_toDeactivated;
+    cAcc4_toDeactivated : port initializer.acc4_toDeactivated -> acc4_toDeactivated;
+    cAcc5_toDeactivated : port initializer.acc5_toDeactivated -> acc5_toDeactivated;
+    cAcc6_toDeactivated : port initializer.acc6_toDeactivated -> acc6_toDeactivated;
 end systemHM.impl;
 
 end HM_Module;
