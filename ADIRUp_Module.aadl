@@ -20,10 +20,10 @@ features
   ADIRU3_data: out data port SHM_DataType::accData;
   ADIRU4_data: out data port SHM_DataType::accData;
   
-  ADIRU1_error : out event data port SHM_DataType::errorData;
-  ADIRU2_error : out event data port SHM_DataType::errorData;
-  ADIRU3_error : out event data port SHM_DataType::errorData;
-  ADIRU4_error : out event data port SHM_DataType::errorData;
+  ADIRU1_errorData : out event data port SHM_DataType::errorData;
+  ADIRU2_errorData : out event data port SHM_DataType::errorData;
+  ADIRU3_errorData : out event data port SHM_DataType::errorData;
+  ADIRU4_errorData : out event data port SHM_DataType::errorData;
 
   ADIRU1_errorAction: in event data port SHM_DataType::actionData;
   ADIRU2_errorAction: in event data port SHM_DataType::actionData;

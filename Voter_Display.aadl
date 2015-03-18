@@ -13,13 +13,13 @@ features
   ADIRU3_data: in data port SHM_DataType::accData;
   ADIRU4_data: in data port SHM_DataType::accData;
  
-  voterL_error: out event data port SHM_DataType::errorData;
-  voterC_error: out event data port SHM_DataType::errorData;
-  voterR_error: out event data port SHM_DataType::errorData;
+  voterL_errorData: out event data port SHM_DataType::errorData;
+  voterC_errorData: out event data port SHM_DataType::errorData;
+  voterR_errorData: out event data port SHM_DataType::errorData;
 
-  displayL_error: out event data port SHM_DataType::errorData;
-  displayC_error: out event data port SHM_DataType::errorData;
-  displayR_error: out event data port SHM_DataType::errorData;
+  displayL_errorData: out event data port SHM_DataType::errorData;
+  displayC_errorData: out event data port SHM_DataType::errorData;
+  displayR_errorData: out event data port SHM_DataType::errorData;
 
   voterL_errorAction: in event data port SHM_DataType::actionData;
   voterC_errorAction: in event data port SHM_DataType::actionData;

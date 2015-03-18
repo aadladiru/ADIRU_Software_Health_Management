@@ -25,7 +25,7 @@ process acc_HM
 features
   accData_in : in event data port SHM_DataType::accData;
   accData_out : out event data port SHM_DataType::accData;
-  error : out event data port SHM_DataType::errorData;
+  errorData : out event data port SHM_DataType::errorData;
   errorAction : in event data port SHM_DataType::actionData;
 end acc_HM;
 
@@ -46,7 +46,7 @@ end acc_HM.impl;
 system acc_unit
 features
   accData : out data port SHM_DataType::accData;
-  error : out event data port SHM_DataType::errorData;
+  errorData : out event data port SHM_DataType::errorData;
   errorAction : in event data port SHM_DataType::actionData;
   to_off : in event port;
   to_on : in event port;
@@ -74,7 +74,7 @@ connections
   cAccAccHM : port acc_device.accData -> acc_HM.accData_in;
 
   cAccData : port acc_HM.accData_out -> accData in modes (on);
-  cAccHMError : port acc_HM.Error -> error;
+  cAccHMError : port acc_HM.errorData -> errorData;
   cAccHMErrorAction : port errorAction -> acc_Hm.errorAction;
 end acc_unit.impl;
 
@@ -88,12 +88,12 @@ features
   acc5_data: out data port SHM_DataType::accData;
   acc6_data: out data port SHM_DataType::accData;
   
-  acc1_error: out event data port SHM_DataType::errorData;
-  acc2_error: out event data port SHM_DataType::errorData;
-  acc3_error: out event data port SHM_DataType::errorData;
-  acc4_error: out event data port SHM_DataType::errorData;
-  acc5_error: out event data port SHM_DataType::errorData;
-  acc6_error: out event data port SHM_DataType::errorData;
+  acc1_errorData: out event data port SHM_DataType::errorData;
+  acc2_errorData: out event data port SHM_DataType::errorData;
+  acc3_errorData: out event data port SHM_DataType::errorData;
+  acc4_errorData: out event data port SHM_DataType::errorData;
+  acc5_errorData: out event data port SHM_DataType::errorData;
+  acc6_errorData: out event data port SHM_DataType::errorData;
 
   acc1_errorAction: in event data port SHM_DataType::actionData;
   acc2_errorAction: in event data port SHM_DataType::actionData;
@@ -140,19 +140,19 @@ connections
     cAcc5 : port acc5.accData -> acc5_data;
     cAcc6 : port acc6.accData -> acc6_data;
     
-    cAcc1Error : port acc1.Error -> acc1_error;
-    cAcc2Error : port acc2.Error -> acc2_error;
-    cAcc3Error : port acc3.Error -> acc3_error;
-    cAcc4Error : port acc4.Error -> acc4_error;
-    cAcc5Error : port acc5.Error -> acc5_error;
-    cAcc6Error : port acc6.Error -> acc6_error;
+    cAcc1errorData : port acc1.errorData -> acc1_errorData;
+    cAcc2errorData : port acc2.errorData -> acc2_errorData;
+    cAcc3errorData : port acc3.errorData -> acc3_errorData;
+    cAcc4errorData : port acc4.errorData -> acc4_errorData;
+    cAcc5errorData : port acc5.errorData -> acc5_errorData;
+    cAcc6errorData : port acc6.errorData -> acc6_errorData;
 
-    cAcc1ErrorAction : port acc1_errorAction -> acc1.errorAction;
-    cAcc2ErrorAction : port acc2_errorAction -> acc2.errorAction;
-    cAcc3ErrorAction : port acc3_errorAction -> acc3.errorAction;
-    cAcc4ErrorAction : port acc4_errorAction -> acc4.errorAction;
-    cAcc5ErrorAction : port acc5_errorAction -> acc5.errorAction;
-    cAcc6ErrorAction : port acc6_errorAction -> acc6.errorAction;
+    cAcc1errorAction : port acc1_errorAction -> acc1.errorAction;
+    cAcc2errorAction : port acc2_errorAction -> acc2.errorAction;
+    cAcc3errorAction : port acc3_errorAction -> acc3.errorAction;
+    cAcc4errorAction : port acc4_errorAction -> acc4.errorAction;
+    cAcc5errorAction : port acc5_errorAction -> acc5.errorAction;
+    cAcc6errorAction : port acc6_errorAction -> acc6.errorAction;
 
     cAcc1ToOn : port acc1_toOn -> acc1.to_on;
     cAcc2ToOn : port acc2_toOn -> acc2.to_on;

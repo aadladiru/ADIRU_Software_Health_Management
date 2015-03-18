@@ -6,12 +6,12 @@ with SEI;
 
 system systemHM
 features
-    acc1_error : in event data port SHM_DataType::errorData;
-    acc2_error : in event data port SHM_DataType::errorData;
-    acc3_error : in event data port SHM_DataType::errorData;
-    acc4_error : in event data port SHM_DataType::errorData;
-    acc5_error : in event data port SHM_DataType::errorData;
-    acc6_error : in event data port SHM_DataType::errorData;
+    acc1_errorData : in event data port SHM_DataType::errorData;
+    acc2_errorData : in event data port SHM_DataType::errorData;
+    acc3_errorData : in event data port SHM_DataType::errorData;
+    acc4_errorData : in event data port SHM_DataType::errorData;
+    acc5_errorData : in event data port SHM_DataType::errorData;
+    acc6_errorData : in event data port SHM_DataType::errorData;
 
     acc1_errorAction : out event data port SHM_DataType::actionData;
     acc2_errorAction : out event data port SHM_DataType::actionData;
@@ -41,23 +41,23 @@ features
     acc5_toDeactivated : out event port;
     acc6_toDeactivated : out event port;
     
-    ADIRU1_error : in event data port SHM_DataType::errorData;
-    ADIRU2_error : in event data port SHM_DataType::errorData;
-    ADIRU3_error : in event data port SHM_DataType::errorData;
-    ADIRU4_error : in event data port SHM_DataType::errorData;
+    ADIRU1_errorData : in event data port SHM_DataType::errorData;
+    ADIRU2_errorData : in event data port SHM_DataType::errorData;
+    ADIRU3_errorData : in event data port SHM_DataType::errorData;
+    ADIRU4_errorData : in event data port SHM_DataType::errorData;
     
     ADIRU1_errorAction : out event data port SHM_DataType::actionData;
     ADIRU2_errorAction : out event data port SHM_DataType::actionData;
     ADIRU3_errorAction : out event data port SHM_DataType::actionData;
     ADIRU4_errorAction : out event data port SHM_DataType::actionData;
     
-    voterL_error: in event data port SHM_DataType::errorData;
-    voterC_error: in event data port SHM_DataType::errorData;
-    voterR_error: in event data port SHM_DataType::errorData;
+    voterL_errorData: in event data port SHM_DataType::errorData;
+    voterC_errorData: in event data port SHM_DataType::errorData;
+    voterR_errorData: in event data port SHM_DataType::errorData;
 
-    displayL_error: in event data port SHM_DataType::errorData;
-    displayC_error: in event data port SHM_DataType::errorData;
-    displayR_error: in event data port SHM_DataType::errorData;
+    displayL_errorData: in event data port SHM_DataType::errorData;
+    displayC_errorData: in event data port SHM_DataType::errorData;
+    displayR_errorData: in event data port SHM_DataType::errorData;
 
     voterL_errorAction: out event data port SHM_DataType::actionData;
     voterC_errorAction: out event data port SHM_DataType::actionData;
