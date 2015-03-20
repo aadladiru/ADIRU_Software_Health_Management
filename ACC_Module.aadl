@@ -14,9 +14,9 @@ annex EMV2{**
   use behavior ADIRU_errLibrary::simple;
 
   error propagations
-    accData : out propagation{ValueError};
+    accData : out propagation{ValueErroneous};
   flows
-    f1 : error source accData{ValueError} when failed;
+    f1 : error source accData{ValueErroneous} when failed;
   end propagations;
 **};
 end acc_device.impl;
@@ -35,16 +35,15 @@ annex EMV2{**
   use behavior ADIRU_errLibrary::simple;
   
   error propagations
-    accData_in : in propagation{ValueError};
+    accData_in : in propagation{ValueErroneous};
     accData_out : out propagation{ValueErroneous};
   flows
-    f1 : error sink accData_in{ValueStuck, ValueChangeTooFast};
-    f2 : error path accData_in{ValueErroneous} -> accData_out{ValueErroneous};
+    f1 : error path accData_in{ValueErroneous} -> accData_out{ValueErroneous};
   end propagations;
   
   component error behavior
   detections
-     operational -[1 ormore(accData_in{ValueStuck}, accData_in{ValueChangeTooFast})]-> errorData!;
+     operational -[1 ormore(accData_in{ValueErroneous})]-> errorData!;
   end component;
 **}; 
 end acc_HM.impl;
