@@ -90,6 +90,7 @@ modes
     init : initial mode;
     running5 : mode;
     running6 : mode;
+    running3 : mode;
 annex behavior_specification {**
     mode transitions
         init -[]-> running5 {
@@ -100,13 +101,21 @@ annex behavior_specification {**
             acc5_toOn!;
             acc6_toDeactivated!;
         };
-        running5 -[acc5_errorData?]-> running6 {
+        running5 -[acc5_errorData? and not acc6_down?]-> running6 {
             acc1_toOn!;
             acc2_toOn!;
             acc3_toDeactivated!;
             acc4_toDeactivated!;
             acc5_toDeactivated!;
             acc6_toOn!;
+        };
+        running5 -[acc5_errorData? and acc6_down?]-> running3 {
+            acc1_toOn!;
+            acc2_toOn!;
+            acc3_toOn!;
+            acc4_toDeactivated!;
+            acc5_toDeactivated!;
+            acc6_toDeactivated!;
         };
         running6 -[acc6_errorData?]-> running5{
             acc1_toOn!;
@@ -183,7 +192,9 @@ features
     displayR_errorAction: out event data port SHM_DataType::actionData;
 end systemHM;
 
-system implementation systemHM.impl
+-- Erroneous implementation, does not connect the acc_down port of the 
+-- LOG to INITIALIZER (simulates no memory for the INITIALIZER)
+system implementation systemHM.implErroneous
 subcomponents
     log : system log.impl;
     initializer : system initializer.impl;
@@ -200,14 +211,7 @@ connections
     cLogInitializer_acc3ErrorData : port log.acc3_errorData_out -> initializer.acc3_errorData;  
     cLogInitializer_acc4ErrorData : port log.acc4_errorData_out -> initializer.acc4_errorData;  
     cLogInitializer_acc5ErrorData : port log.acc5_errorData_out -> initializer.acc5_errorData;  
-    cLogInitializer_acc6ErrorData : port log.acc6_errorData_out -> initializer.acc6_errorData;  
-
-    cLogInitializer_acc1down : port log.acc1_down -> initializer.acc1_down;  
-    cLogInitializer_acc2down : port log.acc2_down -> initializer.acc2_down;  
-    cLogInitializer_acc3down : port log.acc3_down -> initializer.acc3_down;  
-    cLogInitializer_acc4down : port log.acc4_down -> initializer.acc4_down;  
-    cLogInitializer_acc5down : port log.acc5_down -> initializer.acc5_down;  
-    cLogInitializer_acc6down : port log.acc6_down -> initializer.acc6_down;  
+    cLogInitializer_acc6ErrorData : port log.acc6_errorData_out -> initializer.acc6_errorData;
     
     cAcc1_toOn : port initializer.acc1_toOn -> acc1_toOn;
     cAcc2_toOn : port initializer.acc2_toOn -> acc2_toOn;
@@ -229,6 +233,17 @@ connections
     cAcc4_toDeactivated : port initializer.acc4_toDeactivated -> acc4_toDeactivated;
     cAcc5_toDeactivated : port initializer.acc5_toDeactivated -> acc5_toDeactivated;
     cAcc6_toDeactivated : port initializer.acc6_toDeactivated -> acc6_toDeactivated;
-end systemHM.impl;
+end systemHM.implErroneous;
+
+-- Patched implementation of the HM, makes use of the connection between LOG and INITIALIZER
+system implementation systemHM.implPatched extends systemHM.implErroneous
+connections  
+    cLogInitializer_acc1down : port log.acc1_down -> initializer.acc1_down;  
+    cLogInitializer_acc2down : port log.acc2_down -> initializer.acc2_down;  
+    cLogInitializer_acc3down : port log.acc3_down -> initializer.acc3_down;  
+    cLogInitializer_acc4down : port log.acc4_down -> initializer.acc4_down;  
+    cLogInitializer_acc5down : port log.acc5_down -> initializer.acc5_down;  
+    cLogInitializer_acc6down : port log.acc6_down -> initializer.acc6_down; 
+end systemHM.implPatched;
 
 end HM_Module;
