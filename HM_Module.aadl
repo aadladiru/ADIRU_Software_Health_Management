@@ -4,6 +4,17 @@ with ARINC653;
 with SHM_DataType;
 with SEI;
 
+-- LOG
+-- This acts has the system memory, it records failure events and propagate them
+-- to the INITIALIZER.
+-- The ports works as follows:
+--    + accX_errorData_in ..... Failure events from the acc
+--    + accX_errorData_out .... Propagate acc failure event to INITIALIZER, there is
+--                              data to be read on this port ONLY AT THE TIME WHEN THE
+--                              FAILURE HAPPENS.
+--    + accX_down ............. Act has memory, is high when the acc has failed.
+--                              Whereas accX_errorData, this value is meant to be
+--                              persistent, and simulates a flag being set in memory.
 system log
 features
     acc1_errorData_in : in event data port SHM_DataType::errorData;
@@ -27,6 +38,7 @@ features
     acc5_down : out data port;
     acc6_down : out data port;
 flows
+    -- propagates error event to the INITIALIZER
     f1 : flow path acc1_errorData_in -> acc1_errorData_out;
     f2 : flow path acc2_errorData_in -> acc2_errorData_out;
     f3 : flow path acc3_errorData_in -> acc3_errorData_out;
@@ -47,6 +59,11 @@ end log;
 system implementation log.impl
 end log.impl;
 
+-- INITIALIZER
+-- Is the module that gives the acc set to be used. It receives error
+-- events through the accX_errorData event port and can access the 
+-- log through the accX_down which acts as a memory for failed accs.
+-- It has event ports accX_toYYYY to set acc modes.
 system initializer
 features
     acc1_down : in data port;
@@ -85,6 +102,9 @@ features
     acc6_toDeactivated : out event port;
 end initializer;
 
+-- INITIALIZER.IMPL
+-- Here the state machine chosen only takes into account the failures
+-- on acc5 and acc6 as a simple example.
 system implementation initializer.impl
 modes
     init : initial mode;
@@ -128,6 +148,8 @@ annex behavior_specification {**
 **};
 end initializer.impl;
 
+-- SYSTEMHM
+-- System global HM, connects LOG and INITIALIZER together
 system systemHM
 features
     acc1_errorData : in event data port SHM_DataType::errorData;
@@ -192,8 +214,11 @@ features
     displayR_errorAction: out event data port SHM_DataType::actionData;
 end systemHM;
 
--- Erroneous implementation, does not connect the acc_down port of the 
--- LOG to INITIALIZER (simulates no memory for the INITIALIZER)
+-- SYSTEMHM.IMPLERRONEOUS
+-- This is the faulty implementation, the connection of ports accX_down
+-- between the INITIALIZER and the LOG, therefore the INITIALIZER has 
+-- only the knowledge of the event and no memory of the previously 
+-- failed accs.
 system implementation systemHM.implErroneous
 subcomponents
     log : system log.impl;
@@ -235,7 +260,10 @@ connections
     cAcc6_toDeactivated : port initializer.acc6_toDeactivated -> acc6_toDeactivated;
 end systemHM.implErroneous;
 
--- Patched implementation of the HM, makes use of the connection between LOG and INITIALIZER
+-- SYSTEMHM.IMPLPATCHED
+-- Patch the erroneous implementation by connecting the accX_down ports of 
+-- the INITIALIZER and LOG, thus the previous has now the knowledge of the
+-- past failures in the system.
 system implementation systemHM.implPatched extends systemHM.implErroneous
 connections  
     cLogInitializer_acc1down : port log.acc1_down -> initializer.acc1_down;  

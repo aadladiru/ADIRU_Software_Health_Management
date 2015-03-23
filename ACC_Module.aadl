@@ -3,6 +3,10 @@ public
 with SHM_DataType;
 with ADIRU_errLibrary;
 
+-- ACC_DEVICE 
+-- Physical device that produces the acc data that is then
+-- sent to ACC_HM. It's output port can propagate erroneous
+-- values.
 device acc_device
 features
     accData : out data port SHM_DataType::accData;
@@ -21,6 +25,12 @@ annex EMV2{**
 **};
 end acc_device.impl;
 
+-- ACC_HM
+-- Receives the data from the ACC_DEVICE and checks for erroneous
+-- values. In case of an erroneous value being detected it sends
+-- an event to the system HM through the errorData port. It only
+-- detects the error but does not forbid it to propagate further
+-- down the system.
 process acc_HM
 features
   accData_in : in event data port SHM_DataType::accData;
@@ -48,6 +58,21 @@ annex EMV2{**
 **}; 
 end acc_HM.impl;
 
+-- ACC_UNIT
+-- Is one acc unit containing the physical device ACC_DEVICE
+-- and its associated CLHM: ACC_HM. A unit can have different
+-- operating modes that are set by the system HM through the
+-- to_on, to_off, to_deactivated event ports. Modes are:
+--     + OFF .......... power turned OFF, ACC_HM's accData port is
+--                      connected to the corresponding output of the 
+--                      ACC_UNIT.
+--     + ON ........... power turned ON, ACC_HM's accData port is
+--                      connected to the corresponding output of the 
+--                      ACC_UNIT and data is being sent to the ADIRUs.
+--     + DEACTIVATED .. power turned ON, ACC_HM's accData port is not
+--                      connected to the corresponding output of the 
+--                      ACC_UNIT and therefore no data can be received
+--                      by the ADIRUs on that port.
 system acc_unit
 features
   accData : out data port SHM_DataType::accData;
@@ -83,7 +108,8 @@ connections
   cAccHMErrorAction : port errorAction -> acc_Hm.errorAction in modes (on,deactivated);
 end acc_unit.impl;
 
-
+-- ACC
+-- Is the full acc module containing the 6 accs.
 system acc
 features
   acc1_data: out data port SHM_DataType::accData;

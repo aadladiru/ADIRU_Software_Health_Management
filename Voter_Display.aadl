@@ -6,6 +6,14 @@ with SEI;
 with Memory_Properties;
 with ADIRU_errLibrary;
 
+-- VOTER_DISPLAY
+-- This module contains the voters and displays. It takes as input
+-- the values computed by the ADIRUs. It is considered that the voter
+-- will take for good value any value that is given by 3 or more
+-- ADIRUs, thus the implementation of the behavior in the EMV2 annex.
+-- The mode displayErroneousValue correspond to a bad value that has
+-- gone through the whole system and not being discarded by the voters,
+-- thus leading to failure of the system.
 system voter_display
 features
   ADIRU1_data: in data port SHM_DataType::accData;

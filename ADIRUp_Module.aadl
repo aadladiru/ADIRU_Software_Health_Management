@@ -6,8 +6,18 @@ with SEI;
 with Memory_Properties;
 with ADIRU_errLibrary;
 
+-- ADIRU_processor
+-- Is the module containing the 4 ADIRU processes that computes the
+-- angles from the acc data. As they make no checks on the data
+-- any erroneous value from the ACC module will be propagated in the
+-- ADIRU's computation results.
+-- Each of the 4 ADIRUs takes the input from the 6 acc to compute its result.
+-- NB: It seems that the ADIRU just check for the data not being to old,
+-- as it is not relevant to the what is to be studied by this implementation
+-- this error is not implemented.
 system ADIRU_processor
 features
+  -- incoming data from the acc
   acc1_data: in data port SHM_DataType::accData;
   acc2_data: in data port SHM_DataType::accData;
   acc3_data: in data port SHM_DataType::accData;
@@ -15,11 +25,13 @@ features
   acc5_data: in data port SHM_DataType::accData;
   acc6_data: in data port SHM_DataType::accData;
 
+  -- result of computation of the 4 ADIRU processes
   ADIRU1_data: out data port SHM_DataType::accData;
   ADIRU2_data: out data port SHM_DataType::accData;
   ADIRU3_data: out data port SHM_DataType::accData;
   ADIRU4_data: out data port SHM_DataType::accData;
   
+  -- Error event on each of the ADIRUs
   ADIRU1_errorData : out event data port SHM_DataType::errorData;
   ADIRU2_errorData : out event data port SHM_DataType::errorData;
   ADIRU3_errorData : out event data port SHM_DataType::errorData;

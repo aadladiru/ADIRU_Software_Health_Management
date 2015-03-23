@@ -7,7 +7,15 @@ with HM_Module;
 with SHM_DataType;
 with ADIRU_errLibrary;
 
-
+-- ADIRU_SHM
+-- Represents the full ADIRU system. It has two implementations:
+--    + ADIRU_SHM.impl ............ is the faulty implementation.
+--    + ADIRU_SHM.implPatched ..... is the patched implementation,
+--                                  it extends the previous one.
+-- The only difference between the two implementation of this system
+-- is the implementation of the system HM used.
+-- The system is considered to have FAILED if the voters+display module
+-- is in the displayErroneousValue state.
 system ADIRU_SHM
 end ADIRU_SHM; 
 
@@ -17,8 +25,7 @@ subcomponents
   acc_module: system ACC_Module::acc.impl;
   ADIRU_module: system ADIRUp_Module::ADIRU_processor.impl;
   voter_module: system VD_Module::voter_display.impl;
-  systemHM_module: system HM_Module::systemHM.implErroneous;
-
+  systemHM_module: system HM_Module::systemHM.implErroneous; -- faulty impl
 connections
   -- ACC to ADIRU
   acc1_ADIRU : port acc_module.acc1_data -> ADIRU_module.acc1_data;
@@ -111,7 +118,7 @@ end ADIRU_SHM.impl;
 -- Patched implementation
 system implementation ADIRU_SHM.implPatched extends ADIRU_SHM.impl
 subcomponents
-    systemHM_module : refined to system HM_Module::systemHM.implPatched;
+    systemHM_module : refined to system HM_Module::systemHM.implPatched; -- patched impl
 end ADIRU_SHM.implPatched;
 
 
